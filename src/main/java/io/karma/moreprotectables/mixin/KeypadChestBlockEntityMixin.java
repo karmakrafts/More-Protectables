@@ -40,4 +40,10 @@ public abstract class KeypadChestBlockEntityMixin extends ChestBlockEntity
     public BlockState getBEBlockState() {
         return getBlockState();
     }
+
+    @SuppressWarnings("all")
+    @Override
+    public boolean isOpen() {
+        return getOpenNess(0F) > 0F;
+    }
 }

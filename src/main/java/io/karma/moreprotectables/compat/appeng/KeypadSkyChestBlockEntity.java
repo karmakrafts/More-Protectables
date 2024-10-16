@@ -209,4 +209,9 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     public BlockState getBEBlockState() {
         return getBlockState();
     }
+
+    @Override
+    public boolean isOpen() {
+        return getOpenNess(0F) > 0F;
+    }
 }

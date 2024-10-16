@@ -5,6 +5,7 @@ import io.karma.moreprotectables.client.event.BlockEntityRenderEvent;
 import io.karma.moreprotectables.util.KeypadChestBlock;
 import io.karma.moreprotectables.util.KeypadChestBlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction.Axis;
@@ -69,7 +70,7 @@ public final class ChestKeypadRenderer {
             return;
         }
         final var renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-        final var buffer = event.getBufferSource().getBuffer(RenderType.solid());
+        final var buffer = event.getBufferSource().getBuffer(RenderType.cutout());
         final var poseStack = event.getPoseStack();
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
@@ -82,6 +83,19 @@ public final class ChestKeypadRenderer {
             poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, angle, 0F, true));
         }
         poseStack.translate(-0.5F, -0.5F, -0.5F);
+        final var isLocked = event.isItem() || !chestBlockEntity.isOpen();
+        final var buttonModel = isLocked ? keypadLockedModel : keypadUnlockedModel;
+        renderer.renderModel(poseStack.last(),
+            buffer,
+            state,
+            buttonModel,
+            1F,
+            1F,
+            1F,
+            LightTexture.FULL_BRIGHT,
+            event.getPackedOverlay(),
+            ModelData.EMPTY,
+            RenderType.cutout());
         renderer.renderModel(poseStack.last(),
             buffer,
             state,
@@ -92,7 +106,7 @@ public final class ChestKeypadRenderer {
             event.getPackedLight(),
             event.getPackedOverlay(),
             ModelData.EMPTY,
-            RenderType.solid());
+            RenderType.cutout());
         poseStack.popPose();
     }
 }

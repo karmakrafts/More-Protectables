@@ -55,4 +55,9 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     public BlockState getBEBlockState() {
         return getBlockState();
     }
+
+    @Override
+    public boolean isOpen() {
+        return getOpenNess(0F) > 0F;
+    }
 }

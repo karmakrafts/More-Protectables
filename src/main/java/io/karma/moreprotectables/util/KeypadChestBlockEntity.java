@@ -25,6 +25,8 @@ public interface KeypadChestBlockEntity {
 
     BlockState getBEBlockState();
 
+    boolean isOpen();
+
     default boolean isPrimaryChest() {
         final var other = findOtherChest();
         if (other == null) {
