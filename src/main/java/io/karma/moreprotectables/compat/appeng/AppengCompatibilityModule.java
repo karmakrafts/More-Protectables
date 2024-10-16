@@ -1,8 +1,8 @@
 package io.karma.moreprotectables.compat.appeng;
 
-import appeng.client.render.tesr.SkyChestTESR;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
+import io.karma.moreprotectables.compat.appeng.client.render.KeypadSkyChestRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,9 +24,10 @@ public final class AppengCompatibilityModule implements CompatibilityModule {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initClient() {
-        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSkyChestBlockEntity.get(), SkyChestTESR::new);
+        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSkyChestBlockEntity.get(),
+            KeypadSkyChestRenderer::new);
         BlockEntityRenderers.register(AppengCompatibilityContent.keypadSmoothSkyChestBlockEntity.get(),
-            SkyChestTESR::new);
+            KeypadSkyChestRenderer::new);
     }
 
     @Override

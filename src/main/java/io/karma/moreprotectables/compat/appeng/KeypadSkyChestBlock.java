@@ -10,21 +10,29 @@ import appeng.menu.MenuOpener;
 import appeng.menu.implementations.SkyChestMenu;
 import appeng.menu.locator.MenuLocators;
 import io.karma.moreprotectables.util.KeypadChestBlock;
-import net.geforcemods.securitycraft.api.IPasscodeConvertible;
+import net.geforcemods.securitycraft.SCContent;
+import net.geforcemods.securitycraft.api.IDisguisable;
+import net.geforcemods.securitycraft.compat.IOverlayDisplay;
+import net.geforcemods.securitycraft.misc.OwnershipEvent;
+import net.geforcemods.securitycraft.util.PlayerUtils;
+import net.geforcemods.securitycraft.util.Utils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -33,9 +41,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +57,7 @@ import java.util.Objects;
  * @since 14/10/2024
  */
 public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestBlockEntity>
-    implements KeypadChestBlock {
+    implements KeypadChestBlock, IDisguisable, IOverlayDisplay {
     private static final double AABB_OFFSET_BOTTOM = 0.0;
     private static final double AABB_OFFSET_SIDES = 0.06;
     private static final double AABB_OFFSET_TOP = 0.0625;
@@ -123,13 +133,46 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
                                          final InteractionHand hand,
                                          final @Nullable ItemStack heldItem,
                                          final BlockHitResult hit) {
-        if (!level.isClientSide()) {
-            SkyChestBlockEntity blockEntity = getBlockEntity(level, pos);
-            if (blockEntity != null) {
-                MenuOpener.open(SkyChestMenu.TYPE, player, MenuLocators.forBlockEntity(blockEntity));
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state,
+                                 Level level,
+                                 BlockPos pos,
+                                 Player player,
+                                 InteractionHand hand,
+                                 BlockHitResult hit) {
+        if (!level.isClientSide && !net.geforcemods.securitycraft.blocks.KeypadChestBlock.isBlocked(level, pos)) {
+            final var blockEntity = (KeypadSkyChestBlockEntity) level.getBlockEntity(pos);
+            if (blockEntity == null) {
+                return InteractionResult.PASS;
+            }
+            if (blockEntity.verifyPasscodeSet(level, pos, blockEntity, player)) {
+                if (blockEntity.isDenied(player)) {
+                    if (blockEntity.sendsDenylistMessage()) {
+                        PlayerUtils.sendMessageToPlayer(player,
+                            Utils.localize(getDescriptionId()),
+                            Utils.localize("messages.securitycraft:module.onDenylist"),
+                            ChatFormatting.RED);
+                    }
+                }
+                else if (blockEntity.isAllowed(player)) {
+                    if (blockEntity.sendsAllowlistMessage()) {
+                        PlayerUtils.sendMessageToPlayer(player,
+                            Utils.localize(getDescriptionId()),
+                            Utils.localize("messages.securitycraft:module.onAllowlist"),
+                            ChatFormatting.GREEN);
+                    }
+                    activate(state, level, pos, player);
+                }
+                else if (!player.getItemInHand(hand).is(SCContent.CODEBREAKER.get())) {
+                    blockEntity.openPasscodeGUI(level, pos, player);
+                }
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+
+        return InteractionResult.SUCCESS;
     }
 
     @SuppressWarnings("deprecation")
@@ -148,14 +191,92 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
                                         final @NotNull BlockGetter level,
                                         final @NotNull BlockPos pos,
                                         final @NotNull CollisionContext context) {
-        SkyChestBlockEntity sk = getBlockEntity(level, pos);
-        Direction up = sk != null ? sk.getTop() : Direction.UP;
+        final var disguisedState = IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+        if (disguisedState.getBlock() != this) {
+            return disguisedState.getShape(level, pos, context);
+        }
+        final var sk = getBlockEntity(level, pos);
+        final var up = sk != null ? sk.getTop() : Direction.UP;
         return SHAPES.get(up);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+    public int getLightEmission(final BlockState state, final BlockGetter level, final BlockPos pos) {
+        final var disguisedState = IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+        if (disguisedState.getBlock() != this) {
+            return disguisedState.getLightEmission(level, pos);
+        }
+        return super.getLightEmission(state, level, pos);
+    }
+
+    @Override
+    public SoundType getSoundType(final BlockState state,
+                                  final LevelReader level,
+                                  final BlockPos pos,
+                                  final Entity entity) {
+        final var disguisedState = IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+        if (disguisedState.getBlock() != this) {
+            return disguisedState.getSoundType(level, pos, entity);
+        }
+        return super.getSoundType(state, level, pos, entity);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public float getShadeBrightness(final @NotNull BlockState state,
+                                    final @NotNull BlockGetter level,
+                                    final @NotNull BlockPos pos) {
+        final var disguisedState = IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+        if (disguisedState.getBlock() != this) {
+            return disguisedState.getShadeBrightness(level, pos);
+        }
+        return super.getShadeBrightness(state, level, pos);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getLightBlock(final @NotNull BlockState state,
+                             final @NotNull BlockGetter level,
+                             final @NotNull BlockPos pos) {
+        final var disguisedState = IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+        if (disguisedState.getBlock() != this) {
+            return disguisedState.getLightBlock(level, pos);
+        }
+        return super.getLightBlock(state, level, pos);
+    }
+
+    @Override
+    public BlockState getAppearance(final BlockState state,
+                                    final BlockAndTintGetter level,
+                                    final BlockPos pos,
+                                    final Direction side,
+                                    final BlockState queryState,
+                                    final BlockPos queryPos) {
+        return IDisguisable.getDisguisedStateOrDefault(state, level, pos);
+    }
+
+    @Override
+    public ItemStack getDisplayStack(Level level, BlockState state, BlockPos pos) {
+        return getDisguisedStack(level, pos);
+    }
+
+    @Override
+    public boolean shouldShowSCInfo(Level level, BlockState state, BlockPos pos) {
+        return getDisguisedStack(level, pos).getItem() == asItem();
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state,
+                                       HitResult target,
+                                       BlockGetter level,
+                                       BlockPos pos,
+                                       Player player) {
+        return getDisguisedStack(level, pos);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(final BlockPlaceContext context) {
+        final var fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return Objects.requireNonNull(super.getStateForPlacement(context)).setValue(WATERLOGGED,
             fluidState.getType() == Fluids.WATER);
     }
@@ -168,7 +289,7 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
 
     @SuppressWarnings("deprecation")
     @Override
-    public @NotNull BlockState updateShape(BlockState blockState,
+    public @NotNull BlockState updateShape(final BlockState blockState,
                                            final @NotNull Direction facing,
                                            final @NotNull BlockState facingState,
                                            final @NotNull LevelAccessor level,
@@ -180,25 +301,25 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
         return super.updateShape(blockState, facing, facingState, level, currentPos, facingPos);
     }
 
-    private final class Convertible implements IPasscodeConvertible {
-        @Override
-        public boolean isUnprotectedBlock(final BlockState state) {
-            return state.is(unprotectedBlock);
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, entity, stack);
+        if (entity instanceof Player player) {
+            MinecraftForge.EVENT_BUS.post(new OwnershipEvent(level, pos, player));
         }
+    }
 
-        @Override
-        public boolean isProtectedBlock(final BlockState state) {
-            return state.is(KeypadSkyChestBlock.this);
-        }
+    public SkyChestType getType() {
+        return type;
+    }
 
-        @Override
-        public boolean protect(final Player player, final Level level, final BlockPos pos) {
-            return false;
-        }
-
-        @Override
-        public boolean unprotect(final Player player, final Level level, final BlockPos pos) {
-            return false;
+    public void activate(BlockState state, Level level, BlockPos pos, Player player) {
+        if (!level.isClientSide) {
+            final var blockEntity = (KeypadSkyChestBlockEntity) getBlockEntity(level, pos);
+            if (blockEntity != null) {
+                MenuOpener.open(SkyChestMenu.TYPE, player, MenuLocators.forBlockEntity(blockEntity));
+                player.awardStat(Stats.CUSTOM.get(Stats.OPEN_CHEST));
+            }
         }
     }
 }

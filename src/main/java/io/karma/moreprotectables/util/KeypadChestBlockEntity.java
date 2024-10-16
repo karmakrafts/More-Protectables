@@ -6,6 +6,7 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -14,7 +15,7 @@ import javax.annotation.Nullable;
  * @author Alexander Hinze
  * @since 16/10/2024
  */
-public interface KeypadChestBlockEntity {
+public interface KeypadChestBlockEntity extends LidBlockEntity {
     Vec3i X_AXIS = new Vec3i(1, 0, 0);
     Vec3i Z_AXIS = new Vec3i(0, 0, 1);
 
@@ -25,7 +26,9 @@ public interface KeypadChestBlockEntity {
 
     BlockState getBEBlockState();
 
-    boolean isOpen();
+    default boolean isOpen() {
+        return getOpenNess(0F) > 0F;
+    }
 
     default boolean isPrimaryChest() {
         final var other = findOtherChest();
