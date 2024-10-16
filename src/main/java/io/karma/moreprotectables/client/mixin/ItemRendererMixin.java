@@ -41,18 +41,17 @@ public final class ItemRendererMixin {
                           final int combinedOverlay,
                           final BakedModel model,
                           final CallbackInfo cbi) {
-        final var blockEntity = moreprotectables$blockEntityCache.computeIfAbsent(stack.getItem(), item -> {
-            final var block = Block.byItem(item);
-            if (!(block instanceof EntityBlock entityBlock)) {
-                throw new IllegalStateException("Block expected to be an EntityBlock");
-            }
-            return entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
-        });
-        MinecraftForge.EVENT_BUS.post(new BlockEntityRenderEvent(blockEntity,
-            poseStack,
-            buffer,
-            combinedLight,
-            combinedOverlay,
-            true));
+        final var item = stack.getItem();
+        final var block = Block.byItem(item);
+        if (block instanceof EntityBlock entityBlock) {
+            final var blockEntity = moreprotectables$blockEntityCache.computeIfAbsent(item,
+                i -> entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState()));
+            MinecraftForge.EVENT_BUS.post(new BlockEntityRenderEvent(blockEntity,
+                poseStack,
+                buffer,
+                combinedLight,
+                combinedOverlay,
+                true));
+        }
     }
 }

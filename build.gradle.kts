@@ -148,7 +148,7 @@ mixin {
 
 fun Manifest.applyCommonManifest() {
     attributes.apply {
-        this["MixinConfigs"] = "mixins.$modId.client.json"
+        this["MixinConfigs"] = "mixins.$modId.common.json,mixins.$modId.client.json"
         this["Specification-Title"] = modId
         this["Specification-Vendor"] = "Karma Krafts"
         this["Specification-Version"] = version
