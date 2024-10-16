@@ -27,41 +27,41 @@ import java.util.Objects;
  */
 @Mixin(CheckPasscodeScreen.class)
 public abstract class CheckPasscodeScreenMixin extends Screen {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private static Component COOLDOWN_TEXT_1;
-    @Shadow
+    @Shadow(remap = false)
     private int leftPos;
-    @Shadow
+    @Shadow(remap = false)
     private int topPos;
-    @Shadow
+    @Shadow(remap = false)
     private int cooldownText1XPos;
-    @Shadow
+    @Shadow(remap = false)
     private CensoringEditBox keycodeTextbox;
-    @Shadow
+    @Shadow(remap = false)
     private int imageWidth;
-    @Shadow
+    @Shadow(remap = false)
     private int imageHeight;
-    @Shadow
+    @Shadow(remap = false)
     private IPasscodeProtected passcodeProtected;
 
     protected CheckPasscodeScreenMixin(final Component title) {
         super(title);
     }
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void addNumberToString(int number);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void toggleChildrenActive(boolean setActive);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void removeLastCharacter();
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract void checkCode(String code);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract boolean isValidChar(char c);
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;init()V", shift = Shift.AFTER), cancellable = true)
@@ -119,7 +119,10 @@ public abstract class CheckPasscodeScreenMixin extends Screen {
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void onKeyPressed(int keyCode, int scanCode, int modifiers, final CallbackInfoReturnable<Boolean> cbi) {
+    private void onKeyPressed(final int keyCode,
+                              final int scanCode,
+                              final int modifiers,
+                              final CallbackInfoReturnable<Boolean> cbi) {
         if (minecraft == null || keycodeTextbox == null) {
             cbi.setReturnValue(false);
             cbi.cancel();

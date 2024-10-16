@@ -20,7 +20,7 @@ public abstract class KeypadChestBlockEntityMixin extends ChestBlockEntity
         super(type, pos, state);
     }
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract KeypadChestBlockEntity findOther();
 
     @SuppressWarnings("all")

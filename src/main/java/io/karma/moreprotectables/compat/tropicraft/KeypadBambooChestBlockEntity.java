@@ -16,9 +16,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraftforge.client.model.data.ModelData;
 import net.tropicraft.core.common.block.tileentity.BambooChestBlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -202,9 +204,25 @@ public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity i
         return sendDenylistMessage.get();
     }
 
-    @Nullable
     @Override
-    public BlockEntity findOtherChest() {
+    public @Nullable BlockEntity findOtherChest() {
+        BlockState state = getBlockState();
+        ChestType type = state.getValue(ChestBlock.TYPE);
+        if (type != ChestType.SINGLE) {
+            BlockPos offsetPos = worldPosition.relative(ChestBlock.getConnectedDirection(state));
+            BlockState offsetState = level.getBlockState(offsetPos);
+            if (state.getBlock() == offsetState.getBlock()) {
+                ChestType offsetType = offsetState.getValue(ChestBlock.TYPE);
+                if (offsetType != ChestType.SINGLE && type != offsetType && state.getValue(ChestBlock.FACING) == offsetState.getValue(
+                    ChestBlock.FACING)) {
+                    BlockEntity blockEntity = level.getBlockEntity(offsetPos);
+                    if (blockEntity instanceof KeypadBambooChestBlockEntity chestBlockEntity) {
+                        return chestBlockEntity;
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
