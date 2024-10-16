@@ -17,15 +17,21 @@ public final class BlockEntityRenderEvent extends Event {
     private final PoseStack poseStack;
     private final MultiBufferSource bufferSource;
     private final int packedLight;
+    private final int packedOverlay;
+    private final boolean isItem;
 
     public BlockEntityRenderEvent(final BlockEntity blockEntity,
                                   final PoseStack poseStack,
                                   final MultiBufferSource bufferSource,
-                                  final int packedLight) {
+                                  final int packedLight,
+                                  final int packedOverlay,
+                                  final boolean isItem) {
         this.blockEntity = blockEntity;
         this.poseStack = poseStack;
         this.bufferSource = bufferSource;
         this.packedLight = packedLight;
+        this.packedOverlay = packedOverlay;
+        this.isItem = isItem;
     }
 
     public BlockEntity getBlockEntity() {
@@ -42,5 +48,13 @@ public final class BlockEntityRenderEvent extends Event {
 
     public int getPackedLight() {
         return packedLight;
+    }
+
+    public int getPackedOverlay() {
+        return packedOverlay;
+    }
+
+    public boolean isItem() {
+        return isItem;
     }
 }

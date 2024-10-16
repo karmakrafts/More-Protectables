@@ -17,8 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -192,14 +194,19 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     //    return KeypadSkyChestBlock.isBlocked(getLevel(), getBlockPos());
     //}
 
-
+    @Nullable
     @Override
-    public boolean isDoubleChest() {
-        return false;
+    public BlockEntity findOtherChest() {
+        return null;
     }
 
     @Override
-    public boolean isPrimaryChest() {
-        return true;
+    public BlockPos getBEPos() {
+        return worldPosition;
+    }
+
+    @Override
+    public BlockState getBEBlockState() {
+        return getBlockState();
     }
 }

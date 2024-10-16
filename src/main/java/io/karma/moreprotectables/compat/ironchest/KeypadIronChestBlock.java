@@ -2,6 +2,7 @@ package io.karma.moreprotectables.compat.ironchest;
 
 import com.progwml6.ironchest.common.block.IronChestsTypes;
 import com.progwml6.ironchest.common.block.regular.AbstractIronChestBlock;
+import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
 import io.karma.moreprotectables.util.KeypadChestBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -26,9 +27,13 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(final @NotNull Level level,
                                                                   final @NotNull BlockState state,
                                                                   final @NotNull BlockEntityType<T> blockEntityType) {
-        // Attach server ticker for updating crystal chests
-        if (!level.isClientSide && blockEntityType == IronChestCompatibilityContent.keypadCrystalChestBlockEntity.get()) {
-            return KeypadCrystalChestBlockEntity::tick;
+        // Attach ticker for updating crystal chests
+        if (blockEntityType == IronChestCompatibilityContent.keypadCrystalChestBlockEntity.get()) {
+            return level.isClientSide ? createTickerHelper(blockEntityType,
+                this.blockEntityType(),
+                AbstractIronChestBlockEntity::lidAnimateTick) : createTickerHelper(blockEntityType,
+                this.blockEntityType(),
+                KeypadCrystalChestBlockEntity::tick);
         }
         return super.getTicker(level, state, blockEntityType);
     }

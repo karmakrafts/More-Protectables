@@ -34,7 +34,7 @@ public final class KeypadCrystalChestBlockEntity extends KeypadIronChestBlockEnt
         if (!(blockEntity instanceof KeypadCrystalChestBlockEntity chestBlockEntity)) {
             return;
         }
-        if (chestBlockEntity.inventoryTouched) {
+        if (!level.isClientSide && chestBlockEntity.inventoryTouched) {
             chestBlockEntity.inventoryTouched = false;
             chestBlockEntity.sortTopStacks();
         }

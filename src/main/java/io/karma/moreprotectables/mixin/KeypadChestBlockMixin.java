@@ -7,6 +7,6 @@ import org.spongepowered.asm.mixin.Mixin;
  * @author Alexander Hinze
  * @since 16/10/2024
  */
-@Mixin(value = net.geforcemods.securitycraft.blocks.KeypadChestBlock.class, remap = false)
+@Mixin(net.geforcemods.securitycraft.blocks.KeypadChestBlock.class)
 public class KeypadChestBlockMixin implements KeypadChestBlock {
 }

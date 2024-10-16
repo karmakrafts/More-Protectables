@@ -8,8 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -38,13 +40,19 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
         };
     }
 
+    @Nullable
     @Override
-    public boolean isDoubleChest() {
-        return false;
+    public BlockEntity findOtherChest() {
+        return null;
     }
 
     @Override
-    public boolean isPrimaryChest() {
-        return true;
+    public BlockPos getBEPos() {
+        return worldPosition;
+    }
+
+    @Override
+    public BlockState getBEBlockState() {
+        return getBlockState();
     }
 }

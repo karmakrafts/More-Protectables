@@ -1,28 +1,21 @@
 package io.karma.moreprotectables.client.render;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.karma.moreprotectables.MoreProtectables;
-import io.karma.moreprotectables.client.event.BlockEntityItemRenderEvent;
 import io.karma.moreprotectables.client.event.BlockEntityRenderEvent;
 import io.karma.moreprotectables.util.KeypadChestBlock;
 import io.karma.moreprotectables.util.KeypadChestBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.TransformationHelper;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus.Internal;
-
-import java.util.HashMap;
 
 /**
  * @author Alexander Hinze
@@ -36,10 +29,6 @@ public final class ChestKeypadRenderer {
         "block/keypad_on_chest_unlocked");
     public static final ResourceLocation KEYPAD_LOCKED_MODEL = new ResourceLocation(MoreProtectables.MODID,
         "block/keypad_on_chest_locked");
-
-    private final BufferBuilder bufferBuilder = new BufferBuilder(256);
-    private final HashMap<RenderType, BufferBuilder> bufferBuilders = new HashMap<>();
-    private final BufferSource bufferSource = MultiBufferSource.immediateWithBuffers(bufferBuilders, bufferBuilder);
 
     private BakedModel keypadModel;
     private BakedModel keypadUnlockedModel;
@@ -56,7 +45,6 @@ public final class ChestKeypadRenderer {
         modBus.addListener(this::onRegisterAdditionalModels);
         modBus.addListener(this::onBakingComplete);
         bus.addListener(this::onRenderBlockEntity);
-        bus.addListener(this::onRenderBlockEntityItem);
     }
 
     private void onRegisterAdditionalModels(final ModelEvent.RegisterAdditional event) {
@@ -74,15 +62,26 @@ public final class ChestKeypadRenderer {
         keypadLockedModel = models.get(KEYPAD_LOCKED_MODEL);
     }
 
-    private void renderKeypad(final BlockState state,
-                              final PoseStack poseStack,
-                              final MultiBufferSource bufferSource,
-                              final int packedLight,
-                              final int packedOverlay) {
-
+    private void onRenderBlockEntity(final BlockEntityRenderEvent event) {
+        final var blockEntity = event.getBlockEntity();
+        final var state = blockEntity.getBlockState();
+        if (!(state.getBlock() instanceof KeypadChestBlock) || !(blockEntity instanceof KeypadChestBlockEntity chestBlockEntity) || !chestBlockEntity.isPrimaryChest()) {
+            return;
+        }
         final var renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-        final var buffer = bufferSource.getBuffer(RenderType.solid());
+        final var buffer = event.getBufferSource().getBuffer(RenderType.solid());
+        final var poseStack = event.getPoseStack();
         poseStack.pushPose();
+        poseStack.translate(0.5F, 0.5F, 0.5F);
+        if (event.isItem()) {
+            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, 180F, 0F, true));
+        }
+        else {
+            final var facing = state.getValue(HorizontalDirectionalBlock.FACING);
+            final var angle = facing.getAxis() == Axis.Z ? facing.getOpposite().toYRot() : facing.toYRot();
+            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, angle, 0F, true));
+        }
+        poseStack.translate(-0.5F, -0.5F, -0.5F);
         renderer.renderModel(poseStack.last(),
             buffer,
             state,
@@ -90,35 +89,10 @@ public final class ChestKeypadRenderer {
             1F,
             1F,
             1F,
-            packedLight,
-            packedOverlay,
+            event.getPackedLight(),
+            event.getPackedOverlay(),
             ModelData.EMPTY,
             RenderType.solid());
         poseStack.popPose();
-    }
-
-    private void onRenderBlockEntity(final BlockEntityRenderEvent event) {
-        final var blockEntity = event.getBlockEntity();
-        final var state = blockEntity.getBlockState();
-        if (!(state.getBlock() instanceof KeypadChestBlock) || !(blockEntity instanceof KeypadChestBlockEntity chestBlockEntity) || !chestBlockEntity.isPrimaryChest()) {
-            return;
-        }
-        renderKeypad(state,
-            event.getPoseStack(),
-            event.getBufferSource(),
-            event.getPackedLight(),
-            OverlayTexture.NO_OVERLAY);
-    }
-
-    private void onRenderBlockEntityItem(final BlockEntityItemRenderEvent event) {
-        final var block = Block.byItem(event.getStack().getItem());
-        if (!(block instanceof KeypadChestBlock)) {
-            return;
-        }
-        renderKeypad(block.defaultBlockState(),
-            event.getPoseStack(),
-            event.getBufferSource(),
-            event.getPackedLight(),
-            event.getPackedOverlay());
     }
 }

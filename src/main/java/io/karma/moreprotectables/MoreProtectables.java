@@ -39,6 +39,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.ServiceLoader.Provider;
 
 /**
  * @author Alexander Hinze
@@ -54,13 +55,16 @@ public class MoreProtectables {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB,
         MODID);
-    private static List<CompatibilityModule> compatibilityModules;
     // @formatter:off
+    private static final List<CompatibilityModule> COMPAT_MODULES = CompatibilityModule.loadAll()
+        .filter(provider -> FMLLoader.getLoadingModList().getModFileById(CompatibilityModule.getModId(provider.type())) != null)
+        .map(Provider::get)
+        .toList();
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register(MODID, () -> CreativeModeTab.builder()
         .icon(() -> new ItemStack(SCContent.KEY_PANEL.get()))
         .title(Component.translatable(String.format("itemGroup.%s", MODID)))
         .displayItems((params, output) -> {
-            for(final var module : compatibilityModules) {
+            for(final var module : COMPAT_MODULES) {
                 module.addItemsToTab(output);
             }
         })
@@ -68,18 +72,7 @@ public class MoreProtectables {
     // @formatter:on
 
     public MoreProtectables() {
-        // @formatter:off
-        compatibilityModules = CompatibilityModule.loadAll()
-            .filter(provider -> FMLLoader.getLoadingModList().getModFileById(CompatibilityModule.getModId(provider.type())) != null)
-            .map(provider -> {
-                final var module = provider.get();
-                module.init();
-                LOGGER.info("Initialized compatibility module {}", module.getName());
-                return module;
-            })
-            .toList();
-        // @formatter:on
-
+        COMPAT_MODULES.forEach(CompatibilityModule::init);
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -95,7 +88,7 @@ public class MoreProtectables {
 
     @OnlyIn(Dist.CLIENT)
     private void onClientSetup(final FMLClientSetupEvent event) {
-        for (final var module : compatibilityModules) {
+        for (final var module : COMPAT_MODULES) {
             event.enqueueWork(module::initClient);
         }
     }

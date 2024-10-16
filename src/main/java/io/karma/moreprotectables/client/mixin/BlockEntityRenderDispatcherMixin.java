@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,6 +34,11 @@ public final class BlockEntityRenderDispatcherMixin {
             ? LevelRenderer.getLightColor(Objects.requireNonNull(blockEntity.getLevel()), blockEntity.getBlockPos())
             : 0;
         // @formatter:on
-        MinecraftForge.EVENT_BUS.post(new BlockEntityRenderEvent(blockEntity, poseStack, bufferSource, packedLight));
+        MinecraftForge.EVENT_BUS.post(new BlockEntityRenderEvent(blockEntity,
+            poseStack,
+            bufferSource,
+            packedLight,
+            OverlayTexture.NO_OVERLAY,
+            false));
     }
 }
