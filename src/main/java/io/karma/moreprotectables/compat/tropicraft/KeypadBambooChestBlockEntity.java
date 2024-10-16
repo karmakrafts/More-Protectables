@@ -1,7 +1,5 @@
-package io.karma.moreprotectables.compat.appeng;
+package io.karma.moreprotectables.compat.tropicraft;
 
-import appeng.block.storage.SkyChestBlock.SkyChestType;
-import appeng.blockentity.storage.SkyChestBlockEntity;
 import io.karma.moreprotectables.util.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
@@ -22,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
+import net.tropicraft.core.common.block.tileentity.BambooChestBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,9 +31,9 @@ import java.util.UUID;
 
 /**
  * @author Alexander Hinze
- * @since 14/10/2024
+ * @since 16/10/2024
  */
-public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity implements KeypadChestBlockEntity {
+public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity implements KeypadChestBlockEntity {
     private final Owner owner = new Owner();
     private final BooleanOption sendAllowlistMessage = new SendAllowlistMessageOption(false);
     private final BooleanOption sendDenylistMessage = new SendDenylistMessageOption(true);
@@ -46,26 +45,21 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     private ResourceLocation previousChest;
     private long cooldownEnd = 0;
 
-    public KeypadSkyChestBlockEntity(final SkyChestType type, final BlockPos pos, final BlockState blockState) {
-        super(getBlockEntityType(type), pos, blockState);
-    }
-
-    private static BlockEntityType<KeypadSkyChestBlockEntity> getBlockEntityType(final SkyChestType type) {
-        if (type == SkyChestType.STONE) {
-            return AppengCompatibilityContent.keypadSkyChestBlockEntity.get();
-        }
-        return AppengCompatibilityContent.keypadSmoothSkyChestBlockEntity.get();
+    public KeypadBambooChestBlockEntity(final BlockEntityType<BambooChestBlockEntity> type,
+                                        final BlockPos pos,
+                                        final BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
-    public void saveAdditional(final CompoundTag data) {
+    public void saveAdditional(final @NotNull CompoundTag data) {
         super.saveAdditional(data);
         saveAdditionalChestData(data);
     }
 
     @Override
-    public void loadTag(final CompoundTag data) {
-        super.loadTag(data);
+    public void load(final @NotNull CompoundTag data) {
+        super.load(data);
         loadAdditionalChestData(data);
     }
 

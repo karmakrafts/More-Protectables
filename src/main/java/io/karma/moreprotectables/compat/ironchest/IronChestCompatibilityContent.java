@@ -42,50 +42,50 @@ public final class IronChestCompatibilityContent {
     public static void register() {
         final var chestBlockProps = Properties.of().mapColor(MapColor.METAL).strength(3.0F);
 
-        keypadCopperChestBlock = chestBlock("keypad_copper_chest",
+        keypadCopperChestBlock = block("keypad_copper_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.COPPER, chestBlockProps));
-        keypadIronChestBlock = chestBlock("keypad_iron_chest",
+        keypadIronChestBlock = block("keypad_iron_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.IRON, chestBlockProps));
-        keypadGoldChestBlock = chestBlock("keypad_gold_chest",
+        keypadGoldChestBlock = block("keypad_gold_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.GOLD, chestBlockProps));
-        keypadDiamondChestBlock = chestBlock("keypad_diamond_chest",
+        keypadDiamondChestBlock = block("keypad_diamond_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.DIAMOND, chestBlockProps));
-        keypadCrystalChestBlock = chestBlock("keypad_crystal_chest",
+        keypadCrystalChestBlock = block("keypad_crystal_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.CRYSTAL, chestBlockProps));
-        keypadObsidianChestBlock = chestBlock("keypad_obsidian_chest",
+        keypadObsidianChestBlock = block("keypad_obsidian_chest",
             () -> new KeypadIronChestBlock(IronChestsTypes.OBSIDIAN, chestBlockProps));
 
-        keypadCopperChestBlockEntity = chestBlockEntity("keypad_copper_chest",
+        keypadCopperChestBlockEntity = blockEntity("keypad_copper_chest",
             keypadCopperChestBlock,
             (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.COPPER,
                 keypadCopperChestBlock::get,
                 pos,
                 state));
-        keypadIronChestBlockEntity = chestBlockEntity("keypad_iron_chest",
+        keypadIronChestBlockEntity = blockEntity("keypad_iron_chest",
             keypadIronChestBlock,
             (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.IRON,
                 keypadIronChestBlock::get,
                 pos,
                 state));
-        keypadGoldChestBlockEntity = chestBlockEntity("keypad_gold_chest",
+        keypadGoldChestBlockEntity = blockEntity("keypad_gold_chest",
             keypadGoldChestBlock,
             (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.GOLD,
                 keypadGoldChestBlock::get,
                 pos,
                 state));
-        keypadDiamondChestBlockEntity = chestBlockEntity("keypad_diamond_chest",
+        keypadDiamondChestBlockEntity = blockEntity("keypad_diamond_chest",
             keypadDiamondChestBlock,
             (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.DIAMOND,
                 keypadDiamondChestBlock::get,
                 pos,
                 state));
-        keypadCrystalChestBlockEntity = chestBlockEntity("keypad_crystal_chest",
+        keypadCrystalChestBlockEntity = blockEntity("keypad_crystal_chest",
             keypadCrystalChestBlock,
             (pos, state) -> new KeypadCrystalChestBlockEntity(IronChestsTypes.CRYSTAL,
                 keypadCrystalChestBlock::get,
                 pos,
                 state));
-        keypadObsidianChestBlockEntity = chestBlockEntity("keypad_obsidian_chest",
+        keypadObsidianChestBlockEntity = blockEntity("keypad_obsidian_chest",
             keypadObsidianChestBlock,
             (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.OBSIDIAN,
                 keypadObsidianChestBlock::get,
@@ -104,15 +104,15 @@ public final class IronChestCompatibilityContent {
         };
     }
 
-    private static <E extends AbstractIronChestBlockEntity> RegistryObject<BlockEntityType<E>> chestBlockEntity(final String name,
-                                                                                                                final Supplier<? extends Block> block,
-                                                                                                                final BlockEntitySupplier<E> supplier) {
+    private static <E extends AbstractIronChestBlockEntity> RegistryObject<BlockEntityType<E>> blockEntity(final String name,
+                                                                                                           final Supplier<? extends Block> block,
+                                                                                                           final BlockEntitySupplier<E> supplier) {
         return MoreProtectables.BLOCK_ENTITIES.register(name,
             () -> new BlockEntityType<>(supplier, Set.of(block.get()), null));
     }
 
-    private static <B extends AbstractIronChestBlock> RegistryObject<B> chestBlock(final String name,
-                                                                                   final Supplier<B> supplier) {
+    private static <B extends AbstractIronChestBlock> RegistryObject<B> block(final String name,
+                                                                              final Supplier<B> supplier) {
         final var block = MoreProtectables.BLOCKS.register(name, supplier);
         MoreProtectables.ITEMS.register(name,
             () -> new IronChestBlockItem(block.get(),

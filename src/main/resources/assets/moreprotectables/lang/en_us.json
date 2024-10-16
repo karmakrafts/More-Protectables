@@ -9,5 +9,7 @@
   "block.moreprotectables.keypad_gold_chest": "Passcode-protected Gold Chest",
   "block.moreprotectables.keypad_diamond_chest": "Passcode-protected Diamond Chest",
   "block.moreprotectables.keypad_crystal_chest": "Passcode-protected Crystal Chest",
-  "block.moreprotectables.keypad_obsidian_chest": "Passcode-protected Obsidian Chest"
+  "block.moreprotectables.keypad_obsidian_chest": "Passcode-protected Obsidian Chest",
+
+  "block.moreprotectables.keypad_bamboo_chest": "Passcode-protected Bamboo Chest"
 }

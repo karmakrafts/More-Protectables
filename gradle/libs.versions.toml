@@ -13,6 +13,7 @@ ironChests = "1.20.1-14.4.1" # https://dvs1.progwml6.com/files/maven/com/progwml
 appliedEnergistics = "5641282" # https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2/files/all?page=1&pageSize=20
 curios = "5680164" #
 arsNouveau = "5600384" # https://www.curseforge.com/minecraft/mc-mods/ars-nouveau/files/all?page=1&pageSize=20
+registrate = "MC1.20-1.3.11" # https://maven.tterrag.com/com/tterrag/registrate/Registrate/
 tropicraft = "4811116" # https://www.curseforge.com/minecraft/mc-mods/tropicraft/files/all?page=1&pageSize=20
 framedBlocks = "5629578" # https://www.curseforge.com/minecraft/mc-mods/framedblocks/files/all?page=1&pageSize=20
 jei = "15.20.0.104" # https://maven.blamejared.com/mezz/jei/jei-1.20.1-forge/
@@ -29,6 +30,7 @@ ironChests = { module = "com.progwml6.ironchest:ironchests_1.20.x", version.ref 
 appliedEnergistics = { module = "curse.maven:applied-energistics-2-223794", version.ref = "appliedEnergistics" }
 curios = { module = "curse.maven:curios-309927", version.ref = "curios" }
 arsNouveau = { module = "curse.maven:ars-nouveau-401955", version.ref = "arsNouveau" }
+registrate = { module = "com.tterrag.registrate:Registrate", version.ref = "registrate" }
 tropicraft = { module = "curse.maven:tropicraft-254794", version.ref = "tropicraft" }
 framedBlocks = { module = "curse.maven:framedblocks-441647", version.ref = "framedBlocks" }
 jei-forge-core = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }

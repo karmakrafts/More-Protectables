@@ -6,6 +6,7 @@ import appeng.block.storage.SkyChestBlock.SkyChestType;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.ClientTickingBlockEntity;
 import io.karma.moreprotectables.MoreProtectables;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplie
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
@@ -34,9 +36,11 @@ public final class AppengCompatibilityContent {
         final var chestBlockProps = AEBaseBlock.stoneProps().strength(5F, 150F).noOcclusion();
 
         keypadSkyChest = chestBlock("keypad_sky_chest",
-            () -> new KeypadSkyChestBlock(SkyChestType.STONE, chestBlockProps));
+            () -> new KeypadSkyChestBlock(SkyChestType.STONE, chestBlockProps),
+            KeypadSkyChestBlockItem::new);
         keypadSmoothSkyChest = chestBlock("keypad_smooth_sky_chest",
-            () -> new KeypadSkyChestBlock(SkyChestType.BLOCK, chestBlockProps));
+            () -> new KeypadSkyChestBlock(SkyChestType.BLOCK, chestBlockProps),
+            KeypadSkyChestBlockItem::new);
 
         keypadSkyChestBlockEntity = chestBlockEntity("keypad_sky_chest",
             KeypadSkyChestBlockEntity.class,
@@ -67,9 +71,11 @@ public final class AppengCompatibilityContent {
         });
     }
 
-    private static <B extends Block> RegistryObject<B> chestBlock(final String name, final Supplier<B> supplier) {
+    private static <B extends Block> RegistryObject<B> chestBlock(final String name,
+                                                                  final Supplier<B> supplier,
+                                                                  final BiFunction<Block, Properties, ? extends BlockItem> itemFactory) {
         final var block = MoreProtectables.BLOCKS.register(name, supplier);
-        MoreProtectables.ITEMS.register(name, () -> new KeypadSkyChestBlockItem(block.get(), new Properties()));
+        MoreProtectables.ITEMS.register(name, () -> itemFactory.apply(block.get(), new Properties()));
         return block;
     }
 }
