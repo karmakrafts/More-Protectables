@@ -20,11 +20,15 @@ import io.karma.moreprotectables.compat.CompatibilityModule;
 import net.geforcemods.securitycraft.SCContent;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -40,6 +44,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.ServiceLoader.Provider;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * @author Alexander Hinze
@@ -84,6 +91,20 @@ public class MoreProtectables {
         BLOCK_ENTITIES.register(modBus);
         ITEMS.register(modBus);
         TABS.register(modBus);
+    }
+
+    public static <B extends Block> RegistryObject<B> block(final String name,
+                                                            final Supplier<B> supplier,
+                                                            final BiFunction<Block, Properties, ? extends BlockItem> itemFactory) {
+        final var block = BLOCKS.register(name, supplier);
+        ITEMS.register(name, () -> itemFactory.apply(block.get(), new Properties()));
+        return block;
+    }
+
+    public static <E extends BlockEntity> RegistryObject<BlockEntityType<E>> blockEntity(final String name,
+                                                                                         final Supplier<? extends Block> block,
+                                                                                         final BlockEntitySupplier<E> supplier) {
+        return BLOCK_ENTITIES.register(name, () -> new BlockEntityType<>(supplier, Set.of(block.get()), null));
     }
 
     @OnlyIn(Dist.CLIENT)
