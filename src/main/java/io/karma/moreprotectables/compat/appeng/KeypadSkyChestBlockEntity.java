@@ -180,6 +180,17 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     }
 
     @Override
+    public void setPreviousChest(ResourceLocation previousChest) {
+        this.previousChest = previousChest;
+        setChanged();
+    }
+
+    @Override
+    public ResourceLocation getPreviousChest() {
+        return previousChest;
+    }
+
+    @Override
     public void startCooldown() {
         if (!hasLevel()) {
             return;

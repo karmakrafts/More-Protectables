@@ -5,6 +5,7 @@ import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlock
 import com.progwml6.ironchest.common.inventory.IronChestMenu;
 import io.karma.moreprotectables.util.KeypadChestBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Block;
@@ -54,5 +55,15 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     @Override
     public BlockState getBEBlockState() {
         return getBlockState();
+    }
+
+    @Override
+    public ResourceLocation getPreviousChest() {
+        return new ResourceLocation("minecraft:chest");
+    }
+
+    @Override
+    public void setPreviousChest(final ResourceLocation previousChest) {
+
     }
 }

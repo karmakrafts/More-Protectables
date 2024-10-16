@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
@@ -18,6 +19,10 @@ import javax.annotation.Nullable;
 public interface KeypadChestBlockEntity extends LidBlockEntity {
     Vec3i X_AXIS = new Vec3i(1, 0, 0);
     Vec3i Z_AXIS = new Vec3i(0, 0, 1);
+
+    ResourceLocation getPreviousChest();
+
+    void setPreviousChest(final ResourceLocation previousChest);
 
     @Nullable
     BlockEntity findOtherChest();
