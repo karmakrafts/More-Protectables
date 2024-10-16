@@ -1,0 +1,12 @@
+{
+  "keypad_beep": {
+    "category": "block",
+    "sounds": ["moreprotectables:keypad_beep"],
+    "subtitle": "subtitle.moreprotectables.keypad_beep"
+  },
+  "keypad_beep_confirm": {
+    "category": "block",
+    "sounds": ["moreprotectables:keypad_beep_confirm"],
+    "subtitle": "subtitle.moreprotectables.keypad_beep_confirm"
+  }
+}

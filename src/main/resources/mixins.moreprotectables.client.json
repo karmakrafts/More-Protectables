@@ -11,6 +11,7 @@
   "client": [
     "BlockEntityRenderDispatcherMixin",
     "KeypadChestRendererMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "CheckPasscodeScreenMixin"
   ]
 }

@@ -1,6 +1,9 @@
 {
   "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
 
+  "subtitle.moreprotectables.keypad_beep": "Beep",
+  "subtitle.moreprotectables.keypad_beep_confirm": "Beep-beep",
+
   "block.moreprotectables.keypad_sky_chest": "Passcode-protected Sky Stone Chest",
   "block.moreprotectables.keypad_smooth_sky_chest": "Passcode-protected Sky Stone Block Chest",
 
