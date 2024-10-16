@@ -1,0 +1,13 @@
+{
+  "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
+
+  "block.moreprotectables.keypad_sky_chest": "Passcode-protected Sky Stone Chest",
+  "block.moreprotectables.keypad_smooth_sky_chest": "Passcode-protected Smooth Sky Stone Chest",
+
+  "block.moreprotectables.keypad_copper_chest": "Passcode-protected Copper Chest",
+  "block.moreprotectables.keypad_iron_chest": "Passcode-protected Iron Chest",
+  "block.moreprotectables.keypad_gold_chest": "Passcode-protected Gold Chest",
+  "block.moreprotectables.keypad_diamond_chest": "Passcode-protected Diamond Chest",
+  "block.moreprotectables.keypad_crystal_chest": "Passcode-protected Crystal Chest",
+  "block.moreprotectables.keypad_obsidian_chest": "Passcode-protected Obsidian Chest"
+}

@@ -9,17 +9,28 @@ mixinGradle = "0.7.38" # https://repo.spongepowered.org/#browse/browse:maven-pub
 librarian = "1.2.0" # https://github.com/ParchmentMC/Librarian/tags
 
 securityCraft = "5779953" # https://www.curseforge.com/minecraft/mc-mods/security-craft/files/all?page=1&pageSize=20
+ironChests = "1.20.1-14.4.1" # https://dvs1.progwml6.com/files/maven/com/progwml6/ironchest/ironchests_1.20.x/
+appliedEnergistics = "5641282" # https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2/files/all?page=1&pageSize=20
+curios = "5680164" #
+arsNouveau = "5600384" # https://www.curseforge.com/minecraft/mc-mods/ars-nouveau/files/all?page=1&pageSize=20
+tropicraft = "4811116" # https://www.curseforge.com/minecraft/mc-mods/tropicraft/files/all?page=1&pageSize=20
+framedBlocks = "5629578" # https://www.curseforge.com/minecraft/mc-mods/framedblocks/files/all?page=1&pageSize=20
 jei = "15.20.0.104" # https://maven.blamejared.com/mezz/jei/jei-1.20.1-forge/
 embeddium = "0.3.30-beta.48+mc1.20.1" # https://maven.blamejared.com/org/embeddedt/
 oculus = "5299671" # https://www.curseforge.com/minecraft/mc-mods/oculus/files/all?page=1&pageSize=20
 
-jackson = "2.17.2" # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 junit = "5.10.3" # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 
 [libraries]
 minecraftForge = { module = "net.minecraftforge:forge", version.ref = "minecraftForge" }
 
 securityCraft = { module = "curse.maven:security-craft-64760", version.ref = "securityCraft" }
+ironChests = { module = "com.progwml6.ironchest:ironchests_1.20.x", version.ref = "ironChests" }
+appliedEnergistics = { module = "curse.maven:applied-energistics-2-223794", version.ref = "appliedEnergistics" }
+curios = { module = "curse.maven:curios-309927", version.ref = "curios" }
+arsNouveau = { module = "curse.maven:ars-nouveau-401955", version.ref = "arsNouveau" }
+tropicraft = { module = "curse.maven:tropicraft-254794", version.ref = "tropicraft" }
+framedBlocks = { module = "curse.maven:framedblocks-441647", version.ref = "framedBlocks" }
 jei-forge-core = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
 jei-forge-api = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" }
 embeddium = { module = "org.embeddedt:embeddium-1.20.1", version.ref = "embeddium" }

@@ -86,6 +86,12 @@ dependencies {
     //implementation(fg.deobf(libs.oculus.get().toString()))
 
     implementation(fg.deobf(libs.securityCraft.get().toString()))
+    implementation(fg.deobf(libs.ironChests.get().toString()))
+    implementation(fg.deobf(libs.appliedEnergistics.get().toString()))
+    //implementation(fg.deobf(libs.curios.get().toString()))
+    //implementation(fg.deobf(libs.arsNouveau.get().toString()))
+    implementation(fg.deobf(libs.tropicraft.get().toString()))
+    //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
 
@@ -135,6 +141,7 @@ minecraft {
 mixin {
     add(mainSourceSet, "mixins.$modId.refmap.json")
     config("mixins.$modId.common.json")
+    config("mixins.$modId.client.json")
 }
 
 fun Manifest.applyCommonManifest() {
@@ -164,7 +171,7 @@ tasks {
             "mod_license" to license,
             "mod_version" to version,
             "mod_authors" to "Karma Krafts",
-            "mod_description" to "An addon for Almost Unified/Forge that adds inventory and loot table unification.")
+            "mod_description" to "A small addon for SecurityCraft that allows keypads to work with more blocks.")
         inputs.properties(properties)
         filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta")) {
             expand(properties)

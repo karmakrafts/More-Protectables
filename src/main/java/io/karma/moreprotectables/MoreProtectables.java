@@ -15,9 +15,30 @@
 
 package io.karma.moreprotectables;
 
+import io.karma.moreprotectables.client.render.ChestKeypadRenderer;
+import io.karma.moreprotectables.compat.CompatibilityModule;
+import net.geforcemods.securitycraft.SCContent;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 /**
  * @author Alexander Hinze
@@ -27,4 +48,55 @@ import org.apache.logging.log4j.Logger;
 public class MoreProtectables {
     public static final String MODID = "moreprotectables";
     public static final Logger LOGGER = LogManager.getLogger("More Protectables");
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES,
+        MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB,
+        MODID);
+    private static List<CompatibilityModule> compatibilityModules;
+    // @formatter:off
+    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(MODID, () -> CreativeModeTab.builder()
+        .icon(() -> new ItemStack(SCContent.KEY_PANEL.get()))
+        .title(Component.translatable(String.format("itemGroup.%s", MODID)))
+        .displayItems((params, output) -> {
+            for(final var module : compatibilityModules) {
+                module.addItemsToTab(output);
+            }
+        })
+        .build());
+    // @formatter:on
+
+    public MoreProtectables() {
+        // @formatter:off
+        compatibilityModules = CompatibilityModule.loadAll()
+            .filter(provider -> FMLLoader.getLoadingModList().getModFileById(CompatibilityModule.getModId(provider.type())) != null)
+            .map(provider -> {
+                final var module = provider.get();
+                module.init();
+                LOGGER.info("Initialized compatibility module {}", module.getName());
+                return module;
+            })
+            .toList();
+        // @formatter:on
+
+        final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ChestKeypadRenderer.INSTANCE.setup();
+            modBus.addListener(this::onClientSetup);
+        });
+
+        BLOCKS.register(modBus);
+        BLOCK_ENTITIES.register(modBus);
+        ITEMS.register(modBus);
+        TABS.register(modBus);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onClientSetup(final FMLClientSetupEvent event) {
+        for (final var module : compatibilityModules) {
+            event.enqueueWork(module::initClient);
+        }
+    }
 }

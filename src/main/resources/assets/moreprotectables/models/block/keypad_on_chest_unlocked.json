@@ -1,0 +1,23 @@
+{
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "moreprotectables:block/keypad_unlocked",
+		"particle": "moreprotectables:block/keypad_unlocked"
+	},
+	"elements": [
+		{
+			"name": "panel",
+			"from": [10, 5, 0],
+			"to": [14, 9, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 5, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"east": {"uv": [12, 0, 13.5, 6], "texture": "#0"},
+				"south": {"uv": [6, 0, 12, 6], "texture": "#0"},
+				"west": {"uv": [12, 0, 13.5, 6], "texture": "#0"},
+				"up": {"uv": [0, 6, 6, 7.5], "texture": "#0"},
+				"down": {"uv": [0, 6, 6, 7.5], "texture": "#0"}
+			}
+		}
+	]
+}

@@ -1,5 +1,5 @@
 {
-  "package": "io.karma.moreprotectables.mixin",
+  "package": "io.karma.moreprotectables.client.mixin",
   "required": true,
   "refmap": "mixins.unifyeverything.refmap.json",
   "target": "@env(DEFAULT)",
@@ -8,8 +8,8 @@
   "injectors": {
     "maxShiftBy": 100
   },
-  "mixins": [
-    "KeypadChestBlockMixin",
-    "KeypadChestBlockEntityMixin"
+  "client": [
+    "BlockEntityRenderDispatcherMixin",
+    "KeypadChestRendererMixin"
   ]
 }
