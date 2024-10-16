@@ -2,7 +2,6 @@ package io.karma.moreprotectables.mixin;
 
 import net.geforcemods.securitycraft.blockentities.KeypadChestBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;

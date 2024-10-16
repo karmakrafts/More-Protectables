@@ -3,26 +3,21 @@ package io.karma.moreprotectables.compat.appeng;
 import appeng.block.storage.SkyChestBlock.SkyChestType;
 import appeng.blockentity.storage.SkyChestBlockEntity;
 import io.karma.moreprotectables.util.KeypadChestBlockEntity;
-import net.geforcemods.securitycraft.api.*;
+import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
 import net.geforcemods.securitycraft.api.Option.SendDenylistMessageOption;
 import net.geforcemods.securitycraft.api.Option.SmartModuleCooldownOption;
+import net.geforcemods.securitycraft.api.Owner;
 import net.geforcemods.securitycraft.blockentities.DisguisableBlockEntity;
-import net.geforcemods.securitycraft.blocks.KeypadChestBlock;
-import net.geforcemods.securitycraft.items.ModuleItem;
 import net.geforcemods.securitycraft.misc.ModuleType;
-import net.geforcemods.securitycraft.util.PasscodeUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,16 +34,15 @@ import java.util.UUID;
  * @author Alexander Hinze
  * @since 14/10/2024
  */
-public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
-    implements KeypadChestBlockEntity, IPasscodeProtected, IOwnable, IModuleInventory, ICustomizable, ILockable {
+public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity implements KeypadChestBlockEntity {
     private final Owner owner = new Owner();
     private final BooleanOption sendAllowlistMessage = new SendAllowlistMessageOption(false);
     private final BooleanOption sendDenylistMessage = new SendDenylistMessageOption(true);
     private final SmartModuleCooldownOption smartModuleCooldown = new SmartModuleCooldownOption();
+    private final NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
+    private final Map<ModuleType, Boolean> moduleStates = new EnumMap<>(ModuleType.class);
     private byte[] passcode;
     private UUID saltKey;
-    private NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
-    private Map<ModuleType, Boolean> moduleStates = new EnumMap<>(ModuleType.class);
     private ResourceLocation previousChest;
     private long cooldownEnd = 0;
 
@@ -66,34 +60,25 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     @Override
     public void saveAdditional(final CompoundTag data) {
         super.saveAdditional(data);
-        writeModuleInventory(data);
-        writeModuleStates(data);
-        writeOptions(data);
-        final var cooldownLeft = getCooldownEnd() - System.currentTimeMillis();
-        data.putLong("cooldownLeft", cooldownLeft <= 0 ? -1 : cooldownLeft);
-        if (saltKey != null) {
-            data.putUUID("saltKey", saltKey);
-        }
-        if (passcode != null) {
-            data.putString("passcode", PasscodeUtils.bytesToString(passcode));
-        }
-        owner.save(data, needsValidation());
-        if (previousChest != null) {
-            data.putString("previous_chest", previousChest.toString());
-        }
+        saveAdditionalChestData(data);
     }
 
     @Override
     public void loadTag(final CompoundTag data) {
         super.loadTag(data);
-        modules = readModuleInventory(data);
-        moduleStates = readModuleStates(data);
-        readOptions(data);
-        cooldownEnd = System.currentTimeMillis() + data.getLong("cooldownLeft");
-        loadSaltKey(data);
-        loadPasscode(data);
-        owner.load(data);
-        previousChest = new ResourceLocation(data.getString("previous_chest"));
+        loadAdditionalChestData(data);
+    }
+
+    @Override
+    public void setModuleStates(final Map<ModuleType, Boolean> states) {
+        moduleStates.clear();
+        moduleStates.putAll(states);
+    }
+
+    @Override
+    public void setModules(final NonNullList<ItemStack> modules) {
+        this.modules.clear();
+        this.modules.addAll(modules);
     }
 
     @Override
@@ -109,11 +94,6 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     @Override
     public NonNullList<ItemStack> getInventory() {
         return modules;
-    }
-
-    @Override
-    public ModuleType[] acceptedModules() {
-        return new ModuleType[]{ModuleType.ALLOWLIST, ModuleType.DENYLIST, ModuleType.REDSTONE, ModuleType.SMART, ModuleType.HARMING, ModuleType.DISGUISE};
     }
 
     @SuppressWarnings("deprecation")
@@ -149,16 +129,6 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     }
 
     @Override
-    public void activate(final Player player) {
-        if (!hasLevel()) {
-            return;
-        }
-        if (!Objects.requireNonNull(level).isClientSide && getBlockState().getBlock() instanceof KeypadSkyChestBlock block && !isBlocked()) {
-            block.activate(getBlockState(), level, worldPosition, player);
-        }
-    }
-
-    @Override
     public byte[] getPasscode() {
         return passcode == null || passcode.length == 0 ? null : passcode;
     }
@@ -180,14 +150,13 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     }
 
     @Override
-    public void setPreviousChest(ResourceLocation previousChest) {
-        this.previousChest = previousChest;
-        setChanged();
+    public @Nullable ResourceLocation getPreviousChest() {
+        return previousChest;
     }
 
     @Override
-    public ResourceLocation getPreviousChest() {
-        return previousChest;
+    public void setPreviousChest(final @Nullable ResourceLocation previousChest) {
+        this.previousChest = previousChest;
     }
 
     @Override
@@ -204,50 +173,13 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
     }
 
     @Override
-    public boolean isOnCooldown() {
-        return System.currentTimeMillis() < getCooldownEnd();
-    }
-
-    @Override
     public long getCooldownEnd() {
         return cooldownEnd;
     }
 
     @Override
-    public void openPasscodeGUI(final Level level, final BlockPos pos, final Player player) {
-        if (!level.isClientSide && !isBlocked()) {
-            IPasscodeProtected.super.openPasscodeGUI(level, pos, player);
-        }
-    }
-
-    @Override
-    public void dropAllModules() {
-        if (!hasLevel()) {
-            return;
-        }
-        for (ItemStack module : getInventory()) {
-            if (!(module.getItem() instanceof ModuleItem)) {
-                continue;
-            }
-            Block.popResource(Objects.requireNonNull(level), worldPosition, module);
-        }
-        getInventory().clear();
-    }
-
-    @Override
-    public void onModuleInserted(ItemStack stack, ModuleType module, boolean toggled) {
-        IModuleInventory.super.onModuleInserted(stack, module, toggled);
-        if (module == ModuleType.DISGUISE) {
-            DisguisableBlockEntity.onDisguiseModuleInserted(this, stack, toggled);
-        }
-    }
-
-    @Override
-    public void onModuleRemoved(ItemStack stack, ModuleType module, boolean toggled) {
-        IModuleInventory.super.onModuleRemoved(stack, module, toggled);
-        if (module == ModuleType.DISGUISE) {
-            DisguisableBlockEntity.onDisguiseModuleRemoved(this, stack, toggled);
-        }
+    public void setCooldownEnd(final long cooldownEnd) {
+        this.cooldownEnd = cooldownEnd;
     }
 
     @Override
@@ -267,24 +199,12 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity
         DisguisableBlockEntity.onHandleUpdateTag(this);
     }
 
-    private boolean isBlocked() {
-        if (!hasLevel()) {
-            return true;
-        }
-        for (final var dir : Direction.Plane.HORIZONTAL) {
-            final var pos = getBlockPos().relative(dir);
-            if (Objects.requireNonNull(level).getBlockState(pos).getBlock() instanceof KeypadSkyChestBlock && KeypadChestBlock.isBlocked(
-                level,
-                pos))
-                return true;
-        }
-        return KeypadChestBlock.isBlocked(Objects.requireNonNull(level), getBlockPos());
-    }
-
+    @Override
     public boolean sendsAllowlistMessage() {
         return sendAllowlistMessage.get();
     }
 
+    @Override
     public boolean sendsDenylistMessage() {
         return sendDenylistMessage.get();
     }

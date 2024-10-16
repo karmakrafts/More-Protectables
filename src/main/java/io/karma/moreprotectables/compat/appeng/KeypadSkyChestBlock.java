@@ -10,13 +10,8 @@ import appeng.menu.MenuOpener;
 import appeng.menu.implementations.SkyChestMenu;
 import appeng.menu.locator.MenuLocators;
 import io.karma.moreprotectables.util.KeypadChestBlock;
-import net.geforcemods.securitycraft.SCContent;
 import net.geforcemods.securitycraft.api.IDisguisable;
-import net.geforcemods.securitycraft.compat.IOverlayDisplay;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
-import net.geforcemods.securitycraft.util.PlayerUtils;
-import net.geforcemods.securitycraft.util.Utils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -57,7 +52,7 @@ import java.util.Objects;
  * @since 14/10/2024
  */
 public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestBlockEntity>
-    implements KeypadChestBlock, IDisguisable, IOverlayDisplay {
+    implements KeypadChestBlock {
     private static final double AABB_OFFSET_BOTTOM = 0.0;
     private static final double AABB_OFFSET_SIDES = 0.06;
     private static final double AABB_OFFSET_TOP = 0.0625;
@@ -143,36 +138,7 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
                                  Player player,
                                  InteractionHand hand,
                                  BlockHitResult hit) {
-        if (!level.isClientSide && !net.geforcemods.securitycraft.blocks.KeypadChestBlock.isBlocked(level, pos)) {
-            final var blockEntity = (KeypadSkyChestBlockEntity) level.getBlockEntity(pos);
-            if (blockEntity == null) {
-                return InteractionResult.PASS;
-            }
-            if (blockEntity.verifyPasscodeSet(level, pos, blockEntity, player)) {
-                if (blockEntity.isDenied(player)) {
-                    if (blockEntity.sendsDenylistMessage()) {
-                        PlayerUtils.sendMessageToPlayer(player,
-                            Utils.localize(getDescriptionId()),
-                            Utils.localize("messages.securitycraft:module.onDenylist"),
-                            ChatFormatting.RED);
-                    }
-                }
-                else if (blockEntity.isAllowed(player)) {
-                    if (blockEntity.sendsAllowlistMessage()) {
-                        PlayerUtils.sendMessageToPlayer(player,
-                            Utils.localize(getDescriptionId()),
-                            Utils.localize("messages.securitycraft:module.onAllowlist"),
-                            ChatFormatting.GREEN);
-                    }
-                    activate(state, level, pos, player);
-                }
-                else if (!player.getItemInHand(hand).is(SCContent.CODEBREAKER.get())) {
-                    blockEntity.openPasscodeGUI(level, pos, player);
-                }
-            }
-        }
-
-        return InteractionResult.SUCCESS;
+        return useChest(state, level, pos, player, hand, hit);
     }
 
     @SuppressWarnings("deprecation")
@@ -302,7 +268,11 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(final Level level,
+                            final BlockPos pos,
+                            final BlockState state,
+                            final LivingEntity entity,
+                            final ItemStack stack) {
         super.setPlacedBy(level, pos, state, entity, stack);
         if (entity instanceof Player player) {
             MinecraftForge.EVENT_BUS.post(new OwnershipEvent(level, pos, player));
@@ -313,6 +283,7 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
         return type;
     }
 
+    @Override
     public void activate(BlockState state, Level level, BlockPos pos, Player player) {
         if (!level.isClientSide) {
             final var blockEntity = (KeypadSkyChestBlockEntity) getBlockEntity(level, pos);

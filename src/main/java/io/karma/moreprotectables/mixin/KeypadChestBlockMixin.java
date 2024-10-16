@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.Mixin;
  * @since 16/10/2024
  */
 @Mixin(net.geforcemods.securitycraft.blocks.KeypadChestBlock.class)
-public class KeypadChestBlockMixin implements KeypadChestBlock {
+public abstract class KeypadChestBlockMixin implements KeypadChestBlock {
 }
