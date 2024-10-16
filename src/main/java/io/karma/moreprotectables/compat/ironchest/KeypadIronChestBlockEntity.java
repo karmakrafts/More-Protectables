@@ -28,10 +28,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -43,7 +40,7 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     private final BooleanOption sendAllowlistMessage = new SendAllowlistMessageOption(false);
     private final BooleanOption sendDenylistMessage = new SendDenylistMessageOption(true);
     private final SmartModuleCooldownOption smartModuleCooldown = new SmartModuleCooldownOption();
-    private final NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
+    private NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
     private final Map<ModuleType, Boolean> moduleStates = new EnumMap<>(ModuleType.class);
     private byte[] passcode;
     private UUID saltKey;
@@ -90,8 +87,7 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
 
     @Override
     public void setModules(final NonNullList<ItemStack> modules) {
-        this.modules.clear();
-        this.modules.addAll(modules);
+        this.modules = modules;
     }
 
     @Override

@@ -39,7 +39,7 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     private final BooleanOption sendAllowlistMessage = new SendAllowlistMessageOption(false);
     private final BooleanOption sendDenylistMessage = new SendDenylistMessageOption(true);
     private final SmartModuleCooldownOption smartModuleCooldown = new SmartModuleCooldownOption();
-    private final NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
+    private NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
     private final Map<ModuleType, Boolean> moduleStates = new EnumMap<>(ModuleType.class);
     private byte[] passcode;
     private UUID saltKey;
@@ -77,8 +77,7 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
 
     @Override
     public void setModules(final NonNullList<ItemStack> modules) {
-        this.modules.clear();
-        this.modules.addAll(modules);
+        this.modules = modules;
     }
 
     @Override
