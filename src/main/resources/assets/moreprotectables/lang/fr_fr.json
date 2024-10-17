@@ -1,0 +1,18 @@
+{
+  "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
+
+  "subtitle.moreprotectables.keypad_beep": "Bip",
+  "subtitle.moreprotectables.keypad_beep_confirm": "Bip-bip",
+
+  "block.moreprotectables.keypad_sky_chest": "Coffre en pierre du ciel protégé par un code d'accès",
+  "block.moreprotectables.keypad_smooth_sky_chest": "Coffre de blocs de pierre du ciel protégé par un code d'accès",
+
+  "block.moreprotectables.keypad_copper_chest": "Coffre à cuivre protégé par un code d'accès",
+  "block.moreprotectables.keypad_iron_chest": "Coffre de fer protégé par un code d'accès",
+  "block.moreprotectables.keypad_gold_chest": "Coffre d'or protégé par un code d'accès",
+  "block.moreprotectables.keypad_diamond_chest": "Coffre à diamants protégé par un code d'accès",
+  "block.moreprotectables.keypad_crystal_chest": "Coffre à cristaux protégé par un code d'accès",
+  "block.moreprotectables.keypad_obsidian_chest": "Coffre d'obsidienne protégé par un code d'accès",
+
+  "block.moreprotectables.keypad_bamboo_chest": "Coffre en bambou protégé par un code d'accès"
+}

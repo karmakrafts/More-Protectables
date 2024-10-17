@@ -1,0 +1,18 @@
+{
+  "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
+
+  "subtitle.moreprotectables.keypad_beep": "Piep",
+  "subtitle.moreprotectables.keypad_beep_confirm": "Piep-piep",
+
+  "block.moreprotectables.keypad_sky_chest": "Passwortgesicherte Himmelsstein Kiste",
+  "block.moreprotectables.keypad_smooth_sky_chest": "Passwortgesicherte Himmelsstein Block Kiste",
+
+  "block.moreprotectables.keypad_copper_chest": "Passwortgesicherte Kupfer Kiste",
+  "block.moreprotectables.keypad_iron_chest": "Passwortgesicherte Eisen Kiste",
+  "block.moreprotectables.keypad_gold_chest": "Passwortgesicherte Gold Kiste",
+  "block.moreprotectables.keypad_diamond_chest": "Passwortgesicherte Diamant Kiste",
+  "block.moreprotectables.keypad_crystal_chest": "Passwortgesicherte Kristall Kiste",
+  "block.moreprotectables.keypad_obsidian_chest": "Passwortgesicherte Obsidian Kiste",
+
+  "block.moreprotectables.keypad_bamboo_chest": "Passwortgesicherte Bambus Kiste"
+}

@@ -1,0 +1,18 @@
+{
+  "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
+
+  "subtitle.moreprotectables.keypad_beep": "Бип",
+  "subtitle.moreprotectables.keypad_beep_confirm": "Бип-Бип",
+
+  "block.moreprotectables.keypad_sky_chest": "Сундук с небесным камнем, защищенный пасскодом",
+  "block.moreprotectables.keypad_smooth_sky_chest": "Сундук с блоком небесного камня, защищенный пасскодом",
+
+  "block.moreprotectables.keypad_copper_chest": "Медный сундук, защищенный пасскодом",
+  "block.moreprotectables.keypad_iron_chest": "Железный сундук, защищенный пасскодом",
+  "block.moreprotectables.keypad_gold_chest": "Сундук с золотом, защищенный пасскодом",
+  "block.moreprotectables.keypad_diamond_chest": "Алмазный сундук, защищенный пасскодом",
+  "block.moreprotectables.keypad_crystal_chest": "Сундук с кристаллами, защищенный пасскодом",
+  "block.moreprotectables.keypad_obsidian_chest": "Обсидиановый сундук, защищенный пасскодом",
+
+  "block.moreprotectables.keypad_bamboo_chest": "Бамбуковый сундук с защитой пасскодом"
+}
