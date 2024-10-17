@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.jvm.tasks.Jar
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -31,6 +32,8 @@ plugins {
     alias(libs.plugins.forgeGradle)
     alias(libs.plugins.mixinGradle)
     alias(libs.plugins.librarian)
+    alias(libs.plugins.curseforgeGradle)
+    alias(libs.plugins.minotaur)
 }
 
 java {
@@ -88,12 +91,10 @@ dependencies {
 
     implementation(fg.deobf(libs.securityCraft.get().toString()))
     implementation(fg.deobf(libs.ironChests.get().toString()))
-    implementation(fg.deobf(libs.appliedEnergistics.get().toString()))
-    //implementation(fg.deobf(libs.curios.get().toString()))
+    implementation(fg.deobf(libs.appliedEnergistics.get().toString())) //implementation(fg.deobf(libs.curios.get().toString()))
     //implementation(fg.deobf(libs.arsNouveau.get().toString()))
     compileOnly(fg.deobf(libs.registrate.get().toString()))
-    implementation(fg.deobf(libs.tropicraft.get().toString()))
-    //implementation(fg.deobf(libs.framedBlocks.get().toString()))
+    implementation(fg.deobf(libs.tropicraft.get().toString())) //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
 
@@ -181,6 +182,24 @@ tasks {
     }
 }
 
+System.getenv("CI_MODRINTH_TOKEN")?.let { token ->
+    modrinth {
+        this.token = token
+        projectId = project.name
+        versionType = "release"
+        uploadFile = tasks.jar.get()
+        changelog = "See changes until ${System.getenv("CI_PROJECT_URL")}/-/tree/${System.getenv("CI_COMMIT_SHA")}"
+        gameVersions.add(libs.versions.minecraft.get())
+        loaders.add("forge")
+        dependencies {
+            required.project("security-craft")
+            optional.project("iron-chests")
+            optional.project("ae2")
+            optional.project("tropicraft")
+        }
+    }
+}
+
 tasks {
     withType<JavaCompile> {
         sourceCompatibility = "17"
@@ -191,16 +210,31 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 
+    System.getenv("CI_CURSEFORGE_TOKEN")?.let { token ->
+        create<TaskPublishCurseForge>("publishToCurseForge") {
+            apiToken = token
+            upload(1122568, jar) {
+                addJavaVersion("Java 17", "Java 18", "Java 19", "Java 20", "Java 21")
+                addGameVersion(libs.versions.minecraft.get())
+                addEnvironment("Client", "Server")
+                addModLoader("Forge")
+                addRelation("security-craft", "requiredDependency")
+                addRelation("iron-chests", "optionalDependency")
+                addRelation("applied-energistics-2", "optionalDependency")
+                addRelation("tropicraft", "optionalDependency")
+                releaseType = "release"
+                changelog = "See changes until ${System.getenv("CI_PROJECT_URL")}/-/tree/${System.getenv("CI_COMMIT_SHA")}"
+            }
+        }
+    }
+
     val archiveName = project.base.archivesName.get()
-    val jar by getting
 
     publishing {
         repositories {
             System.getenv("CI_API_V4_URL")?.let { apiUrl ->
                 maven {
-                    url = uri("${
-                        apiUrl.replace("http://", "https://")
-                    }/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven")
+                    url = uri("$apiUrl/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven")
                     name = "GitLab"
                     credentials(HttpHeaderCredentials::class) {
                         name = "Job-Token"

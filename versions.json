@@ -1,11 +1,12 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/more-protectables",
   "promos": {
-    "1.20.1-latest": "1.0.2.3",
-    "1.20.1-recommended": "1.0.2.3"
+    "1.20.1-latest": "1.0.2.4",
+    "1.20.1-recommended": "1.0.2.4"
   },
   "1.20.1": {
     "1.0.1.2": "- Initial public release",
-    "1.0.2.3": "- Added translations for german, french and russian"
+    "1.0.2.3": "- Added translations for german, french and russian",
+    "1.0.2.4": "- Added automatic deployment for CurseForge and Modrinth"
   }
 }
