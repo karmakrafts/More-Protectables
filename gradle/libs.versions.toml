@@ -19,6 +19,8 @@ registrate = "MC1.20-1.3.11" # https://maven.tterrag.com/com/tterrag/registrate/
 tropicraft = "4811116" # https://www.curseforge.com/minecraft/mc-mods/tropicraft/files/all?page=1&pageSize=20
 framedBlocks = "5629578" # https://www.curseforge.com/minecraft/mc-mods/framedblocks/files/all?page=1&pageSize=20
 twilightForest = "5468648" # https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest/files/all?page=1&pageSize=20
+zeta = "5597406" # https://www.curseforge.com/minecraft/mc-mods/zeta/files/all?page=1&pageSize=20
+quark = "5594847" # https://www.curseforge.com/minecraft/mc-mods/quark/files/all?page=1&pageSize=20
 jei = "15.20.0.104" # https://maven.blamejared.com/mezz/jei/jei-1.20.1-forge/
 embeddium = "0.3.30-beta.48+mc1.20.1" # https://maven.blamejared.com/org/embeddedt/
 oculus = "5299671" # https://www.curseforge.com/minecraft/mc-mods/oculus/files/all?page=1&pageSize=20
@@ -37,6 +39,8 @@ registrate = { module = "com.tterrag.registrate:Registrate", version.ref = "regi
 tropicraft = { module = "curse.maven:tropicraft-254794", version.ref = "tropicraft" }
 framedBlocks = { module = "curse.maven:framedblocks-441647", version.ref = "framedBlocks" }
 twilightForest = { module = "curse.maven:the-twilight-forest-227639", version.ref = "twilightForest" }
+zeta = { module = "curse.maven:zeta-968868", version.ref = "zeta" }
+quark = { module = "curse.maven:quark-243121", version.ref = "quark" }
 jei-forge-core = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
 jei-forge-api = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" }
 embeddium = { module = "org.embeddedt:embeddium-1.20.1", version.ref = "embeddium" }

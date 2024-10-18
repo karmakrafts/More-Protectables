@@ -98,6 +98,8 @@ dependencies {
     //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.registrate.get().toString()))
     implementation(fg.deobf(libs.tropicraft.get().toString()))
+    //implementation(fg.deobf(libs.zeta.get().toString()))
+    //implementation(fg.deobf(libs.quark.get().toString()))
     //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
@@ -200,6 +202,7 @@ System.getenv("CI_MODRINTH_TOKEN")?.let { token ->
             optional.project("iron-chests")
             optional.project("ae2")
             optional.project("tropicraft")
+            // TODO: add Twilight Forest relatio if it ever gets released on Modrinth
         }
     }
 }
@@ -226,6 +229,7 @@ tasks {
                 addRelation("iron-chests", "optionalDependency")
                 addRelation("applied-energistics-2", "optionalDependency")
                 addRelation("tropicraft", "optionalDependency")
+                addRelation("the-twilight-forest", "optionalDependency")
                 releaseType = "release"
                 changelog = "See changes until ${System.getenv("CI_PROJECT_URL")}/-/tree/${System.getenv("CI_COMMIT_SHA")}"
             }
