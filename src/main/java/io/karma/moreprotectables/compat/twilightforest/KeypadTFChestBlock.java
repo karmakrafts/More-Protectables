@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.compat.tropicraft;
+package io.karma.moreprotectables.compat.twilightforest;
 
 import io.karma.moreprotectables.util.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.IDisguisable;
@@ -15,30 +15,34 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
-import net.tropicraft.core.common.block.BambooChestBlock;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 /**
  * @author Alexander Hinze
- * @since 16/10/2024
+ * @since 18/10/2024
  */
-public final class KeypadBambooChestBlock extends BambooChestBlock implements KeypadChestBlock {
-    public KeypadBambooChestBlock(final Properties props) {
-        super(props, TropicraftCompatibilityContent.keypadBambooChestBlockEntity::get);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
+public final class KeypadTFChestBlock extends ChestBlock implements KeypadChestBlock {
+    public KeypadTFChestBlock(final Properties properties,
+                              final Supplier<BlockEntityType<? extends ChestBlockEntity>> blockEntityType) {
+        super(properties, blockEntityType);
     }
 
     @Override
-    public BlockEntity newBlockEntity(final BlockPos pos, final BlockState state) {
+    public BlockEntity newBlockEntity(final @NotNull BlockPos pos, final @NotNull BlockState state) {
         return blockEntityType.get().create(pos, state);
     }
 

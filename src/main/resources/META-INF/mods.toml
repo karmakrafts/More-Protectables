@@ -62,5 +62,12 @@ versionRange = "[9.6.3,)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.${ mod_id }]]
+modId = "twilightforest"
+mandatory = false
+versionRange = "[4.3.2508,)"
+ordering = "AFTER"
+side = "BOTH"
+
 [modproperties.${ mod_id }]
 catalogueImageIcon = "moreprotectables_logo.png"

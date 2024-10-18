@@ -17,10 +17,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -51,7 +53,23 @@ public interface KeypadChestBlockEntity
     boolean sendsDenylistMessage();
 
     @Nullable
-    BlockEntity findOtherChest();
+    default BlockEntity findOtherChest() {
+        final var state = getBEBlockState();
+        final var type = state.getValue(ChestBlock.TYPE);
+        if (type != ChestType.SINGLE) {
+            final var offsetPos = getBEPos().relative(ChestBlock.getConnectedDirection(state));
+            final var level = Objects.requireNonNull(getThisBlockEntity().getLevel());
+            final var offsetState = level.getBlockState(offsetPos);
+            if (state.getBlock() == offsetState.getBlock()) {
+                final var offsetType = offsetState.getValue(ChestBlock.TYPE);
+                if (offsetType != ChestType.SINGLE && type != offsetType && state.getValue(ChestBlock.FACING) == offsetState.getValue(
+                    ChestBlock.FACING)) {
+                    return level.getBlockEntity(offsetPos);
+                }
+            }
+        }
+        return null;
+    }
 
     BlockPos getBEPos();
 

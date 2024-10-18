@@ -15,7 +15,6 @@ import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,7 +75,11 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
             case BLOCK -> AEBlocks.SMOOTH_SKY_STONE_CHEST.block();
             default -> AEBlocks.SKY_STONE_CHEST.block();
         };
-        registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
+        // @formatter:off
+        registerDefaultState(defaultBlockState()
+            .setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH)
+            .setValue(WATERLOGGED, false));
+        // @formatter:on
     }
 
     private static AABB computeAABB(final Direction up) {
@@ -279,18 +283,17 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
         }
     }
 
-    public SkyChestType getType() {
-        return type;
-    }
-
     @Override
-    public void activate(BlockState state, Level level, BlockPos pos, Player player) {
-        if (!level.isClientSide) {
-            final var blockEntity = (KeypadSkyChestBlockEntity) getBlockEntity(level, pos);
+    public void activate(final BlockState state, final Level level, final BlockPos pos, final Player player) {
+        if (!level.isClientSide()) {
+            final var blockEntity = getBlockEntity(level, pos);
             if (blockEntity != null) {
                 MenuOpener.open(SkyChestMenu.TYPE, player, MenuLocators.forBlockEntity(blockEntity));
-                player.awardStat(Stats.CUSTOM.get(Stats.OPEN_CHEST));
             }
         }
+    }
+
+    public SkyChestType getType() {
+        return type;
     }
 }

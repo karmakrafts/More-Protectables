@@ -221,9 +221,8 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
         return sendDenylistMessage.get();
     }
 
-    @Nullable
     @Override
-    public BlockEntity findOtherChest() {
+    public @Nullable BlockEntity findOtherChest() {
         return null;
     }
 

@@ -91,10 +91,14 @@ dependencies {
 
     implementation(fg.deobf(libs.securityCraft.get().toString()))
     implementation(fg.deobf(libs.ironChests.get().toString()))
-    implementation(fg.deobf(libs.appliedEnergistics.get().toString())) //implementation(fg.deobf(libs.curios.get().toString()))
+    implementation(fg.deobf(libs.appliedEnergistics.get().toString()))
+    implementation(fg.deobf(libs.curios.get().toString()))
+    implementation(fg.deobf(libs.twilightForest.get().toString()))
     //implementation(fg.deobf(libs.arsNouveau.get().toString()))
+    //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.registrate.get().toString()))
-    implementation(fg.deobf(libs.tropicraft.get().toString())) //implementation(fg.deobf(libs.framedBlocks.get().toString()))
+    implementation(fg.deobf(libs.tropicraft.get().toString()))
+    //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
 

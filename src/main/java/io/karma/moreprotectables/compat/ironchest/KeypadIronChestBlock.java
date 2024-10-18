@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 public final class KeypadIronChestBlock extends AbstractIronChestBlock implements KeypadChestBlock {
     public KeypadIronChestBlock(final IronChestsTypes type, final Properties properties) {
         super(properties, () -> IronChestCompatibilityContent.getKeypadChestBlockEntityType(type), type);
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
     @Nullable
@@ -169,20 +170,6 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
         super.setPlacedBy(level, pos, state, entity, stack);
         if (entity instanceof Player player) {
             MinecraftForge.EVENT_BUS.post(new OwnershipEvent(level, pos, player));
-        }
-    }
-
-    @Override
-    public void activate(BlockState state, Level level, BlockPos pos, Player player) {
-        if (!level.isClientSide) {
-            final var blockEntity = (KeypadIronChestBlockEntity) level.getBlockEntity(pos);
-            if (blockEntity != null) {
-                final var menuProvider = getMenuProvider(state, level, pos);
-                if (menuProvider != null) {
-                    player.openMenu(menuProvider);
-                    player.awardStat(getOpenChestStat());
-                }
-            }
         }
     }
 }

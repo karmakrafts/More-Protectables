@@ -1,18 +1,22 @@
 {
   "itemGroup.moreprotectables": "SecurityCraft: More Protectables",
-
   "subtitle.moreprotectables.keypad_beep": "Beep",
   "subtitle.moreprotectables.keypad_beep_confirm": "Beep-beep",
-
   "block.moreprotectables.keypad_sky_chest": "Passcode-protected Sky Stone Chest",
   "block.moreprotectables.keypad_smooth_sky_chest": "Passcode-protected Sky Stone Block Chest",
-
   "block.moreprotectables.keypad_copper_chest": "Passcode-protected Copper Chest",
   "block.moreprotectables.keypad_iron_chest": "Passcode-protected Iron Chest",
   "block.moreprotectables.keypad_gold_chest": "Passcode-protected Gold Chest",
   "block.moreprotectables.keypad_diamond_chest": "Passcode-protected Diamond Chest",
   "block.moreprotectables.keypad_crystal_chest": "Passcode-protected Crystal Chest",
   "block.moreprotectables.keypad_obsidian_chest": "Passcode-protected Obsidian Chest",
-
-  "block.moreprotectables.keypad_bamboo_chest": "Passcode-protected Bamboo Chest"
+  "block.moreprotectables.keypad_bamboo_chest": "Passcode-protected Bamboo Chest",
+  "block.moreprotectables.keypad_twilight_oak_chest": "Passcode-protected Twilight Oak Chest",
+  "block.moreprotectables.keypad_canopy_chest": "Passcode-protected Canopy Chest",
+  "block.moreprotectables.keypad_mangrove_chest": "Passcode-protected Mangrove Chest",
+  "block.moreprotectables.keypad_dark_wood_chest": "Passcode-protected Dark Wood Chest",
+  "block.moreprotectables.keypad_time_wood_chest": "Passcode-protected Time Wood Chest",
+  "block.moreprotectables.keypad_transformation_wood_chest": "Passcode-protected Transformation Wood Chest",
+  "block.moreprotectables.keypad_mining_wood_chest": "Passcode-protected Mining Wood Chest",
+  "block.moreprotectables.keypad_sorting_wood_chest": "Passcode-protected Sorting Wood Chest"
 }

@@ -1,7 +1,7 @@
-package io.karma.moreprotectables.compat.appeng;
+package io.karma.moreprotectables.compat.twilightforest;
 
-import appeng.block.AEBaseBlockItem;
 import io.karma.moreprotectables.client.render.BlockEntityItemRenderer;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 /**
  * @author Alexander Hinze
- * @since 15/10/2024
+ * @since 18/10/2024
  */
-public final class KeypadSkyChestBlockItem extends AEBaseBlockItem {
-    public KeypadSkyChestBlockItem(final Block id, final Properties props) {
-        super(id, props);
+public final class KeypadTFChestBlockItem extends BlockItem {
+    public KeypadTFChestBlockItem(final Block block, final Properties properties) {
+        super(block, properties);
     }
 
     @Override

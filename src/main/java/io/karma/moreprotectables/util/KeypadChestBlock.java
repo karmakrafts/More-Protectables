@@ -7,10 +7,12 @@ import net.geforcemods.securitycraft.util.PlayerUtils;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,23 @@ import org.jetbrains.annotations.NotNull;
  * @since 16/10/2024
  */
 public interface KeypadChestBlock extends IDisguisable, IOverlayDisplay {
-    void activate(final BlockState state, final Level level, final BlockPos pos, final Player player);
+    default Block getThisBlock() {
+        return (Block) this;
+    }
+
+    @SuppressWarnings("deprecation")
+    default void activate(final BlockState state, final Level level, final BlockPos pos, final Player player) {
+        if (!level.isClientSide) {
+            final var blockEntity = level.getBlockEntity(pos);
+            if (blockEntity != null) {
+                final var menuProvider = getThisBlock().getMenuProvider(state, level, pos);
+                if (menuProvider != null) {
+                    player.openMenu(menuProvider);
+                    player.awardStat(Stats.CUSTOM.get(Stats.OPEN_CHEST));
+                }
+            }
+        }
+    }
 
     String getDescriptionId();
 
