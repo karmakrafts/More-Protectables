@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.blockentity;
 
-import net.minecraft.nbt.CompoundTag;
+import net.geforcemods.securitycraft.misc.ModuleType;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
@@ -9,19 +9,15 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
  * @since 19/10/2024
  */
 public interface KeypadDoorBlockEntity extends KeypadBlockEntity {
-    default void loadAdditionalDoorData(final CompoundTag tag) {
-    }
-
-    default void saveAdditionalDoorData(final CompoundTag tag) {
-    }
-
-    void setIsDisabled(final boolean disabled);
-
     boolean isDisabled();
 
     int getSignalLength();
 
-    void setSignalLength(final int signalLength);
+    @Override
+    default boolean isOpen() {
+        final var state = getBEBlockState();
+        return state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN);
+    }
 
     @Override
     default boolean isPrimaryBlock() {
@@ -30,5 +26,10 @@ public interface KeypadDoorBlockEntity extends KeypadBlockEntity {
             return true;
         }
         return state.getValue(DoorBlock.HALF) == DoubleBlockHalf.UPPER;
+    }
+
+    @Override
+    default ModuleType[] acceptedModules() {
+        return new ModuleType[]{ModuleType.ALLOWLIST, ModuleType.DENYLIST, ModuleType.SMART, ModuleType.HARMING, ModuleType.DISGUISE};
     }
 }

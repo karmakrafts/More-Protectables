@@ -1,10 +1,10 @@
 package io.karma.moreprotectables.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.karma.moreprotectables.blockentity.SimpleKeypadBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
  * @since 19/10/2024
  */
 @OnlyIn(Dist.CLIENT)
-public final class DummyBlockEntityRenderer implements BlockEntityRenderer<SimpleKeypadBlockEntity> {
+public final class DummyBlockEntityRenderer implements BlockEntityRenderer<BlockEntity> {
     public DummyBlockEntityRenderer(final Context context) {
     }
 
     @Override
-    public void render(final @NotNull SimpleKeypadBlockEntity blockEntity,
+    public void render(final @NotNull BlockEntity blockEntity,
                        final float partialTicks,
                        final @NotNull PoseStack poseStack,
                        final @NotNull MultiBufferSource bufferSource,

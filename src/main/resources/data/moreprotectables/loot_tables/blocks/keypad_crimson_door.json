@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:copy_name",
+      "source": "block_entity"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "moreprotectables:keypad_crimson_door",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
+          "name": "moreprotectables:keypad_crimson_door"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "moreprotectables:blocks/keypad_crimson_door"
+}

@@ -6,6 +6,7 @@ import net.geforcemods.securitycraft.util.PlayerUtils;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,17 +26,32 @@ import org.joml.Vector3f;
  */
 public interface KeypadDoorBlock extends KeypadBlock {
     Vector3f DEFAULT_OFFSET = new Vector3f(10F / 16F, 0F, 1F / 16F);
+    Vector3f OPEN_OFFSET = new Vector3f(10F / 16F, 0F, -(12F / 16F));
     float DEFAULT_ROTATION_OFFSET = 180F;
+    float OPEN_ROTATION_OFFSET = 90F;
 
     @OnlyIn(Dist.CLIENT)
     @Override
     default float getKeypadRotationOffset(final BlockState state) {
+        if (!state.hasProperty(DoorBlock.OPEN) || !state.hasProperty(DoorBlock.FACING)) {
+            return DEFAULT_ROTATION_OFFSET;
+        }
+        if (state.getValue(DoorBlock.OPEN)) {
+            final var facing = state.getValue(DoorBlock.FACING);
+            if (facing == Direction.EAST || facing == Direction.NORTH) {
+                return -OPEN_ROTATION_OFFSET;
+            }
+            return OPEN_ROTATION_OFFSET;
+        }
         return DEFAULT_ROTATION_OFFSET;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     default Vector3f getKeypadOffset(final BlockState state) {
+        if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
+            return OPEN_OFFSET;
+        }
         return DEFAULT_OFFSET;
     }
 
