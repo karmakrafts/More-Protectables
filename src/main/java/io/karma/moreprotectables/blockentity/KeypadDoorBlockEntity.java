@@ -9,9 +9,11 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
  * @since 19/10/2024
  */
 public interface KeypadDoorBlockEntity extends KeypadBlockEntity {
-    default void loadAdditionalDoorData(final CompoundTag tag) {}
+    default void loadAdditionalDoorData(final CompoundTag tag) {
+    }
 
-    default void saveAdditionalDoorData(final CompoundTag tag) {}
+    default void saveAdditionalDoorData(final CompoundTag tag) {
+    }
 
     void setIsDisabled(final boolean disabled);
 
