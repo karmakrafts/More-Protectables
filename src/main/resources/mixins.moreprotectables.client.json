@@ -12,6 +12,7 @@
     "BlockEntityRenderDispatcherMixin",
     "KeypadChestRendererMixin",
     "ItemRendererMixin",
-    "CheckPasscodeScreenMixin"
+    "CheckPasscodeScreenMixin",
+    "SecuritySeaBoatRendererMixin"
   ]
 }
