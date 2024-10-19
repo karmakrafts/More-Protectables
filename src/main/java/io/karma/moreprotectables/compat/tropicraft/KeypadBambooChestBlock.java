@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.compat.tropicraft;
 
-import io.karma.moreprotectables.util.KeypadChestBlock;
+import io.karma.moreprotectables.block.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ public final class KeypadBambooChestBlock extends BambooChestBlock implements Ke
     }
 
     @Override
-    public BlockEntity newBlockEntity(final BlockPos pos, final BlockState state) {
+    public BlockEntity newBlockEntity(final @NotNull BlockPos pos, final @NotNull BlockState state) {
         return blockEntityType.get().create(pos, state);
     }
 

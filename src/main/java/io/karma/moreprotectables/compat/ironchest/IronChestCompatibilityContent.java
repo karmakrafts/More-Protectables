@@ -1,13 +1,13 @@
 package io.karma.moreprotectables.compat.ironchest;
 
+import com.progwml6.ironchest.common.block.IronChestsBlocks;
 import com.progwml6.ironchest.common.block.IronChestsTypes;
 import com.progwml6.ironchest.common.block.regular.AbstractIronChestBlock;
 import com.progwml6.ironchest.common.item.IronChestBlockItem;
 import io.karma.moreprotectables.MoreProtectables;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -17,6 +17,18 @@ import java.util.function.Supplier;
  * @since 15/10/2024
  */
 public final class IronChestCompatibilityContent {
+    // @formatter:off
+    public static final IronChestsTypes[] CHEST_TYPES = {
+        IronChestsTypes.DIRT,
+        IronChestsTypes.COPPER,
+        IronChestsTypes.IRON,
+        IronChestsTypes.GOLD,
+        IronChestsTypes.DIAMOND,
+        IronChestsTypes.CRYSTAL,
+        IronChestsTypes.OBSIDIAN
+    };
+    // @formatter:on
+
     public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadCopperChestBlockEntity;
     public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadIronChestBlockEntity;
     public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadGoldChestBlockEntity;
@@ -36,20 +48,24 @@ public final class IronChestCompatibilityContent {
     // @formatter:on
 
     public static void register() {
-        final var chestBlockProps = Properties.of().mapColor(MapColor.METAL).strength(3.0F);
-
         keypadCopperChestBlock = block("keypad_copper_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.COPPER, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.COPPER,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.COPPER_CHEST.get())));
         keypadIronChestBlock = block("keypad_iron_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.IRON, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.IRON,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.IRON_CHEST.get())));
         keypadGoldChestBlock = block("keypad_gold_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.GOLD, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.GOLD,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.GOLD_CHEST.get())));
         keypadDiamondChestBlock = block("keypad_diamond_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.DIAMOND, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.DIAMOND,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.DIAMOND_CHEST.get())));
         keypadCrystalChestBlock = block("keypad_crystal_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.CRYSTAL, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.CRYSTAL,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.CRYSTAL_CHEST.get())));
         keypadObsidianChestBlock = block("keypad_obsidian_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.OBSIDIAN, chestBlockProps));
+            () -> new KeypadIronChestBlock(IronChestsTypes.OBSIDIAN,
+                BlockBehaviour.Properties.copy(IronChestsBlocks.OBSIDIAN_CHEST.get())));
 
         keypadCopperChestBlockEntity = MoreProtectables.blockEntity("keypad_copper_chest",
             keypadCopperChestBlock,

@@ -1,0 +1,7 @@
+
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "twilightforest:block/wood/planks_canopy_0"
+  }
+}

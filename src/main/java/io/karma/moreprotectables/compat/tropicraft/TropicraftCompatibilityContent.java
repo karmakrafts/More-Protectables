@@ -1,12 +1,14 @@
 package io.karma.moreprotectables.compat.tropicraft;
 
 import io.karma.moreprotectables.MoreProtectables;
+import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.RegistryObject;
+import net.tropicraft.core.common.block.TropicraftBlocks;
+import net.tropicraft.core.common.block.TropicraftWoodTypes;
 import net.tropicraft.core.common.block.tileentity.BambooChestBlockEntity;
 
 /**
@@ -15,21 +17,31 @@ import net.tropicraft.core.common.block.tileentity.BambooChestBlockEntity;
  */
 public final class TropicraftCompatibilityContent {
     public static RegistryObject<Block> keypadBambooChest;
+    public static RegistryObject<Block> keypadBambooDoor;
+
     public static RegistryObject<BlockEntityType<BambooChestBlockEntity>> keypadBambooChestBlockEntity;
+    public static RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>> keypadBambooDoorBlockEntity;
 
     // @formatter:off
     private TropicraftCompatibilityContent() {}
     // @formatter:on
 
     public static void register() {
-        keypadBambooChest = MoreProtectables.block("keypad_bamboo_chest",
-            () -> new KeypadBambooChestBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.BAMBOO).strength(
-                0.2F,
-                5.0F)),
+        keypadBambooChest = MoreProtectables.block("keypad_tropical_bamboo_chest",
+            () -> new KeypadBambooChestBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_CHEST.get())),
             KeypadBambooChestBlockItem::new);
 
-        keypadBambooChestBlockEntity = MoreProtectables.blockEntity("keypad_bamboo_chest",
+        keypadBambooDoor = MoreProtectables.block("keypad_tropical_bamboo_door",
+            () -> new KeypadBambooDoorBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_DOOR.get()),
+                TropicraftWoodTypes.BAMBOO.setType()),
+            BlockItem::new);
+
+        keypadBambooChestBlockEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_chest",
             keypadBambooChest,
             (pos, state) -> new KeypadBambooChestBlockEntity(keypadBambooChestBlockEntity.get(), pos, state));
+
+        keypadBambooDoorBlockEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_door",
+            keypadBambooDoor,
+            (pos, state) -> new SimpleKeypadDoorBlockEntity(keypadBambooDoorBlockEntity.get(), pos, state));
     }
 }

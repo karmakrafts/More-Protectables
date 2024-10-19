@@ -9,7 +9,7 @@ import appeng.core.definitions.AEBlocks;
 import appeng.menu.MenuOpener;
 import appeng.menu.implementations.SkyChestMenu;
 import appeng.menu.locator.MenuLocators;
-import io.karma.moreprotectables.util.KeypadChestBlock;
+import io.karma.moreprotectables.block.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;

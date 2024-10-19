@@ -1,13 +1,14 @@
 package io.karma.moreprotectables.compat.appeng;
 
-import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseEntityBlock;
 import appeng.block.storage.SkyChestBlock.SkyChestType;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.ClientTickingBlockEntity;
+import appeng.core.definitions.AEBlocks;
 import io.karma.moreprotectables.MoreProtectables;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
@@ -29,13 +30,13 @@ public final class AppengCompatibilityContent {
     // @formatter:on
 
     public static void register() {
-        final var chestBlockProps = AEBaseBlock.stoneProps().strength(5F, 150F).noOcclusion();
-
         keypadSkyChest = MoreProtectables.block("keypad_sky_chest",
-            () -> new KeypadSkyChestBlock(SkyChestType.STONE, chestBlockProps),
+            () -> new KeypadSkyChestBlock(SkyChestType.STONE,
+                BlockBehaviour.Properties.copy(AEBlocks.SKY_STONE_CHEST.block())),
             KeypadSkyChestBlockItem::new);
         keypadSmoothSkyChest = MoreProtectables.block("keypad_smooth_sky_chest",
-            () -> new KeypadSkyChestBlock(SkyChestType.BLOCK, chestBlockProps),
+            () -> new KeypadSkyChestBlock(SkyChestType.BLOCK,
+                BlockBehaviour.Properties.copy(AEBlocks.SMOOTH_SKY_STONE_CHEST.block())),
             KeypadSkyChestBlockItem::new);
 
         keypadSkyChestBlockEntity = chestBlockEntity("keypad_sky_chest",

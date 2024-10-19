@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.compat.tropicraft;
 
-import io.karma.moreprotectables.util.KeypadChestBlockEntity;
+import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
@@ -53,13 +53,13 @@ public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity i
     @Override
     public void saveAdditional(final @NotNull CompoundTag data) {
         super.saveAdditional(data);
-        saveAdditionalChestData(data);
+        saveAdditionalKeypadData(data);
     }
 
     @Override
     public void load(final @NotNull CompoundTag data) {
         super.load(data);
-        loadAdditionalChestData(data);
+        loadAdditionalKeypadData(data);
     }
 
     @Override
@@ -142,13 +142,13 @@ public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity i
     }
 
     @Override
-    public @Nullable ResourceLocation getPreviousChest() {
+    public @Nullable ResourceLocation getPreviousBlock() {
         return previousChest;
     }
 
     @Override
-    public void setPreviousChest(final @Nullable ResourceLocation previousChest) {
-        this.previousChest = previousChest;
+    public void setPreviousBlock(final @Nullable ResourceLocation previousBlock) {
+        this.previousChest = previousBlock;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.compat.twilightforest;
 
-import io.karma.moreprotectables.util.KeypadChestBlockEntity;
+import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
@@ -16,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -46,33 +45,19 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     private long cooldownEnd = 0;
 
     public KeypadTFChestBlockEntity(final WoodType woodType, final BlockPos pos, final BlockState state) {
-        super(getBlockEntityType(woodType), pos, state);
-    }
-
-    private static BlockEntityType<KeypadTFChestBlockEntity> getBlockEntityType(final WoodType woodType) {
-        return switch (woodType.name()) {
-            case "twilightforest:canopy" -> TFCompatibilityContent.keypadCanopyChestBlockEntity.get();
-            case "twilightforest:mangrove" -> TFCompatibilityContent.keypadMangroveChestBlockEntity.get();
-            case "twilightforest:dark" -> TFCompatibilityContent.keypadDarkWoodChestBlockEntity.get();
-            case "twilightforest:time" -> TFCompatibilityContent.keypadTimeWoodChestBlockEntity.get();
-            case "twilightforest:transformation" ->
-                TFCompatibilityContent.keypadTransformationWoodChestBlockEntity.get();
-            case "twilightforest:mining" -> TFCompatibilityContent.keypadMiningWoodChestBlockEntity.get();
-            case "twilightforest:sorting" -> TFCompatibilityContent.keypadSortingWoodChestBlockEntity.get();
-            default -> TFCompatibilityContent.keypadTwilightOakChestBlockEntity.get();
-        };
+        super(TFCompatibilityContent.KEYPAD_WOOD_CHEST_ENTITIES.get(woodType).get(), pos, state);
     }
 
     @Override
     public void saveAdditional(final @NotNull CompoundTag data) {
         super.saveAdditional(data);
-        saveAdditionalChestData(data);
+        saveAdditionalKeypadData(data);
     }
 
     @Override
     public void load(final @NotNull CompoundTag data) {
         super.load(data);
-        loadAdditionalChestData(data);
+        loadAdditionalKeypadData(data);
     }
 
     @Override
@@ -155,13 +140,13 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     }
 
     @Override
-    public @Nullable ResourceLocation getPreviousChest() {
+    public @Nullable ResourceLocation getPreviousBlock() {
         return previousChest;
     }
 
     @Override
-    public void setPreviousChest(final @Nullable ResourceLocation previousChest) {
-        this.previousChest = previousChest;
+    public void setPreviousBlock(final @Nullable ResourceLocation previousBlock) {
+        this.previousChest = previousBlock;
     }
 
     @Override

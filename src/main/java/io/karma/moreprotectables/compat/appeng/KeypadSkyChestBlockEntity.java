@@ -2,7 +2,7 @@ package io.karma.moreprotectables.compat.appeng;
 
 import appeng.block.storage.SkyChestBlock.SkyChestType;
 import appeng.blockentity.storage.SkyChestBlockEntity;
-import io.karma.moreprotectables.util.KeypadChestBlockEntity;
+import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
@@ -60,13 +60,13 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     @Override
     public void saveAdditional(final CompoundTag data) {
         super.saveAdditional(data);
-        saveAdditionalChestData(data);
+        saveAdditionalKeypadData(data);
     }
 
     @Override
     public void loadTag(final CompoundTag data) {
         super.loadTag(data);
-        loadAdditionalChestData(data);
+        loadAdditionalKeypadData(data);
     }
 
     @Override
@@ -149,13 +149,13 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     }
 
     @Override
-    public @Nullable ResourceLocation getPreviousChest() {
+    public @Nullable ResourceLocation getPreviousBlock() {
         return previousChest;
     }
 
     @Override
-    public void setPreviousChest(final @Nullable ResourceLocation previousChest) {
-        this.previousChest = previousChest;
+    public void setPreviousBlock(final @Nullable ResourceLocation previousBlock) {
+        this.previousChest = previousBlock;
     }
 
     @Override
@@ -209,7 +209,7 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     }
 
     @Override
-    public @Nullable BlockEntity findOtherChest() {
+    public @Nullable BlockEntity findOtherBlock() {
         return null;
     }
 

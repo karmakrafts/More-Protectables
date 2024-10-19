@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.compat.twilightforest;
 
-import io.karma.moreprotectables.util.KeypadChestBlock;
+import io.karma.moreprotectables.block.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;

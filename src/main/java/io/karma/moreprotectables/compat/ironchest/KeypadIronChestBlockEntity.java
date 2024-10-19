@@ -3,7 +3,7 @@ package io.karma.moreprotectables.compat.ironchest;
 import com.progwml6.ironchest.common.block.IronChestsTypes;
 import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
 import com.progwml6.ironchest.common.inventory.IronChestMenu;
-import io.karma.moreprotectables.util.KeypadChestBlockEntity;
+import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
@@ -73,13 +73,13 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     @Override
     public void saveAdditional(final @NotNull CompoundTag data) {
         super.saveAdditional(data);
-        saveAdditionalChestData(data);
+        saveAdditionalKeypadData(data);
     }
 
     @Override
     public void load(final @NotNull CompoundTag data) {
         super.load(data);
-        loadAdditionalChestData(data);
+        loadAdditionalKeypadData(data);
     }
 
     @Override
@@ -162,13 +162,13 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     }
 
     @Override
-    public @Nullable ResourceLocation getPreviousChest() {
+    public @Nullable ResourceLocation getPreviousBlock() {
         return previousChest;
     }
 
     @Override
-    public void setPreviousChest(final @Nullable ResourceLocation previousChest) {
-        this.previousChest = previousChest;
+    public void setPreviousBlock(final @Nullable ResourceLocation previousBlock) {
+        this.previousChest = previousBlock;
     }
 
     @Override
@@ -222,7 +222,7 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     }
 
     @Override
-    public @Nullable BlockEntity findOtherChest() {
+    public @Nullable BlockEntity findOtherBlock() {
         return null;
     }
 

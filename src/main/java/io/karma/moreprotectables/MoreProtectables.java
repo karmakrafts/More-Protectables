@@ -15,9 +15,16 @@
 
 package io.karma.moreprotectables;
 
-import io.karma.moreprotectables.client.render.ChestKeypadRenderer;
+import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
+import io.karma.moreprotectables.client.render.KeypadRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
+import io.karma.moreprotectables.init.ModBlockEntities;
+import io.karma.moreprotectables.init.ModBlocks;
+import io.karma.moreprotectables.init.ModConversions;
 import net.geforcemods.securitycraft.SCContent;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -29,6 +36,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -62,28 +70,34 @@ public class MoreProtectables {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB,
         MODID);
+    public static final WoodType[] WOOD_TYPES = {WoodType.OAK, WoodType.SPRUCE, WoodType.BIRCH, WoodType.ACACIA, WoodType.CHERRY, WoodType.JUNGLE, WoodType.DARK_OAK, WoodType.CRIMSON, WoodType.WARPED, WoodType.MANGROVE, WoodType.BAMBOO};
     // @formatter:off
     private static final List<CompatibilityModule> COMPAT_MODULES = CompatibilityModule.loadAll()
         .filter(provider -> FMLLoader.getLoadingModList().getModFileById(CompatibilityModule.getModId(provider.type())) != null)
         .map(Provider::get)
         .toList();
-    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(MODID, () -> CreativeModeTab.builder()
-        .icon(() -> new ItemStack(SCContent.KEY_PANEL.get()))
-        .title(Component.translatable(String.format("itemGroup.%s", MODID)))
-        .displayItems((params, output) -> {
-            for(final var module : COMPAT_MODULES) {
+    // @formatter:on
+    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(MODID,
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(SCContent.KEY_PANEL.get())).title(Component.translatable(
+            String.format("itemGroup.%s", MODID))).displayItems((params, output) -> {
+            for (final var woodType : WOOD_TYPES) {
+                output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
+            }
+            for (final var module : COMPAT_MODULES) {
                 module.addItemsToTab(output);
             }
-        })
-        .build());
-    // @formatter:on
+        }).build());
 
     public MoreProtectables() {
+        ModBlocks.register();
+        ModBlockEntities.register();
+        ModConversions.register();
+
         COMPAT_MODULES.forEach(CompatibilityModule::init);
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ChestKeypadRenderer.INSTANCE.setup();
+            KeypadRenderer.INSTANCE.setup();
             modBus.addListener(this::onClientSetup);
         });
 
@@ -107,10 +121,19 @@ public class MoreProtectables {
         return BLOCK_ENTITIES.register(name, () -> new BlockEntityType<>(supplier, Set.of(block.get()), null));
     }
 
+    @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
     private void onClientSetup(final FMLClientSetupEvent event) {
         for (final var module : COMPAT_MODULES) {
             event.enqueueWork(module::initClient);
         }
+        event.enqueueWork(() -> {
+            for (final var woodType : WOOD_TYPES) {
+                BlockEntityRenderers.register(ModBlockEntities.KEYPAD_WOOD_DOOR.get(woodType).get(),
+                    DummyBlockEntityRenderer::new);
+                ItemBlockRenderTypes.setRenderLayer(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get(),
+                    RenderType.cutout());
+            }
+        });
     }
 }

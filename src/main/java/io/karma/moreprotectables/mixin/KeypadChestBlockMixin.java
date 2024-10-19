@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.mixin;
 
-import io.karma.moreprotectables.util.KeypadChestBlock;
+import io.karma.moreprotectables.block.KeypadChestBlock;
 import org.spongepowered.asm.mixin.Mixin;
 
 /**

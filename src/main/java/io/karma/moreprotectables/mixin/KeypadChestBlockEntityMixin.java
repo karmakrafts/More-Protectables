@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
  */
 @Mixin(value = KeypadChestBlockEntity.class)
 public abstract class KeypadChestBlockEntityMixin extends ChestBlockEntity
-    implements io.karma.moreprotectables.util.KeypadChestBlockEntity {
+    implements io.karma.moreprotectables.blockentity.KeypadChestBlockEntity {
     protected KeypadChestBlockEntityMixin(final BlockEntityType<?> type, final BlockPos pos, final BlockState state) {
         super(type, pos, state);
     }
@@ -25,7 +25,7 @@ public abstract class KeypadChestBlockEntityMixin extends ChestBlockEntity
 
     @SuppressWarnings("all")
     @Override
-    public BlockEntity findOtherChest() {
+    public BlockEntity findOtherBlock() {
         return findOther();
     }
 

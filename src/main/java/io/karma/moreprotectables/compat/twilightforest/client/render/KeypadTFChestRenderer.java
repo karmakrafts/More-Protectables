@@ -2,6 +2,7 @@ package io.karma.moreprotectables.compat.twilightforest.client.render;
 
 import io.karma.moreprotectables.compat.twilightforest.KeypadTFChestBlockEntity;
 import io.karma.moreprotectables.compat.twilightforest.TFCompatibilityContent;
+import io.karma.moreprotectables.util.WoodTypeUtils;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
@@ -25,14 +26,19 @@ public final class KeypadTFChestRenderer extends ChestRenderer<KeypadTFChestBloc
     public static final HashMap<Block, EnumMap<ChestType, Material>> MATERIALS = new HashMap<>();
 
     static {
-        MATERIALS.put(TFCompatibilityContent.keypadTwilightOakChestBlock.get(), chestMaterial("twilight"));
-        MATERIALS.put(TFCompatibilityContent.keypadCanopyChestBlock.get(), chestMaterial("canopy"));
-        MATERIALS.put(TFCompatibilityContent.keypadMangroveChestBlock.get(), chestMaterial("mangrove"));
-        MATERIALS.put(TFCompatibilityContent.keypadDarkWoodChestBlock.get(), chestMaterial("darkwood"));
-        MATERIALS.put(TFCompatibilityContent.keypadTimeWoodChestBlock.get(), chestMaterial("time"));
-        MATERIALS.put(TFCompatibilityContent.keypadTransformationWoodChestBlock.get(), chestMaterial("trans"));
-        MATERIALS.put(TFCompatibilityContent.keypadMiningWoodChestBlock.get(), chestMaterial("mining"));
-        MATERIALS.put(TFCompatibilityContent.keypadSortingWoodChestBlock.get(), chestMaterial("sort"));
+        for (final var woodType : TFCompatibilityContent.WOOD_TYPES) {
+            var materialName = WoodTypeUtils.getSimpleName(woodType);
+            // Remap material names..
+            materialName = switch (materialName) {
+                case "twilight_oak" -> "twilight";
+                case "dark" -> "darkwood";
+                case "transformation" -> "trans";
+                case "sorting" -> "sort";
+                default -> materialName;
+            };
+            MATERIALS.put(TFCompatibilityContent.KEYPAD_WOOD_CHEST_BLOCKS.get(woodType).get(),
+                chestMaterial(materialName));
+        }
     }
 
     public KeypadTFChestRenderer(final Context context) {

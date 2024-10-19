@@ -3,7 +3,7 @@ package io.karma.moreprotectables.compat.ironchest;
 import com.progwml6.ironchest.common.block.IronChestsTypes;
 import com.progwml6.ironchest.common.block.regular.AbstractIronChestBlock;
 import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
-import io.karma.moreprotectables.util.KeypadChestBlock;
+import io.karma.moreprotectables.block.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;

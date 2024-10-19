@@ -4,7 +4,7 @@ import appeng.core.definitions.AEBlocks;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
 import io.karma.moreprotectables.compat.appeng.client.render.KeypadSkyChestRenderer;
-import io.karma.moreprotectables.util.ChestPasscodeConvertible;
+import io.karma.moreprotectables.util.KeypadChestConvertible;
 import net.geforcemods.securitycraft.SecurityCraft;
 import net.geforcemods.securitycraft.api.SecurityCraftAPI;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -27,11 +27,11 @@ public final class AppengCompatibilityModule implements CompatibilityModule {
 
         InterModComms.sendTo(SecurityCraft.MODID,
             SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new ChestPasscodeConvertible(AEBlocks.SKY_STONE_CHEST.block(),
+            () -> new KeypadChestConvertible(AEBlocks.SKY_STONE_CHEST.block(),
                 AppengCompatibilityContent.keypadSkyChest.get()));
         InterModComms.sendTo(SecurityCraft.MODID,
             SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new ChestPasscodeConvertible(AEBlocks.SMOOTH_SKY_STONE_CHEST.block(),
+            () -> new KeypadChestConvertible(AEBlocks.SMOOTH_SKY_STONE_CHEST.block(),
                 AppengCompatibilityContent.keypadSmoothSkyChest.get()));
     }
 

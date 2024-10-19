@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/cherry_door",
+    "layer1": "moreprotectables:item/keypad_door_overlay"
+  }
+}
