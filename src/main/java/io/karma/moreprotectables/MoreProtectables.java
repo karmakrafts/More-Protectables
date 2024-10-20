@@ -93,6 +93,7 @@ public class MoreProtectables {
         ModBlocks.register();
         ModBlockEntities.register();
         ModConversions.register();
+        EventHandler.INSTANCE.setup();
 
         COMPAT_MODULES.forEach(CompatibilityModule::init);
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
