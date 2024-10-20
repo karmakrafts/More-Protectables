@@ -12,6 +12,7 @@
     "KeypadChestBlockMixin",
     "KeypadChestBlockEntityMixin",
     "BoatMixin",
-    "ChestBoatMixin"
+    "ChestBoatMixin",
+    "SecuritySeaBoatMixin"
   ]
 }
