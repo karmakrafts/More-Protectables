@@ -10,6 +10,8 @@
   },
   "mixins": [
     "KeypadChestBlockMixin",
-    "KeypadChestBlockEntityMixin"
+    "KeypadChestBlockEntityMixin",
+    "BoatMixin",
+    "ChestBoatMixin"
   ]
 }

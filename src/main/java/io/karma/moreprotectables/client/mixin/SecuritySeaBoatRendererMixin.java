@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
+import io.karma.moreprotectables.hooks.BoatHooks;
 import net.geforcemods.securitycraft.renderers.SecuritySeaBoatRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -72,7 +73,7 @@ public abstract class SecuritySeaBoatRendererMixin extends BoatRenderer {
         // --- END VANILLA CODE
 
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-        final var type = Boat.Type.values()[entity.getEntityData().get(Boat.DATA_ID_TYPE)];
+        final var type = ((BoatHooks) entity).moreprotectables$getType();
         final var offset = type == Type.BAMBOO ? 5F / 16F : 0F;
         poseStack.translate(-(17F / 16F), offset, 1F / 16F);
         final var buffer = bufferSource.getBuffer(RenderType.cutout());

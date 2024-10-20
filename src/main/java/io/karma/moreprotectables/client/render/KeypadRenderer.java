@@ -53,14 +53,12 @@ public final class KeypadRenderer {
     }
 
     private void onRegisterAdditionalModels(final ModelEvent.RegisterAdditional event) {
-        MoreProtectables.LOGGER.info("Registering additional models");
         event.register(KEYPAD_MODEL);
         event.register(KEYPAD_UNLOCKED_MODEL);
         event.register(KEYPAD_LOCKED_MODEL);
     }
 
     private void onBakingComplete(final ModelEvent.BakingCompleted event) {
-        MoreProtectables.LOGGER.info("Setting up additional models");
         final var models = event.getModels();
         keypadModel = models.get(KEYPAD_MODEL);
         keypadUnlockedModel = models.get(KEYPAD_UNLOCKED_MODEL);

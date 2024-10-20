@@ -6,7 +6,6 @@ import net.geforcemods.securitycraft.util.PlayerUtils;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,23 +25,24 @@ import org.joml.Vector3f;
  * @since 19/10/2024
  */
 public interface KeypadDoorBlock extends KeypadBlock {
-    Vector3f DEFAULT_OFFSET = new Vector3f(10F / 16F, 0F, 1F / 16F);
-    Vector3f OPEN_OFFSET = new Vector3f(10F / 16F, 0F, -(12F / 16F));
+    Vector3f DEFAULT_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, 1F / 16F);
+    Vector3f DEFAULT_OFFSET_RIGHT = new Vector3f(2F / 16F, 0F, 1F / 16F);
+    Vector3f OPEN_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, -(12F / 16F));
+    Vector3f OPEN_OFFSET_RIGHT = new Vector3f(2F / 16F, 0F, -(12F / 16F));
     float DEFAULT_ROTATION_OFFSET = 180F;
     float OPEN_ROTATION_OFFSET = 90F;
 
     @OnlyIn(Dist.CLIENT)
     @Override
     default float getKeypadRotationOffset(final BlockState state) {
-        if (!state.hasProperty(DoorBlock.OPEN) || !state.hasProperty(DoorBlock.FACING)) {
+        if (!state.hasProperty(DoorBlock.OPEN) || !state.hasProperty(DoorBlock.HINGE)) {
             return DEFAULT_ROTATION_OFFSET;
         }
         if (state.getValue(DoorBlock.OPEN)) {
-            final var facing = state.getValue(DoorBlock.FACING);
-            if (facing == Direction.EAST || facing == Direction.NORTH) {
-                return -OPEN_ROTATION_OFFSET;
+            if (state.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
+                return OPEN_ROTATION_OFFSET;
             }
-            return OPEN_ROTATION_OFFSET;
+            return -OPEN_ROTATION_OFFSET;
         }
         return DEFAULT_ROTATION_OFFSET;
     }
@@ -49,10 +50,14 @@ public interface KeypadDoorBlock extends KeypadBlock {
     @OnlyIn(Dist.CLIENT)
     @Override
     default Vector3f getKeypadOffset(final BlockState state) {
-        if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
-            return OPEN_OFFSET;
+        if (!state.hasProperty(DoorBlock.HINGE)) {
+            return DEFAULT_OFFSET_LEFT;
         }
-        return DEFAULT_OFFSET;
+        final var hinge = state.getValue(DoorBlock.HINGE);
+        if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
+            return hinge == DoorHingeSide.LEFT ? OPEN_OFFSET_LEFT : OPEN_OFFSET_RIGHT;
+        }
+        return hinge == DoorHingeSide.LEFT ? DEFAULT_OFFSET_LEFT : DEFAULT_OFFSET_RIGHT;
     }
 
     @Override

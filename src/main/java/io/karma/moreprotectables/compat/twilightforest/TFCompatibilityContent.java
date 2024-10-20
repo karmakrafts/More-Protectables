@@ -75,15 +75,14 @@ public final class TFCompatibilityContent {
 
             KEYPAD_WOOD_CHEST_BLOCKS.put(woodType,
                 MoreProtectables.block(chestName,
-                    () -> new KeypadTFChestBlock(BlockBehaviour.Properties.copy(chestBlock.get()),
-                        KEYPAD_WOOD_CHEST_ENTITIES.get(woodType)::get),
+                    () -> new KeypadTFChestBlock(BlockBehaviour.Properties.copy(chestBlock.get()).explosionResistance(
+                        Float.MAX_VALUE), KEYPAD_WOOD_CHEST_ENTITIES.get(woodType)::get),
                     KeypadTFChestBlockItem::new));
 
             KEYPAD_WOOD_DOOR_BLOCKS.put(woodType,
                 MoreProtectables.block(doorName,
-                    () -> new KeypadWoodDoorBlock(BlockBehaviour.Properties.copy(doorBlock.get()),
-                        woodType.setType(),
-                        KEYPAD_WOOD_DOOR_ENTITIES.get(woodType)::get),
+                    () -> new KeypadWoodDoorBlock(BlockBehaviour.Properties.copy(doorBlock.get()).explosionResistance(
+                        Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_DOOR_ENTITIES.get(woodType)::get),
                     BlockItem::new));
 
             KEYPAD_WOOD_CHEST_ENTITIES.put(woodType,

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/bamboo_chest_raft",
+    "layer1": "moreprotectables:item/keypad_raft_overlay"
+  }
+}

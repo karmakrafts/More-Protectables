@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.util;
 
+import io.karma.moreprotectables.blockentity.KeypadDoorBlockEntity;
 import net.geforcemods.securitycraft.api.IPasscodeConvertible;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * @author Alexander Hinze
@@ -67,5 +69,12 @@ public final class KeypadDoorConvertible implements IPasscodeConvertible {
             .setValue(DoorBlock.FACING, facing)
             .setValue(DoorBlock.OPEN, open), 0x3);
         // @formatter:on
+        if (protect) {
+            final var blockEntity = (KeypadDoorBlockEntity) level.getBlockEntity(pos);
+            if (blockEntity == null) {
+                return;
+            }
+            blockEntity.setPreviousBlock(ForgeRegistries.BLOCKS.getKey(state.getBlock()));
+        }
     }
 }

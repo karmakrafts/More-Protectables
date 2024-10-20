@@ -15,6 +15,7 @@
 
 package io.karma.moreprotectables;
 
+import io.karma.moreprotectables.client.ClientEventHandler;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
@@ -97,6 +98,7 @@ public class MoreProtectables {
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ClientEventHandler.INSTANCE.setup();
             KeypadRenderer.INSTANCE.setup();
             modBus.addListener(this::onClientSetup);
         });

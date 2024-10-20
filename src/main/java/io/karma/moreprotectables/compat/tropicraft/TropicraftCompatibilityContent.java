@@ -28,12 +28,13 @@ public final class TropicraftCompatibilityContent {
 
     public static void register() {
         keypadBambooChest = MoreProtectables.block("keypad_tropical_bamboo_chest",
-            () -> new KeypadBambooChestBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_CHEST.get())),
+            () -> new KeypadBambooChestBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_CHEST.get()).explosionResistance(
+                Float.MAX_VALUE)),
             KeypadBambooChestBlockItem::new);
 
         keypadBambooDoor = MoreProtectables.block("keypad_tropical_bamboo_door",
-            () -> new KeypadBambooDoorBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_DOOR.get()),
-                TropicraftWoodTypes.BAMBOO.setType()),
+            () -> new KeypadBambooDoorBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_DOOR.get()).explosionResistance(
+                Float.MAX_VALUE), TropicraftWoodTypes.BAMBOO.setType()),
             BlockItem::new);
 
         keypadBambooChestBlockEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_chest",

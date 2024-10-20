@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/mangrove_chest_boat",
+    "layer1": "moreprotectables:item/keypad_boat_overlay"
+  }
+}
