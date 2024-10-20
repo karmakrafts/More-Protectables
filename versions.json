@@ -11,6 +11,6 @@
     "1.1.0.5": "- Added support for Twilight Forest chest variants",
     "1.2.0.6": "- Added passcode-protected door variants\n- Patched security boat rendering",
     "1.2.1.7": "- Fix possible synchronization issues with passcode-protected block entities causing Jade tooltips to be wrong",
-    "1.2.2.8": "- Fix iron chest upgrades not working on passcode-protected iron chests\n- Fix dirt chests not being protectable"
+    "1.2.2.8": "- Fix iron chest upgrades not working on passcode-protected iron chests\n- Fix dirt chests not being protectable\n- Fix security sea boat keypads not accurately reflecting lock state"
   }
 }
