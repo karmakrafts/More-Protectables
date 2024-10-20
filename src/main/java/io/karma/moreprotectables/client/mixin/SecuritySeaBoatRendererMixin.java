@@ -6,7 +6,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
 import io.karma.moreprotectables.hooks.BoatHooks;
-import io.karma.moreprotectables.hooks.SecuritySeaBoatHooks;
 import net.geforcemods.securitycraft.renderers.SecuritySeaBoatRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -78,8 +77,7 @@ public abstract class SecuritySeaBoatRendererMixin extends BoatRenderer {
         final var offset = type == Type.BAMBOO ? 5F / 16F : 0F;
         poseStack.translate(-(17F / 16F), offset, 1F / 16F);
         final var buffer = bufferSource.getBuffer(RenderType.cutout());
-        final var isLocked = ((SecuritySeaBoatHooks) entity).moreprotectables$getUsingPlayerCount() == 0;
-        KeypadRenderer.INSTANCE.renderKeypad(buffer, poseStack, packedLight, OverlayTexture.NO_OVERLAY, isLocked);
+        KeypadRenderer.INSTANCE.renderKeypad(buffer, poseStack, packedLight, OverlayTexture.NO_OVERLAY, true);
 
         poseStack.popPose();
     }

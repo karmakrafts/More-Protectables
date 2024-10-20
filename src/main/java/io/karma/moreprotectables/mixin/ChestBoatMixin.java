@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.ChestBoat;
@@ -38,10 +37,9 @@ public abstract class ChestBoatMixin extends Boat implements BoatHooks {
                 final var level = level();
                 if (!level.isClientSide) {
                     final var serverLevel = (ServerLevel) level;
-                    SCContent.SECURITY_SEA_BOAT_ENTITY.get().create(serverLevel, serializeNBT(), entity -> {
-                        entity.copyPosition(this);
-                        serverLevel.addFreshEntity(entity);
-                    }, getOnPos(), MobSpawnType.CONVERSION, false, false);
+                    final var newEntity = SCContent.SECURITY_SEA_BOAT_ENTITY.get().create(serverLevel);
+                    newEntity.copyPosition(this);
+                    serverLevel.addFreshEntity(newEntity);
                     remove(RemovalReason.DISCARDED);
                 }
                 cbi.setReturnValue(InteractionResult.CONSUME);
