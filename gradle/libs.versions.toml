@@ -1,5 +1,5 @@
 [versions]
-moreProtectables = "1.2.0"
+moreProtectables = "1.2.1"
 minecraft = "1.20.1"
 minecraftForge = "1.20.1-47.2.30"
 mappings = "2023.09.03" # https://parchmentmc.org/docs/getting-started
@@ -22,6 +22,7 @@ twilightForest = "5468648" # https://www.curseforge.com/minecraft/mc-mods/the-tw
 zeta = "5597406" # https://www.curseforge.com/minecraft/mc-mods/zeta/files/all?page=1&pageSize=20
 quark = "5594847" # https://www.curseforge.com/minecraft/mc-mods/quark/files/all?page=1&pageSize=20
 jei = "15.20.0.104" # https://maven.blamejared.com/mezz/jei/jei-1.20.1-forge/
+jade = "5776962" # https://www.curseforge.com/minecraft/mc-mods/jade/files/all?page=1&pageSize=20
 embeddium = "0.3.30-beta.48+mc1.20.1" # https://maven.blamejared.com/org/embeddedt/
 oculus = "5299671" # https://www.curseforge.com/minecraft/mc-mods/oculus/files/all?page=1&pageSize=20
 
@@ -43,6 +44,7 @@ zeta = { module = "curse.maven:zeta-968868", version.ref = "zeta" }
 quark = { module = "curse.maven:quark-243121", version.ref = "quark" }
 jei-forge-core = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
 jei-forge-api = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" }
+jade = { module = "curse.maven:jade-324717", version.ref = "jade" }
 embeddium = { module = "org.embeddedt:embeddium-1.20.1", version.ref = "embeddium" }
 oculus = { module = "curse.maven:oculus-581495", version.ref = "oculus" }
 

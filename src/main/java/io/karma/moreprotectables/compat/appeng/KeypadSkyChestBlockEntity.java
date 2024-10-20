@@ -11,10 +11,13 @@ import net.geforcemods.securitycraft.api.Option.SmartModuleCooldownOption;
 import net.geforcemods.securitycraft.api.Owner;
 import net.geforcemods.securitycraft.blockentities.DisguisableBlockEntity;
 import net.geforcemods.securitycraft.misc.ModuleType;
+import net.geforcemods.securitycraft.util.PasscodeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -55,6 +58,28 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
             return AppengCompatibilityContent.keypadSkyChestBlockEntity.get();
         }
         return AppengCompatibilityContent.keypadSmoothSkyChestBlockEntity.get();
+    }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
+        return PasscodeUtils.filterPasscodeAndSaltFromTag(this.saveWithoutMetadata());
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(final Connection net, final ClientboundBlockEntityDataPacket packet) {
+        super.onDataPacket(net, packet);
+        this.handleUpdateTag(packet.getTag());
+    }
+
+    @Override
+    public void handleUpdateTag(final CompoundTag tag) {
+        super.handleUpdateTag(tag);
+        DisguisableBlockEntity.onHandleUpdateTag(this);
     }
 
     @Override
@@ -190,12 +215,6 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     @Override
     public @NotNull ModelData getModelData() {
         return DisguisableBlockEntity.getModelData(this);
-    }
-
-    @Override
-    public void handleUpdateTag(final CompoundTag tag) {
-        super.handleUpdateTag(tag);
-        DisguisableBlockEntity.onHandleUpdateTag(this);
     }
 
     @Override

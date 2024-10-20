@@ -103,6 +103,7 @@ dependencies {
     //implementation(fg.deobf(libs.framedBlocks.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
+    runtimeOnly(fg.deobf(libs.jade.get().toString()))
 
     testImplementation(libs.junit.api)
     testRuntimeOnly(libs.junit.engine)
