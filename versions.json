@@ -1,8 +1,8 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/more-protectables",
   "promos": {
-    "1.20.1-latest": "1.2.1.7",
-    "1.20.1-recommended": "1.2.1.7"
+    "1.20.1-latest": "1.2.2.8",
+    "1.20.1-recommended": "1.2.2.8"
   },
   "1.20.1": {
     "1.0.1.2": "- Initial public release",
@@ -10,6 +10,7 @@
     "1.0.2.4": "- Added automatic deployment for CurseForge and Modrinth",
     "1.1.0.5": "- Added support for Twilight Forest chest variants",
     "1.2.0.6": "- Added passcode-protected door variants\n- Patched security boat rendering",
-    "1.2.1.7": "- Fix possible synchronization issues with passcode-protected block entities causing Jade tooltips to be wrong"
+    "1.2.1.7": "- Fix possible synchronization issues with passcode-protected block entities causing Jade tooltips to be wrong",
+    "1.2.2.8": "- Fix iron chest upgrades not working on passcode-protected iron chests\n- Fix dirt chests not being protectable"
   }
 }

@@ -150,13 +150,23 @@ minecraft {
 
 mixin {
     add(mainSourceSet, "mixins.$modId.refmap.json")
-    config("mixins.$modId.common.json")
-    config("mixins.$modId.client.json")
 }
+
+var mixinConfigs: ArrayList<String> = ArrayList()
+
+fun addMixinConfig(name: String) {
+    val fullName = "mixins.$modId.$name.json"
+    mixin.config(fullName)
+    mixinConfigs += fullName
+}
+
+addMixinConfig("common")
+addMixinConfig("client")
+addMixinConfig("ironchest")
 
 fun Manifest.applyCommonManifest() {
     attributes.apply {
-        this["MixinConfigs"] = "mixins.$modId.common.json,mixins.$modId.client.json"
+        this["MixinConfigs"] = mixinConfigs.joinToString { "," }
         this["Specification-Title"] = modId
         this["Specification-Vendor"] = "Karma Krafts"
         this["Specification-Version"] = version

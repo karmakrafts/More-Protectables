@@ -92,11 +92,6 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     }
 
     @Override
-    public void setModules(final NonNullList<ItemStack> modules) {
-        this.modules = modules;
-    }
-
-    @Override
     public @NotNull Component getDisplayName() {
         return getBlockState().getBlock().getName();
     }
@@ -226,5 +221,15 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     @Override
     public BlockState getBEBlockState() {
         return getBlockState();
+    }
+
+    @Override
+    public NonNullList<ItemStack> getModules() {
+        return modules;
+    }
+
+    @Override
+    public void setModules(final NonNullList<ItemStack> modules) {
+        this.modules = modules;
     }
 }

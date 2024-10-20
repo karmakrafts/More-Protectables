@@ -3,7 +3,10 @@ package io.karma.moreprotectables.compat.ironchest;
 import com.progwml6.ironchest.common.block.IronChestsTypes;
 import com.progwml6.ironchest.common.block.regular.AbstractIronChestBlock;
 import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
+import com.progwml6.ironchest.common.item.ChestUpgradeItem;
 import io.karma.moreprotectables.block.KeypadChestBlock;
+import io.karma.moreprotectables.compat.ironchest.hooks.ChestUpgradeItemHooks;
+import io.karma.moreprotectables.util.ListUtils;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;
 import net.minecraft.core.BlockPos;
@@ -18,6 +21,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -37,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class KeypadIronChestBlock extends AbstractIronChestBlock implements KeypadChestBlock {
     public KeypadIronChestBlock(final IronChestsTypes type, final Properties properties) {
-        super(properties, () -> IronChestCompatibilityContent.getKeypadChestBlockEntityType(type), type);
+        super(properties, IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(type)::get, type);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
@@ -47,7 +51,7 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
                                                                   final @NotNull BlockState state,
                                                                   final @NotNull BlockEntityType<T> blockEntityType) {
         // Attach ticker for updating crystal chests
-        if (blockEntityType == IronChestCompatibilityContent.keypadCrystalChestBlockEntity.get()) {
+        if (blockEntityType == IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(IronChestsTypes.CRYSTAL).get()) {
             return level.isClientSide ? createTickerHelper(blockEntityType,
                 this.blockEntityType(),
                 AbstractIronChestBlockEntity::lidAnimateTick) : createTickerHelper(blockEntityType,
@@ -71,7 +75,61 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
                                           final @NotNull Player player,
                                           final @NotNull InteractionHand hand,
                                           final @NotNull BlockHitResult hit) {
-        return useChest(state, level, pos, player, hand, hit);
+        final var stack = player.getItemInHand(hand);
+        final var item = stack.getItem();
+        if (!(item instanceof ChestUpgradeItem upgradeItem)) {
+            return useChest(state, level, pos, player, hand, hit);
+        }
+        final var type = ((ChestUpgradeItemHooks) upgradeItem).moreprotectables$getType();
+
+        final var blockEntity = level.getBlockEntity(pos);
+        if (!(blockEntity instanceof KeypadIronChestBlockEntity chestBlockEntity)) {
+            return InteractionResult.FAIL;
+        }
+        final var owner = chestBlockEntity.getOwner();
+        if (!player.getUUID().toString().equals(owner.getUUID())) {
+            return InteractionResult.FAIL;
+        }
+        if (!type.canUpgrade(chestBlockEntity.getChestType())) {
+            return InteractionResult.PASS;
+        }
+        final var customName = chestBlockEntity.getCustomName();
+        final var items = ListUtils.copy(chestBlockEntity.getItems());
+        final var modules = ListUtils.copy(chestBlockEntity.getModules());
+        final var saltKey = chestBlockEntity.getSaltKey();
+        final var passcode = chestBlockEntity.getPasscode();
+
+        chestBlockEntity.clearContent(); // Make sure the original chest doesn't spill its contents..
+        chestBlockEntity.clearModules(); // ..nor its modules
+
+        // @formatter:off
+        level.setBlockAndUpdate(pos, IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type.target).get()
+            .defaultBlockState()
+            .setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING))
+            .setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));
+        // @formatter:on
+
+        final var newBlockEntity = level.getBlockEntity(pos);
+        if (!(newBlockEntity instanceof KeypadIronChestBlockEntity newChestBlockEntity)) {
+            return InteractionResult.FAIL;
+        }
+        newChestBlockEntity.setOwner(owner.getUUID(), owner.getName());
+        newChestBlockEntity.setSaltKey(saltKey);
+        if (passcode != null) {
+            newChestBlockEntity.setPasscode(passcode);
+        }
+        if (customName != null) {
+            newChestBlockEntity.setCustomName(customName);
+        }
+        newChestBlockEntity.setModules(modules);
+        newChestBlockEntity.setItems(items);
+        newChestBlockEntity.setChanged();
+
+        if (!player.getAbilities().instabuild) {
+            stack.shrink(1);
+        }
+
+        return InteractionResult.SUCCESS;
     }
 
     @SuppressWarnings("deprecation")

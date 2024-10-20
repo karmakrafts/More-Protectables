@@ -94,11 +94,6 @@ public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity i
     }
 
     @Override
-    public void setModules(final NonNullList<ItemStack> modules) {
-        this.modules = modules;
-    }
-
-    @Override
     public @NotNull Component getDisplayName() {
         return getBlockState().getBlock().getName();
     }
@@ -228,5 +223,15 @@ public final class KeypadBambooChestBlockEntity extends BambooChestBlockEntity i
     @Override
     public BlockState getBEBlockState() {
         return getBlockState();
+    }
+
+    @Override
+    public NonNullList<ItemStack> getModules() {
+        return modules;
+    }
+
+    @Override
+    public void setModules(final NonNullList<ItemStack> modules) {
+        this.modules = modules;
     }
 }

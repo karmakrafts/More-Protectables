@@ -41,6 +41,8 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
 
     void setPreviousBlock(final @Nullable ResourceLocation previousBlock);
 
+    NonNullList<ItemStack> getModules();
+
     void setModules(final NonNullList<ItemStack> modules);
 
     void setModuleStates(final Map<ModuleType, Boolean> states);
@@ -52,6 +54,10 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
     boolean sendsDenylistMessage();
 
     boolean isOpen();
+
+    default void clearModules() {
+        getModules().clear();
+    }
 
     default boolean isPrimaryBlock() {
         return true;

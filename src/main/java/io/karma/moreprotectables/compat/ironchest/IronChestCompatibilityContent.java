@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 /**
@@ -29,91 +31,43 @@ public final class IronChestCompatibilityContent {
     };
     // @formatter:on
 
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadCopperChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadIronChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadGoldChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadDiamondChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadCrystalChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>> keypadObsidianChestBlockEntity;
+    public static final HashMap<IronChestsTypes, RegistryObject<? extends AbstractIronChestBlock>> CHEST_BLOCKS = new HashMap<>();
+    public static final HashMap<IronChestsTypes, RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>>> KEYPAD_CHEST_BLOCK_ENTITIES = new HashMap<>();
+    public static final HashMap<IronChestsTypes, RegistryObject<KeypadIronChestBlock>> KEYPAD_CHEST_BLOCKS = new HashMap<>();
 
-    public static RegistryObject<KeypadIronChestBlock> keypadCopperChestBlock;
-    public static RegistryObject<KeypadIronChestBlock> keypadIronChestBlock;
-    public static RegistryObject<KeypadIronChestBlock> keypadGoldChestBlock;
-    public static RegistryObject<KeypadIronChestBlock> keypadDiamondChestBlock;
-    public static RegistryObject<KeypadIronChestBlock> keypadCrystalChestBlock;
-    public static RegistryObject<KeypadIronChestBlock> keypadObsidianChestBlock;
+    static {
+        CHEST_BLOCKS.put(IronChestsTypes.DIRT, IronChestsBlocks.DIRT_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.COPPER, IronChestsBlocks.COPPER_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.IRON, IronChestsBlocks.IRON_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.GOLD, IronChestsBlocks.GOLD_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.DIAMOND, IronChestsBlocks.DIAMOND_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.CRYSTAL, IronChestsBlocks.CRYSTAL_CHEST);
+        CHEST_BLOCKS.put(IronChestsTypes.OBSIDIAN, IronChestsBlocks.OBSIDIAN_CHEST);
+    }
 
     // @formatter:off
     private IronChestCompatibilityContent() {}
     // @formatter:on
 
     public static void register() {
-        keypadCopperChestBlock = block("keypad_copper_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.COPPER,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.COPPER_CHEST.get())));
-        keypadIronChestBlock = block("keypad_iron_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.IRON,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.IRON_CHEST.get())));
-        keypadGoldChestBlock = block("keypad_gold_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.GOLD,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.GOLD_CHEST.get())));
-        keypadDiamondChestBlock = block("keypad_diamond_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.DIAMOND,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.DIAMOND_CHEST.get())));
-        keypadCrystalChestBlock = block("keypad_crystal_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.CRYSTAL,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.CRYSTAL_CHEST.get())));
-        keypadObsidianChestBlock = block("keypad_obsidian_chest",
-            () -> new KeypadIronChestBlock(IronChestsTypes.OBSIDIAN,
-                BlockBehaviour.Properties.copy(IronChestsBlocks.OBSIDIAN_CHEST.get())));
+        for (final var type : CHEST_TYPES) {
+            final var chestName = String.format("keypad_%s_chest", type.name().toLowerCase(Locale.ROOT));
 
-        keypadCopperChestBlockEntity = MoreProtectables.blockEntity("keypad_copper_chest",
-            keypadCopperChestBlock,
-            (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.COPPER,
-                keypadCopperChestBlock::get,
-                pos,
-                state));
-        keypadIronChestBlockEntity = MoreProtectables.blockEntity("keypad_iron_chest",
-            keypadIronChestBlock,
-            (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.IRON,
-                keypadIronChestBlock::get,
-                pos,
-                state));
-        keypadGoldChestBlockEntity = MoreProtectables.blockEntity("keypad_gold_chest",
-            keypadGoldChestBlock,
-            (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.GOLD,
-                keypadGoldChestBlock::get,
-                pos,
-                state));
-        keypadDiamondChestBlockEntity = MoreProtectables.blockEntity("keypad_diamond_chest",
-            keypadDiamondChestBlock,
-            (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.DIAMOND,
-                keypadDiamondChestBlock::get,
-                pos,
-                state));
-        keypadCrystalChestBlockEntity = MoreProtectables.blockEntity("keypad_crystal_chest",
-            keypadCrystalChestBlock,
-            (pos, state) -> new KeypadCrystalChestBlockEntity(IronChestsTypes.CRYSTAL,
-                keypadCrystalChestBlock::get,
-                pos,
-                state));
-        keypadObsidianChestBlockEntity = MoreProtectables.blockEntity("keypad_obsidian_chest",
-            keypadObsidianChestBlock,
-            (pos, state) -> new KeypadIronChestBlockEntity(IronChestsTypes.OBSIDIAN,
-                keypadObsidianChestBlock::get,
-                pos,
-                state));
-    }
+            final var keypadChestBlock = block(chestName,
+                () -> new KeypadIronChestBlock(type, BlockBehaviour.Properties.copy(CHEST_BLOCKS.get(type).get())));
+            KEYPAD_CHEST_BLOCKS.put(type, keypadChestBlock);
 
-    public static BlockEntityType<KeypadIronChestBlockEntity> getKeypadChestBlockEntityType(final IronChestsTypes type) {
-        return switch (type) {
-            case COPPER -> keypadCopperChestBlockEntity.get();
-            case GOLD -> keypadGoldChestBlockEntity.get();
-            case DIAMOND -> keypadDiamondChestBlockEntity.get();
-            case CRYSTAL -> keypadCrystalChestBlockEntity.get();
-            case OBSIDIAN -> keypadObsidianChestBlockEntity.get();
-            default -> keypadIronChestBlockEntity.get();
-        };
+            KEYPAD_CHEST_BLOCK_ENTITIES.put(type,
+                MoreProtectables.blockEntity(chestName,
+                    keypadChestBlock,
+                    type == IronChestsTypes.CRYSTAL ? (pos, state) -> new KeypadCrystalChestBlockEntity(type,
+                        keypadChestBlock::get,
+                        pos,
+                        state) : (pos, state) -> new KeypadIronChestBlockEntity(type,
+                        keypadChestBlock::get,
+                        pos,
+                        state)));
+        }
     }
 
     private static <B extends AbstractIronChestBlock> RegistryObject<B> block(final String name,

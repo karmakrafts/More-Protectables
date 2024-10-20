@@ -57,13 +57,24 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
                                       final Supplier<Block> block,
                                       final BlockPos pos,
                                       final BlockState state) {
-        super(IronChestCompatibilityContent.getKeypadChestBlockEntityType(type), pos, state, type, block);
+        super(IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(type).get(), pos, state, type, block);
+    }
+
+    @Override
+    public NonNullList<ItemStack> getModules() {
+        return modules;
+    }
+
+    @Override
+    public void setModules(final NonNullList<ItemStack> modules) {
+        this.modules = modules;
     }
 
     @Override
     protected @NotNull AbstractContainerMenu createMenu(final int containerId,
                                                         final @NotNull Inventory playerInventory) {
         return switch (getChestType()) {
+            case DIRT -> IronChestMenu.createDirtContainer(containerId, playerInventory, this);
             case COPPER -> IronChestMenu.createCopperContainer(containerId, playerInventory, this);
             case GOLD -> IronChestMenu.createGoldContainer(containerId, playerInventory, this);
             case DIAMOND -> IronChestMenu.createDiamondContainer(containerId, playerInventory, this);
@@ -111,11 +122,6 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
     public void setModuleStates(final Map<ModuleType, Boolean> states) {
         moduleStates.clear();
         moduleStates.putAll(states);
-    }
-
-    @Override
-    public void setModules(final NonNullList<ItemStack> modules) {
-        this.modules = modules;
     }
 
     @Override

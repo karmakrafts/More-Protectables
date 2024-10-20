@@ -1,0 +1,14 @@
+{
+  "package": "io.karma.moreprotectables.compat.ironchest.mixin",
+  "required": false,
+  "refmap": "mixins.moreprotectables.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "injectors": {
+    "maxShiftBy": 100
+  },
+  "mixins": [
+    "ChestUpgradeItemMixin"
+  ]
+}
