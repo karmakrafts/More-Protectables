@@ -1,9 +1,12 @@
 package io.karma.moreprotectables.client.render;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.block.KeypadBlock;
 import io.karma.moreprotectables.blockentity.KeypadBlockEntity;
 import io.karma.moreprotectables.client.event.BlockEntityRenderEvent;
+import net.geforcemods.securitycraft.SCContent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
@@ -11,6 +14,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
@@ -63,13 +67,57 @@ public final class KeypadRenderer {
         keypadLockedModel = models.get(KEYPAD_LOCKED_MODEL);
     }
 
+    public void renderKeypad(final BlockState state,
+                             final VertexConsumer buffer,
+                             final PoseStack poseStack,
+                             final int packedLight,
+                             final int packedOverlay,
+                             final boolean isLocked) {
+        final var renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+        final var buttonModel = isLocked ? keypadLockedModel : keypadUnlockedModel;
+        renderer.renderModel(poseStack.last(),
+            buffer,
+            state,
+            keypadModel,
+            1F,
+            1F,
+            1F,
+            packedLight,
+            packedOverlay,
+            ModelData.EMPTY,
+            RenderType.cutout());
+        renderer.renderModel(poseStack.last(),
+            buffer,
+            state,
+            buttonModel,
+            1F,
+            1F,
+            1F,
+            LightTexture.FULL_BRIGHT,
+            packedOverlay,
+            ModelData.EMPTY,
+            RenderType.cutout());
+    }
+
+    public void renderKeypad(final VertexConsumer buffer,
+                             final PoseStack poseStack,
+                             final int packedLight,
+                             final int packedOverlay,
+                             final boolean isLocked) {
+        renderKeypad(SCContent.KEYPAD_CHEST.get().defaultBlockState(),
+            buffer,
+            poseStack,
+            packedLight,
+            packedOverlay,
+            isLocked);
+    }
+
     private void onRenderBlockEntity(final BlockEntityRenderEvent event) {
         final var blockEntity = event.getBlockEntity();
         final var state = blockEntity.getBlockState();
         if (!(state.getBlock() instanceof KeypadBlock keypadBlock) || !(blockEntity instanceof KeypadBlockEntity keypadBlockEntity) || !keypadBlockEntity.isPrimaryBlock()) {
             return;
         }
-        final var renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
         final var buffer = event.getBufferSource().getBuffer(RenderType.cutout());
         final var poseStack = event.getPoseStack();
         final var offset = keypadBlock.getKeypadOffset(state);
@@ -87,29 +135,7 @@ public final class KeypadRenderer {
         poseStack.translate(-0.5F, -0.5F, -0.5F);
         poseStack.translate(-offset.x, offset.y, -offset.z);
         final var isLocked = event.isItem() || !keypadBlockEntity.isOpen();
-        final var buttonModel = isLocked ? keypadLockedModel : keypadUnlockedModel;
-        renderer.renderModel(poseStack.last(),
-            buffer,
-            state,
-            keypadModel,
-            1F,
-            1F,
-            1F,
-            event.getPackedLight(),
-            event.getPackedOverlay(),
-            ModelData.EMPTY,
-            RenderType.cutout());
-        renderer.renderModel(poseStack.last(),
-            buffer,
-            state,
-            buttonModel,
-            1F,
-            1F,
-            1F,
-            LightTexture.FULL_BRIGHT,
-            event.getPackedOverlay(),
-            ModelData.EMPTY,
-            RenderType.cutout());
+        renderKeypad(state, buffer, poseStack, event.getPackedLight(), event.getPackedOverlay(), isLocked);
         poseStack.popPose();
     }
 }
