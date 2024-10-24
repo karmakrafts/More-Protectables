@@ -1,7 +1,7 @@
 package io.karma.moreprotectables.compat.twilightforest;
 
 import io.karma.moreprotectables.MoreProtectables;
-import io.karma.moreprotectables.block.KeypadWoodDoorBlock;
+import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
 import io.karma.moreprotectables.util.WoodTypeUtils;
 import net.minecraft.world.item.BlockItem;
@@ -38,7 +38,7 @@ public final class TFCompatibilityContent {
     public static final HashMap<WoodType, RegistryObject<DoorBlock>> WOOD_DOOR_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<KeypadTFChestBlock>> KEYPAD_WOOD_CHEST_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<KeypadTFChestBlockEntity>>> KEYPAD_WOOD_CHEST_ENTITIES = new HashMap<>();
-    public static final HashMap<WoodType, RegistryObject<KeypadWoodDoorBlock>> KEYPAD_WOOD_DOOR_BLOCKS = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_DOOR_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>>> KEYPAD_WOOD_DOOR_ENTITIES = new HashMap<>();
 
     static {
@@ -81,7 +81,7 @@ public final class TFCompatibilityContent {
 
             KEYPAD_WOOD_DOOR_BLOCKS.put(woodType,
                 MoreProtectables.block(doorName,
-                    () -> new KeypadWoodDoorBlock(BlockBehaviour.Properties.copy(doorBlock.get()).explosionResistance(
+                    () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(doorBlock.get()).explosionResistance(
                         Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_DOOR_ENTITIES.get(woodType)::get),
                     BlockItem::new));
 

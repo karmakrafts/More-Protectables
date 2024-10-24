@@ -31,13 +31,13 @@ public abstract class KeypadChestBlockEntityMixin extends ChestBlockEntity
 
     @SuppressWarnings("all")
     @Override
-    public BlockPos getBEPos() {
+    public BlockPos getThisPos() {
         return worldPosition;
     }
 
     @SuppressWarnings("all")
     @Override
-    public BlockState getBEBlockState() {
+    public BlockState getThisState() {
         return getBlockState();
     }
 }

@@ -4,6 +4,7 @@ import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.util.KeypadDoorConvertible;
 import net.geforcemods.securitycraft.SecurityCraft;
 import net.geforcemods.securitycraft.api.SecurityCraftAPI;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.InterModComms;
 
 /**
@@ -22,5 +23,8 @@ public final class ModConversions {
                 () -> new KeypadDoorConvertible(ModBlocks.WOOD_DOORS.get(woodType),
                     ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get()));
         }
+        InterModComms.sendTo(SecurityCraft.MODID,
+            SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
+            () -> new KeypadDoorConvertible(Blocks.IRON_DOOR, ModBlocks.KEYPAD_IRON_DOOR.get()));
     }
 }

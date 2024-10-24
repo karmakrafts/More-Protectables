@@ -5,8 +5,6 @@ import appeng.blockentity.storage.SkyChestBlockEntity;
 import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
-import net.geforcemods.securitycraft.api.Option.SendAllowlistMessageOption;
-import net.geforcemods.securitycraft.api.Option.SendDenylistMessageOption;
 import net.geforcemods.securitycraft.api.Option.SmartModuleCooldownOption;
 import net.geforcemods.securitycraft.api.Owner;
 import net.geforcemods.securitycraft.blockentities.DisguisableBlockEntity;
@@ -20,17 +18,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -39,15 +32,15 @@ import java.util.UUID;
  */
 public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity implements KeypadChestBlockEntity {
     private final Owner owner = new Owner();
-    private final BooleanOption sendAllowlistMessage = new SendAllowlistMessageOption(false);
-    private final BooleanOption sendDenylistMessage = new SendDenylistMessageOption(true);
-    private final SmartModuleCooldownOption smartModuleCooldown = new SmartModuleCooldownOption();
-    private final Map<ModuleType, Boolean> moduleStates = new EnumMap<>(ModuleType.class);
-    private NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
+    private final Option.BooleanOption sendAllowlistMessage = new Option.SendAllowlistMessageOption(false);
+    private final Option.BooleanOption sendDenylistMessage = new Option.SendAllowlistMessageOption(true);
+    private final Option.SmartModuleCooldownOption smartModuleCooldown = new SmartModuleCooldownOption();
     private byte[] passcode;
     private UUID saltKey;
+    private NonNullList<ItemStack> modules = NonNullList.withSize(getMaxNumberOfModules(), ItemStack.EMPTY);
+    private long cooldownEnd;
+    private Map<ModuleType, Boolean> moduleStates;
     private ResourceLocation previousChest;
-    private long cooldownEnd = 0;
 
     public KeypadSkyChestBlockEntity(final SkyChestType type, final BlockPos pos, final BlockState blockState) {
         super(getBlockEntityType(type), pos, blockState);
@@ -86,54 +79,23 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     public void saveAdditional(final CompoundTag data) {
         super.saveAdditional(data);
         saveAdditionalKeypadData(data);
+        writeModuleInventory(data);
+        writeModuleStates(data);
+        writeOptions(data);
     }
 
     @Override
     public void loadTag(final CompoundTag data) {
         super.loadTag(data);
         loadAdditionalKeypadData(data);
-    }
-
-    @Override
-    public void setModuleStates(final Map<ModuleType, Boolean> states) {
-        moduleStates.clear();
-        moduleStates.putAll(states);
+        modules = readModuleInventory(data);
+        moduleStates = readModuleStates(data);
+        readOptions(data);
     }
 
     @Override
     public @NotNull Component getDisplayName() {
         return getBlockState().getBlock().getName();
-    }
-
-    @Override
-    public Option<?>[] customOptions() {
-        return new Option[]{sendAllowlistMessage, sendDenylistMessage, smartModuleCooldown};
-    }
-
-    @Override
-    public NonNullList<ItemStack> getInventory() {
-        return modules;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isModuleEnabled(final ModuleType moduleType) {
-        return hasModule(moduleType) && moduleStates.get(moduleType) == Boolean.TRUE;
-    }
-
-    @Override
-    public void toggleModuleState(final ModuleType moduleType, final boolean shouldBeEnabled) {
-        moduleStates.put(moduleType, shouldBeEnabled);
-    }
-
-    @Override
-    public Level myLevel() {
-        return level;
-    }
-
-    @Override
-    public BlockPos myPos() {
-        return worldPosition;
     }
 
     @Override
@@ -179,19 +141,6 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     }
 
     @Override
-    public void startCooldown() {
-        if (!hasLevel()) {
-            return;
-        }
-        final var start = System.currentTimeMillis();
-        if (!isOnCooldown()) {
-            cooldownEnd = start + smartModuleCooldown.get() * 50;
-            Objects.requireNonNull(level).sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
-            setChanged();
-        }
-    }
-
-    @Override
     public long getCooldownEnd() {
         return cooldownEnd;
     }
@@ -199,51 +148,41 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
     @Override
     public void setCooldownEnd(final long cooldownEnd) {
         this.cooldownEnd = cooldownEnd;
+        setChanged();
     }
 
     @Override
-    public void setRemoved() {
-        super.setRemoved();
-        DisguisableBlockEntity.onSetRemoved(this);
+    public BooleanOption getSendAllowlistMessage() {
+        return sendAllowlistMessage;
     }
 
     @Override
-    public @NotNull ModelData getModelData() {
-        return DisguisableBlockEntity.getModelData(this);
+    public BooleanOption getSendDenylistMessage() {
+        return sendDenylistMessage;
     }
 
     @Override
-    public boolean sendsAllowlistMessage() {
-        return sendAllowlistMessage.get();
+    public SmartModuleCooldownOption getSmartModuleCooldown() {
+        return smartModuleCooldown;
     }
 
     @Override
-    public boolean sendsDenylistMessage() {
-        return sendDenylistMessage.get();
+    public Option<?>[] customOptions() {
+        return new Option[]{sendAllowlistMessage, sendDenylistMessage, smartModuleCooldown};
     }
 
     @Override
-    public @Nullable BlockEntity findOtherBlock() {
-        return null;
-    }
-
-    @Override
-    public BlockPos getBEPos() {
-        return worldPosition;
-    }
-
-    @Override
-    public BlockState getBEBlockState() {
-        return getBlockState();
-    }
-
-    @Override
-    public NonNullList<ItemStack> getModules() {
+    public NonNullList<ItemStack> getInventory() {
         return modules;
     }
 
     @Override
-    public void setModules(final NonNullList<ItemStack> modules) {
+    public void setInventory(final NonNullList<ItemStack> modules) {
         this.modules = modules;
+    }
+
+    @Override
+    public Map<ModuleType, Boolean> getModuleStates() {
+        return moduleStates;
     }
 }

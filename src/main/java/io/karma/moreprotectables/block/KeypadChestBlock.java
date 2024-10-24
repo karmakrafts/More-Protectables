@@ -2,6 +2,8 @@ package io.karma.moreprotectables.block;
 
 import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.SCContent;
+import net.geforcemods.securitycraft.api.IDisguisable;
+import net.geforcemods.securitycraft.compat.IOverlayDisplay;
 import net.geforcemods.securitycraft.util.PlayerUtils;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -22,7 +24,7 @@ import org.joml.Vector3f;
  * @author Alexander Hinze
  * @since 16/10/2024
  */
-public interface KeypadChestBlock extends KeypadBlock {
+public interface KeypadChestBlock extends KeypadBlock, IDisguisable, IOverlayDisplay {
     Vector3f DEFAULT_OFFSET = new Vector3f(2F / 16F, 5F / 16F, 0F);
 
     @OnlyIn(Dist.CLIENT)

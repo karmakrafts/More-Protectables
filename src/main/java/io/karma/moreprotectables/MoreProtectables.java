@@ -84,6 +84,7 @@ public class MoreProtectables {
             for (final var woodType : WOOD_TYPES) {
                 output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
             }
+            output.accept(ModBlocks.KEYPAD_IRON_DOOR.get());
             for (final var module : COMPAT_MODULES) {
                 module.addItemsToTab(output);
             }
@@ -137,6 +138,8 @@ public class MoreProtectables {
                 ItemBlockRenderTypes.setRenderLayer(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get(),
                     RenderType.cutout());
             }
+            BlockEntityRenderers.register(ModBlockEntities.KEYPAD_IRON_DOOR.get(), DummyBlockEntityRenderer::new);
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.KEYPAD_IRON_DOOR.get(), RenderType.cutout());
         });
     }
 }

@@ -95,12 +95,11 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
         }
         final var customName = chestBlockEntity.getCustomName();
         final var items = ListUtils.copy(chestBlockEntity.getItems());
-        final var modules = ListUtils.copy(chestBlockEntity.getModules());
+        final var modules = ListUtils.copy(chestBlockEntity.getInventory());
         final var saltKey = chestBlockEntity.getSaltKey();
         final var passcode = chestBlockEntity.getPasscode();
 
         chestBlockEntity.clearContent(); // Make sure the original chest doesn't spill its contents..
-        chestBlockEntity.clearModules(); // ..nor its modules
 
         // @formatter:off
         level.setBlockAndUpdate(pos, IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type.target).get()
@@ -121,7 +120,7 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
         if (customName != null) {
             newChestBlockEntity.setCustomName(customName);
         }
-        newChestBlockEntity.setModules(modules);
+        newChestBlockEntity.setInventory(modules);
         newChestBlockEntity.setItems(items);
         newChestBlockEntity.setChanged();
 

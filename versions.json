@@ -1,8 +1,8 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/more-protectables",
   "promos": {
-    "1.20.1-latest": "1.2.2.9",
-    "1.20.1-recommended": "1.2.2.9"
+    "1.20.1-latest": "1.2.3.10",
+    "1.20.1-recommended": "1.2.3.10"
   },
   "1.20.1": {
     "1.0.1.2": "- Initial public release",
@@ -12,6 +12,7 @@
     "1.2.0.6": "- Added passcode-protected door variants\n- Patched security boat rendering",
     "1.2.1.7": "- Fix possible synchronization issues with passcode-protected block entities causing Jade tooltips to be wrong",
     "1.2.2.8": "- Fix iron chest upgrades not working on passcode-protected iron chests\n- Fix dirt chests not being protectable\n- Fix security sea boat keypads not accurately reflecting lock state",
-	"1.2.2.9": "- Add issue tracker and display URL to mod info file"
+	"1.2.2.9": "- Add issue tracker and display URL to mod info file",
+	"1.2.3.10": "- Add passcode-protected iron doors\n- Fix synchronization issues with passcode-protected doors because of state change"
   }
 }

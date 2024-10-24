@@ -1,11 +1,12 @@
 package io.karma.moreprotectables.init;
 
 import io.karma.moreprotectables.MoreProtectables;
-import io.karma.moreprotectables.block.KeypadWoodDoorBlock;
+import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -16,8 +17,9 @@ import java.util.HashMap;
  * @since 19/10/2024
  */
 public final class ModBlocks {
-    public static final HashMap<WoodType, RegistryObject<KeypadWoodDoorBlock>> KEYPAD_WOOD_DOOR = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_DOOR = new HashMap<>();
     public static final HashMap<WoodType, Block> WOOD_DOORS = new HashMap<>();
+    public static RegistryObject<SimpleKeypadDoorBlock> KEYPAD_IRON_DOOR;
 
     static {
         WOOD_DOORS.put(WoodType.OAK, Blocks.OAK_DOOR);
@@ -43,10 +45,15 @@ public final class ModBlocks {
             final var props = BlockBehaviour.Properties.copy(WOOD_DOORS.get(woodType));
             KEYPAD_WOOD_DOOR.put(woodType,
                 MoreProtectables.block(name,
-                    () -> new KeypadWoodDoorBlock(props,
+                    () -> new SimpleKeypadDoorBlock(props,
                         woodType.setType(),
                         ModBlockEntities.KEYPAD_WOOD_DOOR.get(woodType)::get),
                     BlockItem::new));
         }
+        KEYPAD_IRON_DOOR = MoreProtectables.block("keypad_iron_door",
+            () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_DOOR),
+                BlockSetType.IRON,
+                ModBlockEntities.KEYPAD_IRON_DOOR::get),
+            BlockItem::new);
     }
 }

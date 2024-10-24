@@ -2,6 +2,8 @@ package io.karma.moreprotectables.block;
 
 import io.karma.moreprotectables.blockentity.KeypadDoorBlockEntity;
 import net.geforcemods.securitycraft.SCContent;
+import net.geforcemods.securitycraft.api.IDisguisable;
+import net.geforcemods.securitycraft.compat.IOverlayDisplay;
 import net.geforcemods.securitycraft.util.PlayerUtils;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -24,7 +26,7 @@ import org.joml.Vector3f;
  * @author Alexander Hinze
  * @since 19/10/2024
  */
-public interface KeypadDoorBlock extends KeypadBlock {
+public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisplay {
     Vector3f DEFAULT_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, 1F / 16F);
     Vector3f DEFAULT_OFFSET_RIGHT = new Vector3f(2F / 16F, 0F, 1F / 16F);
     Vector3f OPEN_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, -(12F / 16F));

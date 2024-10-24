@@ -23,12 +23,12 @@ import java.util.function.Supplier;
  * @author Alexander Hinze
  * @since 19/10/2024
  */
-public class KeypadWoodDoorBlock extends SpecialDoorBlock implements KeypadDoorBlock {
+public class SimpleKeypadDoorBlock extends SpecialDoorBlock implements KeypadDoorBlock {
     private final Supplier<BlockEntityType<?>> blockEntityType;
 
-    public KeypadWoodDoorBlock(final Properties properties,
-                               final BlockSetType type,
-                               final Supplier<BlockEntityType<?>> blockEntityType) {
+    public SimpleKeypadDoorBlock(final Properties properties,
+                                 final BlockSetType type,
+                                 final Supplier<BlockEntityType<?>> blockEntityType) {
         super(properties, type);
         this.blockEntityType = blockEntityType;
     }

@@ -123,8 +123,8 @@ public final class KeypadChestConvertible implements IPasscodeConvertible {
         chest.load(tag);
 
         if (protect) {
-            if (player != null) {
-                ((IOwnable) chest).setOwner(player.getUUID().toString(), player.getName().getString());
+            if (player != null && chest instanceof IOwnable ownable) {
+                ownable.setOwner(player.getUUID().toString(), player.getName().getString());
             }
             ((KeypadChestBlockEntity) chest).setPreviousBlock(ForgeRegistries.BLOCKS.getKey(oldChestState.getBlock()));
         }

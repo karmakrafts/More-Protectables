@@ -1,25 +1,20 @@
 package io.karma.moreprotectables.blockentity;
 
-import io.karma.moreprotectables.block.KeypadChestBlock;
 import net.geforcemods.securitycraft.api.*;
 import net.geforcemods.securitycraft.blockentities.DisguisableBlockEntity;
 import net.geforcemods.securitycraft.items.ModuleItem;
 import net.geforcemods.securitycraft.misc.ModuleType;
 import net.geforcemods.securitycraft.util.PasscodeUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -29,38 +24,148 @@ import java.util.Objects;
  * @author Alexander Hinze
  * @since 18/10/2024
  */
-public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModuleInventory, ICustomizable, ILockable {
+public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModuleInventory, ICustomizable {
     Vec3i X_AXIS = new Vec3i(1, 0, 0);
     Vec3i Z_AXIS = new Vec3i(0, 0, 1);
 
-    @NotNull
-    Component getDisplayName();
+    Map<ModuleType, Boolean> getModuleStates();
+
+    Option.BooleanOption getSendAllowlistMessage();
+
+    Option.BooleanOption getSendDenylistMessage();
+
+    Option.SmartModuleCooldownOption getSmartModuleCooldown();
 
     @Nullable
     ResourceLocation getPreviousBlock();
 
     void setPreviousBlock(final @Nullable ResourceLocation previousBlock);
 
-    NonNullList<ItemStack> getModules();
-
-    void setModules(final NonNullList<ItemStack> modules);
-
-    void setModuleStates(final Map<ModuleType, Boolean> states);
+    void setInventory(final NonNullList<ItemStack> modules);
 
     void setCooldownEnd(final long cooldownEnd);
 
-    boolean sendsAllowlistMessage();
+    default boolean sendsAllowlistMessage() {
+        return getSendAllowlistMessage().get();
+    }
 
-    boolean sendsDenylistMessage();
+    default boolean sendsDenylistMessage() {
+        return getSendDenylistMessage().get();
+    }
 
     boolean isOpen();
 
-    default void clearModules() {
-        getModules().clear();
+    default void addOrRemoveModuleFromAttached(final ItemStack module, final boolean remove, final boolean toggled) {
+        if (!module.isEmpty()) {
+            if (module.getItem() instanceof ModuleItem moduleItem) {
+                final var offsetBe = (KeypadChestBlockEntity) findOtherBlock();
+                if (offsetBe != null) {
+                    if (toggled) {
+                        if (offsetBe.isModuleEnabled(moduleItem.getModuleType()) != remove) {
+                            return;
+                        }
+                    }
+                    else if (offsetBe.hasModule(moduleItem.getModuleType()) != remove) {
+                        return;
+                    }
+
+                    if (remove) {
+                        offsetBe.removeModule(moduleItem.getModuleType(), toggled);
+                    }
+                    else {
+                        offsetBe.insertModule(module, toggled);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    default void onModuleInserted(final ItemStack stack, final ModuleType module, final boolean toggled) {
+        IModuleInventory.super.onModuleInserted(stack, module, toggled);
+        this.addOrRemoveModuleFromAttached(stack, false, toggled);
+        if (module == ModuleType.DISGUISE) {
+            DisguisableBlockEntity.onDisguiseModuleInserted(getThis(), stack, toggled);
+        }
+    }
+
+    @Override
+    default void onModuleRemoved(final ItemStack stack, final ModuleType module, final boolean toggled) {
+        IModuleInventory.super.onModuleRemoved(stack, module, toggled);
+        this.addOrRemoveModuleFromAttached(stack, true, toggled);
+        if (module == ModuleType.DISGUISE) {
+            DisguisableBlockEntity.onDisguiseModuleRemoved(getThis(), stack, toggled);
+        }
+    }
+
+    @Override
+    default <T> void onOptionChanged(final Option<T> option) {
+        final var otherBe = (KeypadChestBlockEntity) findOtherBlock();
+        if (otherBe != null) {
+            if (option instanceof Option.BooleanOption boolOption) {
+                if (option == getSendAllowlistMessage()) {
+                    otherBe.getSendAllowlistMessage().setValue(boolOption.get());
+                }
+                else {
+                    if (option != getSendDenylistMessage()) {
+                        throw new UnsupportedOperationException("Unhandled option synchronization in keypad chest! " + option.getName());
+                    }
+                    otherBe.getSendAllowlistMessage().setValue(boolOption.get());
+                }
+            }
+            else {
+                if (!(option instanceof Option.IntOption) || option != getSmartModuleCooldown()) {
+                    throw new UnsupportedOperationException("Unhandled option synchronization in keypad chest! " + option.getName());
+                }
+
+                otherBe.getSmartModuleCooldown().copy(option);
+            }
+        }
+        ICustomizable.super.onOptionChanged(option);
+    }
+
+    @Override
+    default void startCooldown() {
+        final var otherHalf = (KeypadBlockEntity) findOtherBlock();
+        final var start = System.currentTimeMillis();
+        startCooldown(start);
+        if (otherHalf != null) {
+            otherHalf.startCooldown(start);
+        }
+    }
+
+    default void startCooldown(final long start) {
+        if (!isOnCooldown()) {
+            setCooldownEnd(start + (long) (getSmartModuleCooldown().get() * 50));
+            final var state = getThisState();
+            Objects.requireNonNull(getThis().getLevel()).sendBlockUpdated(getThisPos(), state, state, 0x2);
+            getThis().setChanged();
+        }
     }
 
     default boolean isPrimaryBlock() {
         return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    default boolean isModuleEnabled(final ModuleType module) {
+        return hasModule(module) && getModuleStates().get(module) == Boolean.TRUE;
+    }
+
+    @Override
+    default void toggleModuleState(final ModuleType module, final boolean shouldBeEnabled) {
+        getModuleStates().put(module, shouldBeEnabled);
+    }
+
+    @Override
+    default Level myLevel() {
+        return getThis().getLevel();
+    }
+
+    @Override
+    default BlockPos myPos() {
+        return getThis().getBlockPos();
     }
 
     @Nullable
@@ -68,25 +173,27 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
         return null;
     }
 
-    BlockPos getBEPos();
+    default BlockEntity getThis() {
+        return (BlockEntity) this;
+    }
 
-    BlockState getBEBlockState();
+    default BlockPos getThisPos() {
+        return getThis().getBlockPos();
+    }
+
+    default BlockState getThisState() {
+        return getThis().getBlockState();
+    }
 
     default void loadAdditionalKeypadData(final CompoundTag data) {
-        setModules(readModuleInventory(data));
-        setModuleStates(readModuleStates(data));
-        readOptions(data);
         setCooldownEnd(System.currentTimeMillis() + data.getLong("cooldownLeft"));
         loadSaltKey(data);
         loadPasscode(data);
         getOwner().load(data);
-        setPreviousBlock(new ResourceLocation(data.getString("previous_chest")));
+        setPreviousBlock(new ResourceLocation(data.getString("previous_block")));
     }
 
     default void saveAdditionalKeypadData(final CompoundTag data) {
-        writeModuleInventory(data);
-        writeModuleStates(data);
-        writeOptions(data);
         final var cooldownLeft = getCooldownEnd() - System.currentTimeMillis();
         data.putLong("cooldownLeft", cooldownLeft <= 0 ? -1 : cooldownLeft);
         final var saltKey = getSaltKey();
@@ -100,43 +207,12 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
         getOwner().save(data, needsValidation());
         final var previousChest = getPreviousBlock();
         if (previousChest != null) {
-            data.putString("previous_chest", previousChest.toString());
+            data.putString("previous_block", previousChest.toString());
         }
-    }
-
-    default boolean isBlocked() {
-        final var blockEntity = getThisBlockEntity();
-        if (!blockEntity.hasLevel()) {
-            return true;
-        }
-        final var level = Objects.requireNonNull(blockEntity.getLevel());
-        for (final var dir : Direction.Plane.HORIZONTAL) {
-            final var pos = blockEntity.getBlockPos().relative(dir);
-            if (level.getBlockState(pos).getBlock() == blockEntity.getBlockState().getBlock() && net.geforcemods.securitycraft.blocks.KeypadChestBlock.isBlocked(
-                level,
-                pos)) {
-                return true;
-            }
-        }
-        return net.geforcemods.securitycraft.blocks.KeypadChestBlock.isBlocked(Objects.requireNonNull(level),
-            blockEntity.getBlockPos());
-    }
-
-    @Override
-    default ModuleType[] acceptedModules() {
-        return new ModuleType[]{ModuleType.ALLOWLIST, ModuleType.DENYLIST, ModuleType.REDSTONE, ModuleType.SMART, ModuleType.HARMING, ModuleType.DISGUISE};
     }
 
     @Override
     default void activate(final Player player) {
-        final var blockEntity = getThisBlockEntity();
-        if (!blockEntity.hasLevel()) {
-            return;
-        }
-        final var level = Objects.requireNonNull(blockEntity.getLevel());
-        if (!level.isClientSide && blockEntity.getBlockState().getBlock() instanceof KeypadChestBlock block && !isBlocked()) {
-            block.activate(blockEntity.getBlockState(), level, blockEntity.getBlockPos(), player);
-        }
     }
 
     @Override
@@ -146,39 +222,8 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
 
     @Override
     default void openPasscodeGUI(final Level level, final BlockPos pos, final Player player) {
-        if (!level.isClientSide && !isBlocked()) {
+        if (!level.isClientSide) {
             IPasscodeProtected.super.openPasscodeGUI(level, pos, player);
-        }
-    }
-
-    @Override
-    default void dropAllModules() {
-        final var blockEntity = getThisBlockEntity();
-        if (!blockEntity.hasLevel()) {
-            return;
-        }
-        for (final var module : getInventory()) {
-            if (!(module.getItem() instanceof ModuleItem)) {
-                continue;
-            }
-            Block.popResource(Objects.requireNonNull(blockEntity.getLevel()), blockEntity.getBlockPos(), module);
-        }
-        getInventory().clear();
-    }
-
-    @Override
-    default void onModuleInserted(ItemStack stack, ModuleType module, boolean toggled) {
-        IModuleInventory.super.onModuleInserted(stack, module, toggled);
-        if (module == ModuleType.DISGUISE) {
-            DisguisableBlockEntity.onDisguiseModuleInserted(getThisBlockEntity(), stack, toggled);
-        }
-    }
-
-    @Override
-    default void onModuleRemoved(ItemStack stack, ModuleType module, boolean toggled) {
-        IModuleInventory.super.onModuleRemoved(stack, module, toggled);
-        if (module == ModuleType.DISGUISE) {
-            DisguisableBlockEntity.onDisguiseModuleRemoved(getThisBlockEntity(), stack, toggled);
         }
     }
 }

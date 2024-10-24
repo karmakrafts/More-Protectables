@@ -15,6 +15,7 @@ import java.util.Objects;
  */
 public final class ModBlockEntities {
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>>> KEYPAD_WOOD_DOOR = new HashMap<>();
+    public static RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>> KEYPAD_IRON_DOOR;
 
     // @formatter:off
     private ModBlockEntities() {}
@@ -28,5 +29,8 @@ public final class ModBlockEntities {
                     Objects.requireNonNull(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType)),
                     (pos, state) -> new SimpleKeypadDoorBlockEntity(KEYPAD_WOOD_DOOR.get(woodType).get(), pos, state)));
         }
+        KEYPAD_IRON_DOOR = MoreProtectables.blockEntity("keypad_iron_door",
+            ModBlocks.KEYPAD_IRON_DOOR,
+            (pos, state) -> new SimpleKeypadDoorBlockEntity(KEYPAD_IRON_DOOR.get(), pos, state));
     }
 }

@@ -1,7 +1,5 @@
 package io.karma.moreprotectables.block;
 
-import net.geforcemods.securitycraft.api.IDisguisable;
-import net.geforcemods.securitycraft.compat.IOverlayDisplay;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -16,7 +14,7 @@ import org.joml.Vector3f;
  * @author Alexander Hinze
  * @since 18/10/2024
  */
-public interface KeypadBlock extends EntityBlock, IOverlayDisplay, IDisguisable {
+public interface KeypadBlock extends EntityBlock {
     Vector3f DEFAULT_OFFSET = new Vector3f(0F);
 
     @OnlyIn(Dist.CLIENT)
