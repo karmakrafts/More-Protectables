@@ -1,5 +1,5 @@
 [versions]
-moreProtectables = "1.2.2"
+moreProtectables = "1.2.3"
 minecraft = "1.20.1"
 minecraftForge = "1.20.1-47.2.30"
 mappings = "2023.09.03" # https://parchmentmc.org/docs/getting-started
