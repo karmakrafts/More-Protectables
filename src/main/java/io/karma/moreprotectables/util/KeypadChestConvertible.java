@@ -20,28 +20,30 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * @author Alexander Hinze
  * @since 16/10/2024
  */
 public final class KeypadChestConvertible implements IPasscodeConvertible {
-    private final Block unprotectedBlock;
-    private final Block protectedBlock;
+    private final Supplier<? extends Block> unprotectedBlock;
+    private final Supplier<? extends Block> protectedBlock;
 
-    public KeypadChestConvertible(final Block unprotectedBlock, final Block protectedBlock) {
+    public KeypadChestConvertible(final Supplier<? extends Block> unprotectedBlock,
+                                  final Supplier<? extends Block> protectedBlock) {
         this.unprotectedBlock = unprotectedBlock;
         this.protectedBlock = protectedBlock;
     }
 
     @Override
     public boolean isUnprotectedBlock(final BlockState state) {
-        return state.is(unprotectedBlock);
+        return state.is(unprotectedBlock.get());
     }
 
     @Override
     public boolean isProtectedBlock(final BlockState state) {
-        return state.is(protectedBlock);
+        return state.is(protectedBlock.get());
     }
 
     @Override
@@ -107,13 +109,13 @@ public final class KeypadChestConvertible implements IPasscodeConvertible {
 
         if (chest instanceof ChestBlockEntity) {
             level.setBlockAndUpdate(pos,
-                convertedBlock.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing).setValue(
+                convertedBlock.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing).setValue(
                     ChestBlock.TYPE,
                     type));
         }
         else {
             level.setBlockAndUpdate(pos,
-                convertedBlock.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing));
+                convertedBlock.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing));
         }
 
         chest = level.getBlockEntity(pos);

@@ -40,7 +40,7 @@
       "y": 180
     },
     "facing=south,half=top,open=false": {
-      "model": "twilightforest:block/wood/trapdoor/mine/mine_trapdoor#_top",
+      "model": "twilightforest:block/wood/trapdoor/mine/mine_trapdoor_top",
       "y": 180
     },
     "facing=south,half=top,open=true": {

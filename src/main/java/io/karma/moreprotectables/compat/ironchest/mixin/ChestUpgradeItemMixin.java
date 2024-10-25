@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
  */
 @Mixin(ChestUpgradeItem.class)
 public class ChestUpgradeItemMixin implements ChestUpgradeItemHooks {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private IronChestsUpgradeType type;
 

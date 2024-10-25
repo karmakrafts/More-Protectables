@@ -83,7 +83,7 @@ public class MoreProtectables {
             String.format("itemGroup.%s", MODID))).displayItems((params, output) -> {
             for (final var woodType : WOOD_TYPES) {
                 output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
-                output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
+                //output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
             }
             output.accept(ModBlocks.KEYPAD_IRON_DOOR.get());
             for (final var module : COMPAT_MODULES) {

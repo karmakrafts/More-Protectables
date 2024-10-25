@@ -3,14 +3,11 @@ package io.karma.moreprotectables.compat.ironchest;
 import com.progwml6.ironchest.client.render.IronChestRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
-import io.karma.moreprotectables.util.KeypadChestConvertible;
-import net.geforcemods.securitycraft.SecurityCraft;
-import net.geforcemods.securitycraft.api.SecurityCraftAPI;
+import io.karma.moreprotectables.util.PasscodeConversions;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.InterModComms;
 
 /**
  * @author Alexander Hinze
@@ -25,10 +22,8 @@ public final class IronChestCompatibilityModule implements CompatibilityModule {
         IronChestCompatibilityContent.register();
 
         for (final var type : IronChestCompatibilityContent.CHEST_TYPES) {
-            InterModComms.sendTo(SecurityCraft.MODID,
-                SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-                () -> new KeypadChestConvertible(IronChestCompatibilityContent.CHEST_BLOCKS.get(type).get(),
-                    IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type).get()));
+            PasscodeConversions.registerChestConversion(IronChestCompatibilityContent.CHEST_BLOCKS.get(type),
+                IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type));
         }
     }
 

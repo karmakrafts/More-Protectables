@@ -19,15 +19,16 @@ import net.tropicraft.core.common.block.TropicraftBlocks;
 public final class TropicraftCompatibilityModule implements CompatibilityModule {
     public static final String MODID = "tropicraft";
 
+    @SuppressWarnings("all")
     @Override
     public void init() {
         TropicraftCompatibilityContent.register();
 
-        PasscodeConversions.registerChestConversion(TropicraftBlocks.BAMBOO_CHEST,
+        PasscodeConversions.registerChestConversion(() -> TropicraftBlocks.BAMBOO_CHEST.get(),
             TropicraftCompatibilityContent.keypadBambooChest);
-        PasscodeConversions.registerDoorConversion(TropicraftBlocks.BAMBOO_DOOR,
+        PasscodeConversions.registerDoorConversion(() -> TropicraftBlocks.BAMBOO_DOOR.get(),
             TropicraftCompatibilityContent.keypadBambooDoor);
-        PasscodeConversions.registerTrapdoorConversion(TropicraftBlocks.BAMBOO_TRAPDOOR,
+        PasscodeConversions.registerTrapdoorConversion(() -> TropicraftBlocks.BAMBOO_TRAPDOOR.get(),
             TropicraftCompatibilityContent.keypadBambooTrapdoor);
     }
 

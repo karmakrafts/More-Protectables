@@ -12,27 +12,30 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
+
 /**
  * @author Alexander Hinze
  * @since 19/10/2024
  */
 public final class KeypadDoorConvertible implements IPasscodeConvertible {
-    private final Block unprotectedBlock;
-    private final Block protectedBlock;
+    private final Supplier<? extends Block> unprotectedBlock;
+    private final Supplier<? extends Block> protectedBlock;
 
-    public KeypadDoorConvertible(final Block unprotectedBlock, final Block protectedBlock) {
+    public KeypadDoorConvertible(final Supplier<? extends Block> unprotectedBlock,
+                                 final Supplier<? extends Block> protectedBlock) {
         this.unprotectedBlock = unprotectedBlock;
         this.protectedBlock = protectedBlock;
     }
 
     @Override
     public boolean isUnprotectedBlock(final BlockState state) {
-        return state.is(unprotectedBlock);
+        return state.is(unprotectedBlock.get());
     }
 
     @Override
     public boolean isProtectedBlock(final BlockState state) {
-        return state.is(protectedBlock);
+        return state.is(protectedBlock.get());
     }
 
     @Override
@@ -74,7 +77,7 @@ public final class KeypadDoorConvertible implements IPasscodeConvertible {
         final var open = state.getValue(DoorBlock.OPEN);
         final var hinge = state.getValue(DoorBlock.HINGE);
         // @formatter:off
-        level.setBlockAndUpdate(pos, (protect ? protectedBlock.defaultBlockState() : unprotectedBlock.defaultBlockState())
+        level.setBlockAndUpdate(pos, (protect ? protectedBlock.get().defaultBlockState() : unprotectedBlock.get().defaultBlockState())
             .setValue(DoorBlock.HALF, half)
             .setValue(DoorBlock.FACING, facing)
             .setValue(DoorBlock.OPEN, open)

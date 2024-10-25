@@ -2,6 +2,7 @@ package io.karma.moreprotectables.compat.twilightforest;
 
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
+import io.karma.moreprotectables.block.SimpleKeypadTrapdoorBlock;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
 import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
 import io.karma.moreprotectables.util.WoodTypeUtils;
@@ -44,7 +45,7 @@ public final class TFCompatibilityContent {
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<KeypadTFChestBlockEntity>>> KEYPAD_WOOD_CHEST_ENTITIES = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_DOOR_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>>> KEYPAD_WOOD_DOOR_ENTITIES = new HashMap<>();
-    public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_TRAPDOOR_BLOCKS = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<SimpleKeypadTrapdoorBlock>> KEYPAD_WOOD_TRAPDOOR_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadTrapdoorBlockEntity>>> KEYPAD_WOOD_TRAPDOOR_ENTITIES = new HashMap<>();
 
     static {
@@ -101,7 +102,7 @@ public final class TFCompatibilityContent {
 
             KEYPAD_WOOD_TRAPDOOR_BLOCKS.put(woodType,
                 MoreProtectables.block(trapdoorName,
-                    () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(WOOD_TRAPDOOR_BLOCKS.get(woodType).get()).explosionResistance(
+                    () -> new SimpleKeypadTrapdoorBlock(BlockBehaviour.Properties.copy(WOOD_TRAPDOOR_BLOCKS.get(woodType).get()).explosionResistance(
                         Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_TRAPDOOR_ENTITIES.get(woodType)::get),
                     BlockItem::new));
 

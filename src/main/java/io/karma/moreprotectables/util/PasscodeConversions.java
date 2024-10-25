@@ -20,20 +20,20 @@ public final class PasscodeConversions {
                                                final Supplier<? extends Block> prot) {
         InterModComms.sendTo(SecurityCraft.MODID,
             SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadChestConvertible(unprot.get(), prot.get()));
+            () -> new KeypadChestConvertible(unprot, prot));
     }
 
     public static void registerDoorConversion(final Supplier<? extends Block> unprot,
                                               final Supplier<? extends Block> prot) {
         InterModComms.sendTo(SecurityCraft.MODID,
             SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadDoorConvertible(unprot.get(), prot.get()));
+            () -> new KeypadDoorConvertible(unprot, prot));
     }
 
     public static void registerTrapdoorConversion(final Supplier<? extends Block> unprot,
                                                   final Supplier<? extends Block> prot) {
         InterModComms.sendTo(SecurityCraft.MODID,
             SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadTrapdoorConvertible(unprot.get(), prot.get()));
+            () -> new KeypadTrapdoorConvertible(unprot, prot));
     }
 }
