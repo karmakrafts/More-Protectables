@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.blockentity;
 
+import io.karma.moreprotectables.block.KeypadBlock;
 import net.geforcemods.securitycraft.api.*;
 import net.geforcemods.securitycraft.blockentities.DisguisableBlockEntity;
 import net.geforcemods.securitycraft.items.ModuleItem;
@@ -44,6 +45,10 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
     void setInventory(final NonNullList<ItemStack> modules);
 
     void setCooldownEnd(final long cooldownEnd);
+
+    default boolean isDisabled() {
+        return false;
+    }
 
     default boolean sendsAllowlistMessage() {
         return getSendAllowlistMessage().get();
@@ -213,6 +218,13 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
 
     @Override
     default void activate(final Player player) {
+        final var level = Objects.requireNonNull(getThis().getLevel());
+        if (!level.isClientSide) {
+            final var state = getThisState();
+            if (state.getBlock() instanceof KeypadBlock doorBlock) {
+                doorBlock.activate(state, level, getThisPos(), player);
+            }
+        }
     }
 
     @Override

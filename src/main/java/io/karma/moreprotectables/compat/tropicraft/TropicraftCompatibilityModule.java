@@ -3,15 +3,11 @@ package io.karma.moreprotectables.compat.tropicraft;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
-import io.karma.moreprotectables.util.KeypadChestConvertible;
-import io.karma.moreprotectables.util.KeypadDoorConvertible;
-import net.geforcemods.securitycraft.SecurityCraft;
-import net.geforcemods.securitycraft.api.SecurityCraftAPI;
+import io.karma.moreprotectables.util.PasscodeConversions;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
-import net.minecraftforge.fml.InterModComms;
 import net.tropicraft.core.client.tileentity.BambooChestRenderer;
 import net.tropicraft.core.common.block.TropicraftBlocks;
 
@@ -27,30 +23,32 @@ public final class TropicraftCompatibilityModule implements CompatibilityModule 
     public void init() {
         TropicraftCompatibilityContent.register();
 
-        InterModComms.sendTo(SecurityCraft.MODID,
-            SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadChestConvertible(TropicraftBlocks.BAMBOO_CHEST.get(),
-                TropicraftCompatibilityContent.keypadBambooChest.get()));
-
-        InterModComms.sendTo(SecurityCraft.MODID,
-            SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadDoorConvertible(TropicraftBlocks.BAMBOO_DOOR.get(),
-                TropicraftCompatibilityContent.keypadBambooDoor.get()));
+        PasscodeConversions.registerChestConversion(TropicraftBlocks.BAMBOO_CHEST,
+            TropicraftCompatibilityContent.keypadBambooChest);
+        PasscodeConversions.registerDoorConversion(TropicraftBlocks.BAMBOO_DOOR,
+            TropicraftCompatibilityContent.keypadBambooDoor);
+        PasscodeConversions.registerTrapdoorConversion(TropicraftBlocks.BAMBOO_TRAPDOOR,
+            TropicraftCompatibilityContent.keypadBambooTrapdoor);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void initClient() {
-        BlockEntityRenderers.register(TropicraftCompatibilityContent.keypadBambooChestBlockEntity.get(),
+        BlockEntityRenderers.register(TropicraftCompatibilityContent.keypadBambooChestEntity.get(),
             BambooChestRenderer::new);
-        BlockEntityRenderers.register(TropicraftCompatibilityContent.keypadBambooDoorBlockEntity.get(),
+        BlockEntityRenderers.register(TropicraftCompatibilityContent.keypadBambooDoorEntity.get(),
+            DummyBlockEntityRenderer::new);
+        BlockEntityRenderers.register(TropicraftCompatibilityContent.keypadBambooTrapdoorEntity.get(),
             DummyBlockEntityRenderer::new);
         ItemBlockRenderTypes.setRenderLayer(TropicraftCompatibilityContent.keypadBambooDoor.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(TropicraftCompatibilityContent.keypadBambooTrapdoor.get(),
+            RenderType.cutout());
     }
 
     @Override
     public void addItemsToTab(final Output output) {
         output.accept(TropicraftCompatibilityContent.keypadBambooChest.get());
         output.accept(TropicraftCompatibilityContent.keypadBambooDoor.get());
+        output.accept(TropicraftCompatibilityContent.keypadBambooTrapdoor.get());
     }
 }

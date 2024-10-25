@@ -4,14 +4,11 @@ import appeng.core.definitions.AEBlocks;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
 import io.karma.moreprotectables.compat.appeng.client.render.KeypadSkyChestRenderer;
-import io.karma.moreprotectables.util.KeypadChestConvertible;
-import net.geforcemods.securitycraft.SecurityCraft;
-import net.geforcemods.securitycraft.api.SecurityCraftAPI;
+import io.karma.moreprotectables.util.PasscodeConversions;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.InterModComms;
 
 /**
  * @author Alexander Hinze
@@ -24,15 +21,10 @@ public final class AppengCompatibilityModule implements CompatibilityModule {
     @Override
     public void init() {
         AppengCompatibilityContent.register();
-
-        InterModComms.sendTo(SecurityCraft.MODID,
-            SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadChestConvertible(AEBlocks.SKY_STONE_CHEST.block(),
-                AppengCompatibilityContent.keypadSkyChest.get()));
-        InterModComms.sendTo(SecurityCraft.MODID,
-            SecurityCraftAPI.IMC_PASSCODE_CONVERTIBLE_MSG,
-            () -> new KeypadChestConvertible(AEBlocks.SMOOTH_SKY_STONE_CHEST.block(),
-                AppengCompatibilityContent.keypadSmoothSkyChest.get()));
+        PasscodeConversions.registerChestConversion(AEBlocks.SKY_STONE_CHEST::block,
+            AppengCompatibilityContent.keypadSkyChest);
+        PasscodeConversions.registerChestConversion(AEBlocks.SMOOTH_SKY_STONE_CHEST::block,
+            AppengCompatibilityContent.keypadSmoothSkyChest);
     }
 
     @OnlyIn(Dist.CLIENT)

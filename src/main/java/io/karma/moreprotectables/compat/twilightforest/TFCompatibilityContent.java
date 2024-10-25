@@ -3,9 +3,11 @@ package io.karma.moreprotectables.compat.twilightforest;
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
+import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
 import io.karma.moreprotectables.util.WoodTypeUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -36,10 +38,14 @@ public final class TFCompatibilityContent {
 
     public static final HashMap<WoodType, RegistryObject<TFChestBlock>> WOOD_CHEST_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<DoorBlock>> WOOD_DOOR_BLOCKS = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<TrapDoorBlock>> WOOD_TRAPDOOR_BLOCKS = new HashMap<>();
+
     public static final HashMap<WoodType, RegistryObject<KeypadTFChestBlock>> KEYPAD_WOOD_CHEST_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<KeypadTFChestBlockEntity>>> KEYPAD_WOOD_CHEST_ENTITIES = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_DOOR_BLOCKS = new HashMap<>();
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>>> KEYPAD_WOOD_DOOR_ENTITIES = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<SimpleKeypadDoorBlock>> KEYPAD_WOOD_TRAPDOOR_BLOCKS = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadTrapdoorBlockEntity>>> KEYPAD_WOOD_TRAPDOOR_ENTITIES = new HashMap<>();
 
     static {
         WOOD_CHEST_BLOCKS.put(TFWoodTypes.TWILIGHT_OAK_WOOD_TYPE, TFBlocks.TWILIGHT_OAK_CHEST);
@@ -59,6 +65,15 @@ public final class TFCompatibilityContent {
         WOOD_DOOR_BLOCKS.put(TFWoodTypes.TRANSFORMATION_WOOD_TYPE, TFBlocks.TRANSFORMATION_DOOR);
         WOOD_DOOR_BLOCKS.put(TFWoodTypes.MINING_WOOD_TYPE, TFBlocks.MINING_DOOR);
         WOOD_DOOR_BLOCKS.put(TFWoodTypes.SORTING_WOOD_TYPE, TFBlocks.SORTING_DOOR);
+
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.TWILIGHT_OAK_WOOD_TYPE, TFBlocks.TWILIGHT_OAK_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.CANOPY_WOOD_TYPE, TFBlocks.CANOPY_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.MANGROVE_WOOD_TYPE, TFBlocks.MANGROVE_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.DARK_WOOD_TYPE, TFBlocks.DARK_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.TIME_WOOD_TYPE, TFBlocks.TIME_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.TRANSFORMATION_WOOD_TYPE, TFBlocks.TRANSFORMATION_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.MINING_WOOD_TYPE, TFBlocks.MINING_TRAPDOOR);
+        WOOD_TRAPDOOR_BLOCKS.put(TFWoodTypes.SORTING_WOOD_TYPE, TFBlocks.SORTING_TRAPDOOR);
     }
 
     // @formatter:off
@@ -70,19 +85,24 @@ public final class TFCompatibilityContent {
             final var woodName = WoodTypeUtils.getSimpleName(woodType);
             final var chestName = String.format("keypad_tf_%s_chest", woodName);
             final var doorName = String.format("keypad_tf_%s_door", woodName);
-            final var chestBlock = WOOD_CHEST_BLOCKS.get(woodType);
-            final var doorBlock = WOOD_DOOR_BLOCKS.get(woodType);
+            final var trapdoorName = String.format("keypad_tf_%s_trapdoor", woodName);
 
             KEYPAD_WOOD_CHEST_BLOCKS.put(woodType,
                 MoreProtectables.block(chestName,
-                    () -> new KeypadTFChestBlock(BlockBehaviour.Properties.copy(chestBlock.get()).explosionResistance(
+                    () -> new KeypadTFChestBlock(BlockBehaviour.Properties.copy(WOOD_CHEST_BLOCKS.get(woodType).get()).explosionResistance(
                         Float.MAX_VALUE), KEYPAD_WOOD_CHEST_ENTITIES.get(woodType)::get),
                     KeypadTFChestBlockItem::new));
 
             KEYPAD_WOOD_DOOR_BLOCKS.put(woodType,
                 MoreProtectables.block(doorName,
-                    () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(doorBlock.get()).explosionResistance(
+                    () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(WOOD_DOOR_BLOCKS.get(woodType).get()).explosionResistance(
                         Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_DOOR_ENTITIES.get(woodType)::get),
+                    BlockItem::new));
+
+            KEYPAD_WOOD_TRAPDOOR_BLOCKS.put(woodType,
+                MoreProtectables.block(trapdoorName,
+                    () -> new SimpleKeypadDoorBlock(BlockBehaviour.Properties.copy(WOOD_TRAPDOOR_BLOCKS.get(woodType).get()).explosionResistance(
+                        Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_TRAPDOOR_ENTITIES.get(woodType)::get),
                     BlockItem::new));
 
             KEYPAD_WOOD_CHEST_ENTITIES.put(woodType,
@@ -94,6 +114,13 @@ public final class TFCompatibilityContent {
                 MoreProtectables.blockEntity(doorName,
                     KEYPAD_WOOD_DOOR_BLOCKS.get(woodType),
                     (pos, state) -> new SimpleKeypadDoorBlockEntity(KEYPAD_WOOD_DOOR_ENTITIES.get(woodType).get(),
+                        pos,
+                        state)));
+
+            KEYPAD_WOOD_TRAPDOOR_ENTITIES.put(woodType,
+                MoreProtectables.blockEntity(trapdoorName,
+                    KEYPAD_WOOD_TRAPDOOR_BLOCKS.get(woodType),
+                    (pos, state) -> new SimpleKeypadTrapdoorBlockEntity(KEYPAD_WOOD_TRAPDOOR_ENTITIES.get(woodType).get(),
                         pos,
                         state)));
         }

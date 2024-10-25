@@ -100,6 +100,7 @@ dependencies {
     implementation(fg.deobf(libs.tropicraft.get().toString()))
     //implementation(fg.deobf(libs.zeta.get().toString()))
     //implementation(fg.deobf(libs.quark.get().toString()))
+    //implementation(fg.deobf(libs.immersiveEngineering.get().toString()))
     compileOnly(fg.deobf(libs.jei.forge.api.get().toString()))
     runtimeOnly(fg.deobf(libs.jei.forge.core.get().toString()))
     runtimeOnly(fg.deobf(libs.jade.get().toString()))

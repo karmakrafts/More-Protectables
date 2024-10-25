@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class KeypadBambooChestBlock extends BambooChestBlock implements KeypadChestBlock {
     public KeypadBambooChestBlock(final Properties props) {
-        super(props, TropicraftCompatibilityContent.keypadBambooChestBlockEntity::get);
+        super(props, TropicraftCompatibilityContent.keypadBambooChestEntity::get);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 

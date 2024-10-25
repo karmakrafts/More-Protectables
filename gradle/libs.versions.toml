@@ -1,5 +1,5 @@
 [versions]
-moreProtectables = "1.2.3"
+moreProtectables = "1.3.0"
 minecraft = "1.20.1"
 minecraftForge = "1.20.1-47.2.30"
 mappings = "2023.09.03" # https://parchmentmc.org/docs/getting-started
@@ -21,6 +21,7 @@ framedBlocks = "5629578" # https://www.curseforge.com/minecraft/mc-mods/framedbl
 twilightForest = "5468648" # https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest/files/all?page=1&pageSize=20
 zeta = "5597406" # https://www.curseforge.com/minecraft/mc-mods/zeta/files/all?page=1&pageSize=20
 quark = "5594847" # https://www.curseforge.com/minecraft/mc-mods/quark/files/all?page=1&pageSize=20
+immersiveEngineering = "5224387" # https://www.curseforge.com/minecraft/mc-mods/immersive-engineering/files/all?page=1&pageSize=20
 jei = "15.20.0.104" # https://maven.blamejared.com/mezz/jei/jei-1.20.1-forge/
 jade = "5776962" # https://www.curseforge.com/minecraft/mc-mods/jade/files/all?page=1&pageSize=20
 embeddium = "0.3.30-beta.48+mc1.20.1" # https://maven.blamejared.com/org/embeddedt/
@@ -42,6 +43,7 @@ framedBlocks = { module = "curse.maven:framedblocks-441647", version.ref = "fram
 twilightForest = { module = "curse.maven:the-twilight-forest-227639", version.ref = "twilightForest" }
 zeta = { module = "curse.maven:zeta-968868", version.ref = "zeta" }
 quark = { module = "curse.maven:quark-243121", version.ref = "quark" }
+immersiveEngineering = { module = "curse.maven:immersive-engineering-231951", version.ref = "immersiveEngineering" }
 jei-forge-core = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
 jei-forge-api = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" }
 jade = { module = "curse.maven:jade-324717", version.ref = "jade" }

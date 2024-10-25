@@ -2,6 +2,7 @@ package io.karma.moreprotectables.init;
 
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
+import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.RegistryObject;
@@ -15,6 +16,7 @@ import java.util.Objects;
  */
 public final class ModBlockEntities {
     public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>>> KEYPAD_WOOD_DOOR = new HashMap<>();
+    public static final HashMap<WoodType, RegistryObject<BlockEntityType<SimpleKeypadTrapdoorBlockEntity>>> KEYPAD_WOOD_TRAPDOOR = new HashMap<>();
     public static RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>> KEYPAD_IRON_DOOR;
 
     // @formatter:off
@@ -23,11 +25,17 @@ public final class ModBlockEntities {
 
     public static void register() {
         for (final var woodType : MoreProtectables.WOOD_TYPES) {
-            final var name = String.format("keypad_%s_door", woodType.name());
             KEYPAD_WOOD_DOOR.put(woodType,
-                MoreProtectables.blockEntity(name,
+                MoreProtectables.blockEntity(String.format("keypad_%s_door", woodType.name()),
                     Objects.requireNonNull(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType)),
                     (pos, state) -> new SimpleKeypadDoorBlockEntity(KEYPAD_WOOD_DOOR.get(woodType).get(), pos, state)));
+
+            KEYPAD_WOOD_TRAPDOOR.put(woodType,
+                MoreProtectables.blockEntity(String.format("keypad_%s_trapdoor", woodType.name()),
+                    Objects.requireNonNull(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType)),
+                    (pos, state) -> new SimpleKeypadTrapdoorBlockEntity(KEYPAD_WOOD_TRAPDOOR.get(woodType).get(),
+                        pos,
+                        state)));
         }
         KEYPAD_IRON_DOOR = MoreProtectables.blockEntity("keypad_iron_door",
             ModBlocks.KEYPAD_IRON_DOOR,

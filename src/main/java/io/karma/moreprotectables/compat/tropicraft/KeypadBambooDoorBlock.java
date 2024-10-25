@@ -29,7 +29,7 @@ public final class KeypadBambooDoorBlock extends SpecialDoorBlock implements Key
 
     @Override
     public @Nullable BlockEntity newBlockEntity(final @NotNull BlockPos pos, final @NotNull BlockState state) {
-        return TropicraftCompatibilityContent.keypadBambooDoorBlockEntity.get().create(pos, state);
+        return TropicraftCompatibilityContent.keypadBambooDoorEntity.get().create(pos, state);
     }
 
     @Override

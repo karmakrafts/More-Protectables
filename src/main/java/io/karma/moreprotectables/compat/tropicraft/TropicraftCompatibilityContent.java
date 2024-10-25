@@ -2,6 +2,7 @@ package io.karma.moreprotectables.compat.tropicraft;
 
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
+import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,9 +19,11 @@ import net.tropicraft.core.common.block.tileentity.BambooChestBlockEntity;
 public final class TropicraftCompatibilityContent {
     public static RegistryObject<Block> keypadBambooChest;
     public static RegistryObject<Block> keypadBambooDoor;
+    public static RegistryObject<Block> keypadBambooTrapdoor;
 
-    public static RegistryObject<BlockEntityType<BambooChestBlockEntity>> keypadBambooChestBlockEntity;
-    public static RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>> keypadBambooDoorBlockEntity;
+    public static RegistryObject<BlockEntityType<BambooChestBlockEntity>> keypadBambooChestEntity;
+    public static RegistryObject<BlockEntityType<SimpleKeypadDoorBlockEntity>> keypadBambooDoorEntity;
+    public static RegistryObject<BlockEntityType<SimpleKeypadTrapdoorBlockEntity>> keypadBambooTrapdoorEntity;
 
     // @formatter:off
     private TropicraftCompatibilityContent() {}
@@ -37,12 +40,21 @@ public final class TropicraftCompatibilityContent {
                 Float.MAX_VALUE), TropicraftWoodTypes.BAMBOO.setType()),
             BlockItem::new);
 
-        keypadBambooChestBlockEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_chest",
-            keypadBambooChest,
-            (pos, state) -> new KeypadBambooChestBlockEntity(keypadBambooChestBlockEntity.get(), pos, state));
+        keypadBambooTrapdoor = MoreProtectables.block("keypad_tropical_bamboo_trapdoor",
+            () -> new KeypadBambooTrapdoorBlock(BlockBehaviour.Properties.copy(TropicraftBlocks.BAMBOO_TRAPDOOR.get()).explosionResistance(
+                Float.MAX_VALUE), TropicraftWoodTypes.BAMBOO.setType()),
+            BlockItem::new);
 
-        keypadBambooDoorBlockEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_door",
+        keypadBambooChestEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_chest",
+            keypadBambooChest,
+            (pos, state) -> new KeypadBambooChestBlockEntity(keypadBambooChestEntity.get(), pos, state));
+
+        keypadBambooDoorEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_door",
             keypadBambooDoor,
-            (pos, state) -> new SimpleKeypadDoorBlockEntity(keypadBambooDoorBlockEntity.get(), pos, state));
+            (pos, state) -> new SimpleKeypadDoorBlockEntity(keypadBambooDoorEntity.get(), pos, state));
+
+        keypadBambooTrapdoorEntity = MoreProtectables.blockEntity("keypad_tropical_bamboo_trapdoor",
+            keypadBambooTrapdoor,
+            (pos, state) -> new SimpleKeypadTrapdoorBlockEntity(keypadBambooTrapdoorEntity.get(), pos, state));
     }
 }

@@ -16,10 +16,10 @@ import java.util.Map;
  */
 @Mixin(CustomizableBlockEntity.class)
 public final class CustomizableBlockEntityMixin implements CustomizableBlockEntityHooks {
-    @Shadow
+    @Shadow(remap = false)
     private Map<ModuleType, Boolean> moduleStates;
 
-    @Shadow
+    @Shadow(remap = false)
     private NonNullList<ItemStack> modules;
 
     @Override
