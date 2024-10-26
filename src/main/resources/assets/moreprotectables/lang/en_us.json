@@ -40,8 +40,18 @@
   "block.moreprotectables.keypad_obsidian_chest": "Passcode-protected Obsidian Chest",
 
   "block.moreprotectables.keypad_tropical_bamboo_chest": "Passcode-protected Bamboo Chest",
+
   "block.moreprotectables.keypad_tropical_bamboo_door": "Passcode-protected Bamboo Door",
+  "block.moreprotectables.keypad_tropical_mahogany_door": "Passcode-protected Mahogany Door",
+  "block.moreprotectables.keypad_tropical_mangrove_door": "Passcode-protected Mangrove Door",
+  "block.moreprotectables.keypad_tropical_palm_door": "Passcode-protected Palm Door",
+  "block.moreprotectables.keypad_tropical_thatch_door": "Passcode-protected Thatch Door",
+
   "block.moreprotectables.keypad_tropical_bamboo_trapdoor": "Passcode-protected Bamboo Trapdoor",
+  "block.moreprotectables.keypad_tropical_mahogany_trapdoor": "Passcode-protected Mahogany Trapdoor",
+  "block.moreprotectables.keypad_tropical_mangrove_trapdoor": "Passcode-protected Mangrove Trapdoor",
+  "block.moreprotectables.keypad_tropical_palm_trapdoor": "Passcode-protected Palm Trapdoor",
+  "block.moreprotectables.keypad_tropical_thatch_trapdoor": "Passcode-protected Thatch Trapdoor",
 
   "block.moreprotectables.keypad_tf_twilight_oak_chest": "Passcode-protected Twilight Oak Chest",
   "block.moreprotectables.keypad_tf_canopy_chest": "Passcode-protected Canopy Chest",

@@ -19,8 +19,8 @@ import java.util.function.Supplier;
  * @since 15/10/2024
  */
 public final class AppengCompatibilityContent {
-    public static RegistryObject<BlockEntityType<KeypadSkyChestBlockEntity>> keypadSkyChestBlockEntity;
-    public static RegistryObject<BlockEntityType<KeypadSkyChestBlockEntity>> keypadSmoothSkyChestBlockEntity;
+    public static RegistryObject<BlockEntityType<KeypadSkyChestBlockEntity>> keypadSkyChestEntity;
+    public static RegistryObject<BlockEntityType<KeypadSkyChestBlockEntity>> keypadSmoothSkyChestEntity;
 
     public static RegistryObject<KeypadSkyChestBlock> keypadSkyChest;
     public static RegistryObject<KeypadSkyChestBlock> keypadSmoothSkyChest;
@@ -39,12 +39,12 @@ public final class AppengCompatibilityContent {
                 BlockBehaviour.Properties.copy(AEBlocks.SMOOTH_SKY_STONE_CHEST.block())),
             KeypadSkyChestBlockItem::new);
 
-        keypadSkyChestBlockEntity = chestBlockEntity("keypad_sky_chest",
+        keypadSkyChestEntity = chestBlockEntity("keypad_sky_chest",
             KeypadSkyChestBlockEntity.class,
             keypadSkyChest,
             (pos, state) -> new KeypadSkyChestBlockEntity(SkyChestType.STONE, pos, state));
 
-        keypadSmoothSkyChestBlockEntity = chestBlockEntity("keypad_smooth_sky_chest",
+        keypadSmoothSkyChestEntity = chestBlockEntity("keypad_smooth_sky_chest",
             KeypadSkyChestBlockEntity.class,
             keypadSmoothSkyChest,
             (pos, state) -> new KeypadSkyChestBlockEntity(SkyChestType.BLOCK, pos, state));

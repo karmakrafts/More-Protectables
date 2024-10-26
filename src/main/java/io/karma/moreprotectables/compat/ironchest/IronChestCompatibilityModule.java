@@ -22,8 +22,8 @@ public final class IronChestCompatibilityModule implements CompatibilityModule {
         IronChestCompatibilityContent.register();
 
         for (final var type : IronChestCompatibilityContent.CHEST_TYPES) {
-            PasscodeConversions.registerChestConversion(IronChestCompatibilityContent.CHEST_BLOCKS.get(type),
-                IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type));
+            PasscodeConversions.registerChestConversion(IronChestCompatibilityContent.CHEST.get(type),
+                IronChestCompatibilityContent.KEYPAD_CHEST.get(type));
         }
     }
 
@@ -31,7 +31,7 @@ public final class IronChestCompatibilityModule implements CompatibilityModule {
     @Override
     public void initClient() {
         for (final var type : IronChestCompatibilityContent.CHEST_TYPES) {
-            BlockEntityRenderers.register(IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(type).get(),
+            BlockEntityRenderers.register(IronChestCompatibilityContent.KEYPAD_CHEST_ENTITY.get(type).get(),
                 IronChestRenderer::new);
         }
     }
@@ -39,7 +39,7 @@ public final class IronChestCompatibilityModule implements CompatibilityModule {
     @Override
     public void addItemsToTab(final Output output) {
         for (final var type : IronChestCompatibilityContent.CHEST_TYPES) {
-            output.accept(IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type).get());
+            output.accept(IronChestCompatibilityContent.KEYPAD_CHEST.get(type).get());
         }
     }
 }

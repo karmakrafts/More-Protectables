@@ -42,7 +42,7 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     private ResourceLocation previousChest;
 
     public KeypadTFChestBlockEntity(final WoodType woodType, final BlockPos pos, final BlockState state) {
-        super(TFCompatibilityContent.KEYPAD_WOOD_CHEST_ENTITIES.get(woodType).get(), pos, state);
+        super(TFCompatibilityContent.KEYPAD_WOOD_CHEST_ENTITY.get(woodType).get(), pos, state);
     }
 
     @Override

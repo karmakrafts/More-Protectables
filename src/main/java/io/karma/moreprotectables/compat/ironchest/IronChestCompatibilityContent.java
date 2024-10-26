@@ -31,18 +31,18 @@ public final class IronChestCompatibilityContent {
     };
     // @formatter:on
 
-    public static final HashMap<IronChestsTypes, RegistryObject<? extends AbstractIronChestBlock>> CHEST_BLOCKS = new HashMap<>();
-    public static final HashMap<IronChestsTypes, RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>>> KEYPAD_CHEST_BLOCK_ENTITIES = new HashMap<>();
-    public static final HashMap<IronChestsTypes, RegistryObject<KeypadIronChestBlock>> KEYPAD_CHEST_BLOCKS = new HashMap<>();
+    public static final HashMap<IronChestsTypes, RegistryObject<? extends AbstractIronChestBlock>> CHEST = new HashMap<>();
+    public static final HashMap<IronChestsTypes, RegistryObject<BlockEntityType<KeypadIronChestBlockEntity>>> KEYPAD_CHEST_ENTITY = new HashMap<>();
+    public static final HashMap<IronChestsTypes, RegistryObject<KeypadIronChestBlock>> KEYPAD_CHEST = new HashMap<>();
 
     static {
-        CHEST_BLOCKS.put(IronChestsTypes.DIRT, IronChestsBlocks.DIRT_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.COPPER, IronChestsBlocks.COPPER_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.IRON, IronChestsBlocks.IRON_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.GOLD, IronChestsBlocks.GOLD_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.DIAMOND, IronChestsBlocks.DIAMOND_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.CRYSTAL, IronChestsBlocks.CRYSTAL_CHEST);
-        CHEST_BLOCKS.put(IronChestsTypes.OBSIDIAN, IronChestsBlocks.OBSIDIAN_CHEST);
+        CHEST.put(IronChestsTypes.DIRT, IronChestsBlocks.DIRT_CHEST);
+        CHEST.put(IronChestsTypes.COPPER, IronChestsBlocks.COPPER_CHEST);
+        CHEST.put(IronChestsTypes.IRON, IronChestsBlocks.IRON_CHEST);
+        CHEST.put(IronChestsTypes.GOLD, IronChestsBlocks.GOLD_CHEST);
+        CHEST.put(IronChestsTypes.DIAMOND, IronChestsBlocks.DIAMOND_CHEST);
+        CHEST.put(IronChestsTypes.CRYSTAL, IronChestsBlocks.CRYSTAL_CHEST);
+        CHEST.put(IronChestsTypes.OBSIDIAN, IronChestsBlocks.OBSIDIAN_CHEST);
     }
 
     // @formatter:off
@@ -54,10 +54,10 @@ public final class IronChestCompatibilityContent {
             final var chestName = String.format("keypad_%s_chest", type.name().toLowerCase(Locale.ROOT));
 
             final var keypadChestBlock = block(chestName,
-                () -> new KeypadIronChestBlock(type, BlockBehaviour.Properties.copy(CHEST_BLOCKS.get(type).get())));
-            KEYPAD_CHEST_BLOCKS.put(type, keypadChestBlock);
+                () -> new KeypadIronChestBlock(type, BlockBehaviour.Properties.copy(CHEST.get(type).get())));
+            KEYPAD_CHEST.put(type, keypadChestBlock);
 
-            KEYPAD_CHEST_BLOCK_ENTITIES.put(type,
+            KEYPAD_CHEST_ENTITY.put(type,
                 MoreProtectables.blockEntity(chestName,
                     keypadChestBlock,
                     type == IronChestsTypes.CRYSTAL ? (pos, state) -> new KeypadCrystalChestBlockEntity(type,

@@ -50,7 +50,7 @@ public class KeypadIronChestBlockEntity extends AbstractIronChestBlockEntity imp
                                       final Supplier<Block> block,
                                       final BlockPos pos,
                                       final BlockState state) {
-        super(IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(type).get(), pos, state, type, block);
+        super(IronChestCompatibilityContent.KEYPAD_CHEST_ENTITY.get(type).get(), pos, state, type, block);
     }
 
     @Override

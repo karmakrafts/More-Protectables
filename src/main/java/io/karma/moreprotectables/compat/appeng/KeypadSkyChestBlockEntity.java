@@ -48,9 +48,9 @@ public final class KeypadSkyChestBlockEntity extends SkyChestBlockEntity impleme
 
     private static BlockEntityType<KeypadSkyChestBlockEntity> getBlockEntityType(final SkyChestType type) {
         if (type == SkyChestType.STONE) {
-            return AppengCompatibilityContent.keypadSkyChestBlockEntity.get();
+            return AppengCompatibilityContent.keypadSkyChestEntity.get();
         }
-        return AppengCompatibilityContent.keypadSmoothSkyChestBlockEntity.get();
+        return AppengCompatibilityContent.keypadSmoothSkyChestEntity.get();
     }
 
     @Override

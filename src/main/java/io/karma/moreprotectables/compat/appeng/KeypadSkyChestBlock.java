@@ -151,8 +151,8 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
                      final ServerLevel level,
                      final @NotNull BlockPos pos,
                      final @NotNull RandomSource random) {
-        level.getBlockEntity(pos, AppengCompatibilityContent.keypadSkyChestBlockEntity.get()).ifPresent(
-            SkyChestBlockEntity::recheckOpen);
+        level.getBlockEntity(pos,
+            AppengCompatibilityContent.keypadSkyChestEntity.get()).ifPresent(SkyChestBlockEntity::recheckOpen);
     }
 
     @SuppressWarnings("deprecation")

@@ -23,12 +23,12 @@ public final class TFCompatibilityModule implements CompatibilityModule {
         TFCompatibilityContent.register();
 
         for (final var woodType : TFCompatibilityContent.WOOD_TYPES) {
-            PasscodeConversions.registerChestConversion(TFCompatibilityContent.WOOD_CHEST_BLOCKS.get(woodType),
-                TFCompatibilityContent.KEYPAD_WOOD_CHEST_BLOCKS.get(woodType));
-            PasscodeConversions.registerDoorConversion(TFCompatibilityContent.WOOD_DOOR_BLOCKS.get(woodType),
-                TFCompatibilityContent.KEYPAD_WOOD_DOOR_BLOCKS.get(woodType));
-            PasscodeConversions.registerTrapdoorConversion(TFCompatibilityContent.WOOD_TRAPDOOR_BLOCKS.get(woodType),
-                TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR_BLOCKS.get(woodType));
+            PasscodeConversions.registerChestConversion(TFCompatibilityContent.WOOD_CHEST.get(woodType),
+                TFCompatibilityContent.KEYPAD_WOOD_CHEST.get(woodType));
+            PasscodeConversions.registerDoorConversion(TFCompatibilityContent.WOOD_DOOR.get(woodType),
+                TFCompatibilityContent.KEYPAD_WOOD_DOOR.get(woodType));
+            PasscodeConversions.registerTrapdoorConversion(TFCompatibilityContent.WOOD_TRAPDOOR.get(woodType),
+                TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR.get(woodType));
         }
     }
 
@@ -36,11 +36,11 @@ public final class TFCompatibilityModule implements CompatibilityModule {
     @Override
     public void initClient() {
         for (final var woodType : TFCompatibilityContent.WOOD_TYPES) {
-            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_CHEST_ENTITIES.get(woodType).get(),
+            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_CHEST_ENTITY.get(woodType).get(),
                 KeypadTFChestRenderer::new);
-            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_DOOR_ENTITIES.get(woodType).get(),
+            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_DOOR_ENTITY.get(woodType).get(),
                 DummyBlockEntityRenderer::new);
-            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR_ENTITIES.get(woodType).get(),
+            BlockEntityRenderers.register(TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR_ENTITY.get(woodType).get(),
                 DummyBlockEntityRenderer::new);
         }
     }
@@ -48,9 +48,9 @@ public final class TFCompatibilityModule implements CompatibilityModule {
     @Override
     public void addItemsToTab(final Output output) {
         for (final var woodType : TFCompatibilityContent.WOOD_TYPES) {
-            output.accept(TFCompatibilityContent.KEYPAD_WOOD_CHEST_BLOCKS.get(woodType).get());
-            output.accept(TFCompatibilityContent.KEYPAD_WOOD_DOOR_BLOCKS.get(woodType).get());
-            output.accept(TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR_BLOCKS.get(woodType).get());
+            output.accept(TFCompatibilityContent.KEYPAD_WOOD_CHEST.get(woodType).get());
+            output.accept(TFCompatibilityContent.KEYPAD_WOOD_DOOR.get(woodType).get());
+            output.accept(TFCompatibilityContent.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
         }
     }
 }

@@ -41,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class KeypadIronChestBlock extends AbstractIronChestBlock implements KeypadChestBlock {
     public KeypadIronChestBlock(final IronChestsTypes type, final Properties properties) {
-        super(properties, IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(type)::get, type);
+        super(properties, IronChestCompatibilityContent.KEYPAD_CHEST_ENTITY.get(type)::get, type);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
@@ -51,7 +51,7 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
                                                                   final @NotNull BlockState state,
                                                                   final @NotNull BlockEntityType<T> blockEntityType) {
         // Attach ticker for updating crystal chests
-        if (blockEntityType == IronChestCompatibilityContent.KEYPAD_CHEST_BLOCK_ENTITIES.get(IronChestsTypes.CRYSTAL).get()) {
+        if (blockEntityType == IronChestCompatibilityContent.KEYPAD_CHEST_ENTITY.get(IronChestsTypes.CRYSTAL).get()) {
             return level.isClientSide ? createTickerHelper(blockEntityType,
                 this.blockEntityType(),
                 AbstractIronChestBlockEntity::lidAnimateTick) : createTickerHelper(blockEntityType,
@@ -102,7 +102,7 @@ public final class KeypadIronChestBlock extends AbstractIronChestBlock implement
         chestBlockEntity.clearContent(); // Make sure the original chest doesn't spill its contents..
 
         // @formatter:off
-        level.setBlockAndUpdate(pos, IronChestCompatibilityContent.KEYPAD_CHEST_BLOCKS.get(type.target).get()
+        level.setBlockAndUpdate(pos, IronChestCompatibilityContent.KEYPAD_CHEST.get(type.target).get()
             .defaultBlockState()
             .setValue(ChestBlock.FACING, state.getValue(ChestBlock.FACING))
             .setValue(ChestBlock.WATERLOGGED, state.getValue(ChestBlock.WATERLOGGED)));

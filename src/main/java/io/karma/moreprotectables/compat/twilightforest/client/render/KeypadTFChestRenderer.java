@@ -36,8 +36,7 @@ public final class KeypadTFChestRenderer extends ChestRenderer<KeypadTFChestBloc
                 case "sorting" -> "sort";
                 default -> materialName;
             };
-            MATERIALS.put(TFCompatibilityContent.KEYPAD_WOOD_CHEST_BLOCKS.get(woodType).get(),
-                chestMaterial(materialName));
+            MATERIALS.put(TFCompatibilityContent.KEYPAD_WOOD_CHEST.get(woodType).get(), chestMaterial(materialName));
         }
     }
 

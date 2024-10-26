@@ -30,9 +30,9 @@ public final class AppengCompatibilityModule implements CompatibilityModule {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initClient() {
-        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSkyChestBlockEntity.get(),
+        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSkyChestEntity.get(),
             KeypadSkyChestRenderer::new);
-        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSmoothSkyChestBlockEntity.get(),
+        BlockEntityRenderers.register(AppengCompatibilityContent.keypadSmoothSkyChestEntity.get(),
             KeypadSkyChestRenderer::new);
     }
 
