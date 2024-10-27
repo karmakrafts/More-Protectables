@@ -102,7 +102,7 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
     }
 
     @Override
-    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
+    public void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(WATERLOGGED);
     }

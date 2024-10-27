@@ -5,6 +5,7 @@ import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import io.karma.moreprotectables.block.SimpleKeypadTrapdoorBlock;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
 import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
+import io.karma.moreprotectables.item.SimpleKeypadBlockItem;
 import io.karma.moreprotectables.util.WoodTypeUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.DoorBlock;
@@ -104,7 +105,7 @@ public final class TFCompatibilityContent {
                 MoreProtectables.block(trapdoorName,
                     () -> new SimpleKeypadTrapdoorBlock(BlockBehaviour.Properties.copy(WOOD_TRAPDOOR.get(woodType).get()).explosionResistance(
                         Float.MAX_VALUE), woodType.setType(), KEYPAD_WOOD_TRAPDOOR_ENTITY.get(woodType)::get),
-                    BlockItem::new));
+                    SimpleKeypadBlockItem::new));
 
             KEYPAD_WOOD_CHEST_ENTITY.put(woodType,
                 MoreProtectables.blockEntity(chestName,

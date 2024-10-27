@@ -15,7 +15,8 @@
 
 package io.karma.moreprotectables;
 
-import io.karma.moreprotectables.client.ClientEventHandler;
+import io.karma.moreprotectables.block.ReinforcedBlockGenerator;
+import io.karma.moreprotectables.client.model.ModelPatcher;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
@@ -83,12 +84,13 @@ public class MoreProtectables {
             String.format("itemGroup.%s", MODID))).displayItems((params, output) -> {
             for (final var woodType : WOOD_TYPES) {
                 output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
-                //output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
+                output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
             }
             output.accept(ModBlocks.KEYPAD_IRON_DOOR.get());
             for (final var module : COMPAT_MODULES) {
                 module.addItemsToTab(output);
             }
+            ReinforcedBlockGenerator.INSTANCE.getGeneratedBlocks().values().forEach(output::accept);
         }).build());
 
     public MoreProtectables() {
@@ -101,7 +103,7 @@ public class MoreProtectables {
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ClientEventHandler.INSTANCE.setup();
+            ModelPatcher.INSTANCE.setup();
             KeypadRenderer.INSTANCE.setup();
             modBus.addListener(this::onClientSetup);
         });
@@ -110,6 +112,8 @@ public class MoreProtectables {
         BLOCK_ENTITIES.register(modBus);
         ITEMS.register(modBus);
         TABS.register(modBus);
+
+        ReinforcedBlockGenerator.INSTANCE.setup();
     }
 
     public static <B extends Block> RegistryObject<B> block(final String name,

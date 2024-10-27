@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.TransformationHelper;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
@@ -118,20 +117,15 @@ public final class KeypadRenderer {
         }
         final var buffer = event.getBufferSource().getBuffer(RenderType.cutout());
         final var poseStack = event.getPoseStack();
-        final var offset = keypadBlock.getKeypadOffset(state);
-        final var rotationOffset = keypadBlock.getKeypadRotationOffset(state);
         poseStack.pushPose();
-        poseStack.translate(0.5F, 0.5F, 0.5F);
         if (event.isItem()) {
-            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, 180F + rotationOffset, 0F, true));
+            keypadBlock.applyKeypadTransform(poseStack, state, true, 0F);
         }
         else {
             final var facing = state.getValue(HorizontalDirectionalBlock.FACING);
             final var angle = facing.getAxis() == Axis.Z ? facing.getOpposite().toYRot() : facing.toYRot();
-            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, angle + rotationOffset, 0F, true));
+            keypadBlock.applyKeypadTransform(poseStack, state, false, angle);
         }
-        poseStack.translate(-0.5F, -0.5F, -0.5F);
-        poseStack.translate(-offset.x, offset.y, -offset.z);
         final var isLocked = event.isItem() || !keypadBlockEntity.isOpen();
         renderKeypad(state, buffer, poseStack, event.getPackedLight(), event.getPackedOverlay(), isLocked);
         poseStack.popPose();

@@ -5,6 +5,7 @@ import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import io.karma.moreprotectables.block.SimpleKeypadTrapdoorBlock;
 import io.karma.moreprotectables.blockentity.SimpleKeypadDoorBlockEntity;
 import io.karma.moreprotectables.blockentity.SimpleKeypadTrapdoorBlockEntity;
+import io.karma.moreprotectables.item.SimpleKeypadBlockItem;
 import io.karma.moreprotectables.util.WoodTypeUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -93,7 +94,7 @@ public final class TropicraftCompatibilityContent {
                         Float.MAX_VALUE),
                         TropicraftWoodTypes.BAMBOO.setType(),
                         KEYPAD_WOOD_TRAPDOOR_ENTITY.get(woodType)::get),
-                    BlockItem::new));
+                    SimpleKeypadBlockItem::new));
 
             KEYPAD_WOOD_DOOR_ENTITY.put(woodType,
                 MoreProtectables.blockEntity(doorName,

@@ -3,6 +3,7 @@ package io.karma.moreprotectables.init;
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.block.SimpleKeypadDoorBlock;
 import io.karma.moreprotectables.block.SimpleKeypadTrapdoorBlock;
+import io.karma.moreprotectables.item.SimpleKeypadBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,7 +69,7 @@ public final class ModBlocks {
                     () -> new SimpleKeypadTrapdoorBlock(BlockBehaviour.Properties.copy(WOOD_TRAPDOORS.get(woodType)),
                         woodType.setType(),
                         ModBlockEntities.KEYPAD_WOOD_TRAPDOOR.get(woodType)::get),
-                    BlockItem::new));
+                    SimpleKeypadBlockItem::new));
         }
 
         KEYPAD_IRON_DOOR = MoreProtectables.block("keypad_iron_door",

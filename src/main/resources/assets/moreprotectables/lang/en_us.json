@@ -3,6 +3,8 @@
   "subtitle.moreprotectables.keypad_beep": "Beep",
   "subtitle.moreprotectables.keypad_beep_confirm": "Beep-beep",
 
+  "block.moreprotectables.reinforced_block": "Reinforced %s",
+
   "block.moreprotectables.keypad_oak_door": "Passcode-protected Oak Door",
   "block.moreprotectables.keypad_spruce_door": "Passcode-protected Spruce Door",
   "block.moreprotectables.keypad_birch_door": "Passcode-protected Birch Door",

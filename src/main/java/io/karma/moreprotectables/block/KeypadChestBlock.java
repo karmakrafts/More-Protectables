@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.block;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.SCContent;
 import net.geforcemods.securitycraft.api.IDisguisable;
@@ -17,20 +18,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.TransformationHelper;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 /**
  * @author Alexander Hinze
  * @since 16/10/2024
  */
 public interface KeypadChestBlock extends KeypadBlock, IDisguisable, IOverlayDisplay {
-    Vector3f DEFAULT_OFFSET = new Vector3f(2F / 16F, 5F / 16F, 0F);
-
     @OnlyIn(Dist.CLIENT)
     @Override
-    default Vector3f getKeypadOffset(final BlockState state) {
-        return DEFAULT_OFFSET;
+    default void applyKeypadTransform(final PoseStack poseStack,
+                                      final BlockState state,
+                                      final boolean isItem,
+                                      final float angle) {
+        poseStack.translate(0.5F, 0.5F, 0.5F);
+        poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, isItem ? 180F : angle, 0F, true));
+        poseStack.translate(-0.5F, -0.5F, -0.5F);
+        poseStack.translate(-(2F / 16F), 5F / 16F, 0F);
     }
 
     @SuppressWarnings("deprecation")

@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.block;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.karma.moreprotectables.blockentity.KeypadDoorBlockEntity;
 import net.geforcemods.securitycraft.SCContent;
 import net.geforcemods.securitycraft.api.IDisguisable;
@@ -20,46 +21,55 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Vector3f;
+import net.minecraftforge.common.util.TransformationHelper;
 
 /**
  * @author Alexander Hinze
  * @since 19/10/2024
  */
 public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisplay {
-    Vector3f DEFAULT_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, 1F / 16F);
-    Vector3f DEFAULT_OFFSET_RIGHT = new Vector3f(2F / 16F, 0F, 1F / 16F);
-    Vector3f OPEN_OFFSET_LEFT = new Vector3f(10F / 16F, 0F, -(12F / 16F));
-    Vector3f OPEN_OFFSET_RIGHT = new Vector3f(2F / 16F, 0F, -(12F / 16F));
-    float DEFAULT_ROTATION_OFFSET = 180F;
-    float OPEN_ROTATION_OFFSET = 90F;
-
     @OnlyIn(Dist.CLIENT)
-    @Override
-    default float getKeypadRotationOffset(final BlockState state) {
+    default float getKeypadRotation(final BlockState state) {
         if (!state.hasProperty(DoorBlock.OPEN) || !state.hasProperty(DoorBlock.HINGE)) {
-            return DEFAULT_ROTATION_OFFSET;
+            return 180F;
         }
         if (state.getValue(DoorBlock.OPEN)) {
             if (state.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
-                return OPEN_ROTATION_OFFSET;
+                return 90F;
             }
-            return -OPEN_ROTATION_OFFSET;
+            return -90F;
         }
-        return DEFAULT_ROTATION_OFFSET;
+        return 180F;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    default Vector3f getKeypadOffset(final BlockState state) {
-        if (!state.hasProperty(DoorBlock.HINGE)) {
-            return DEFAULT_OFFSET_LEFT;
-        }
+    default void applyKeypadTransform(final PoseStack poseStack,
+                                      final BlockState state,
+                                      final boolean isItem,
+                                      final float angle) {
+        poseStack.translate(0.5F, 0.5F, 0.5F);
+        final var rotation = getKeypadRotation(state);
+        final var actualRotation = isItem ? rotation + 180F : angle + rotation;
+        poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, actualRotation, 0F, true));
+        poseStack.translate(-0.5F, -0.5F, -0.5F);
+
         final var hinge = state.getValue(DoorBlock.HINGE);
+        // Handle open transforms
         if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
-            return hinge == DoorHingeSide.LEFT ? OPEN_OFFSET_LEFT : OPEN_OFFSET_RIGHT;
+            if (hinge == DoorHingeSide.LEFT) {
+                poseStack.translate(-(10F / 16F), 0F, 12F / 16F);
+                return;
+            }
+            poseStack.translate(-(2F / 16F), 0F, 12F / 16F);
+            return;
         }
-        return hinge == DoorHingeSide.LEFT ? DEFAULT_OFFSET_LEFT : DEFAULT_OFFSET_RIGHT;
+        // Handle closed transforms
+        if (hinge == DoorHingeSide.LEFT) {
+            poseStack.translate(-(10F / 16F), 0F, -(1F / 16F));
+            return;
+        }
+        poseStack.translate(-(2F / 16F), 0F, -(1F / 16F));
     }
 
     @Override
