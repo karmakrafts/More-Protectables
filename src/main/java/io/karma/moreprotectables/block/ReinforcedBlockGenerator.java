@@ -8,9 +8,13 @@ import io.karma.moreprotectables.item.ReinforcedShadowBlockItem;
 import net.geforcemods.securitycraft.SecurityCraft;
 import net.geforcemods.securitycraft.api.IReinforcedBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,6 +49,47 @@ public final class ReinforcedBlockGenerator {
         namespaceBlacklist.add(SecurityCraft.MODID);
     }
 
+    @OnlyIn(Dist.CLIENT)
+    private static BlockColor handleShadowBlockColor(final BlockColor color) {
+        return (state, level, pos, index) -> {
+            if (!(state.getBlock() instanceof IReinforcedBlock reinforcedBlock)) {
+                return -1;
+            }
+            final var shadowedState = reinforcedBlock.getVanillaBlock().withPropertiesOf(state);
+            if (shadowedState.is(Blocks.GRASS_BLOCK)) {
+                // @formatter:off
+                return index == 1 && !state.getValue(SnowyDirtBlock.SNOWY)
+                    ? BiomeColors.getAverageGrassColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
+                    : -1;
+                // @formatter:on
+            }
+            else if (shadowedState.is(Blocks.WATER_CAULDRON)) {
+                // @formatter:off
+                return index == 1
+                    ? BiomeColors.getAverageWaterColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
+                    : -1;
+                // @formatter:on
+            }
+            return color.getColor(shadowedState, level, pos, index);
+        };
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static ItemColor handleShadowBlockItemColor(final ItemColor color) {
+        return (stack, index) -> {
+            final var block = Block.byItem(stack.getItem());
+            if (!(block instanceof IReinforcedBlock reinforcedBlock)) {
+                return -1;
+            }
+            final var shadowedBlock = reinforcedBlock.getVanillaBlock();
+            final var shadowedStack = new ItemStack(shadowedBlock);
+            if (shadowedBlock == Blocks.GRASS_BLOCK || shadowedBlock == Blocks.WATER_CAULDRON) {
+                return index == 1 ? color.getColor(shadowedStack, index) : -1;
+            }
+            return color.getColor(shadowedStack, index);
+        };
+    }
+
     public void whitelist(final @Language("RegExp") String pattern) {
         whitelistPatterns.add(Pattern.compile(pattern));
     }
@@ -75,22 +120,34 @@ public final class ReinforcedBlockGenerator {
                 if (colorProvider == null) {
                     continue;
                 }
-                blockColors.register(colorProvider, block);
+                blockColors.register(handleShadowBlockColor(colorProvider), block);
             }
-            // Remove color handlers from builtin reinforced blocks
+            // Override color handlers from builtin reinforced blocks
             for (final var entry : ForgeRegistries.BLOCKS.getEntries()) {
                 final var block = entry.getValue();
-                if (!(block instanceof IReinforcedBlock)) {
+                if (!(block instanceof IReinforcedBlock reinforcedBlock)) {
                     continue;
                 }
                 if (!entry.getKey().location().getNamespace().equals(SecurityCraft.MODID)) {
                     continue;
                 }
-                ((BlockColorsHooks) blockColors).moreprotectable$removeBlockColor(block);
+                final var blockColor = ((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(reinforcedBlock.getVanillaBlock());
+                if (blockColor != null) {
+                    blockColors.register(handleShadowBlockColor(blockColor), block);
+                }
+                else {
+                    ((BlockColorsHooks) blockColors).moreprotectable$removeBlockColor(block);
+                }
                 if (!ForgeRegistries.ITEMS.containsKey(ForgeRegistries.BLOCKS.getKey(block))) {
                     continue;
                 }
-                ((ItemColorsHooks) itemColors).moreprotectables$removeItemColor(block.asItem());
+                final var shadowedItem = reinforcedBlock.getVanillaBlock().asItem();
+                final var itemColor = ((ItemColorsHooks) itemColors).moreprotectables$getItemColor(shadowedItem);
+                if (itemColor == null) {
+                    ((ItemColorsHooks) itemColors).moreprotectables$removeItemColor(shadowedItem);
+                    continue;
+                }
+                itemColors.register(handleShadowBlockItemColor(itemColor), block.asItem());
             }
         });
     }

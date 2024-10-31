@@ -15,6 +15,5 @@ public interface BlockColorsHooks {
     @Nullable
     BlockColor moreprotectable$getBlockColor(final Block block);
 
-    @Nullable
-    BlockColor moreprotectable$removeBlockColor(final Block block);
+    void moreprotectable$removeBlockColor(final Block block);
 }

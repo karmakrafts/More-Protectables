@@ -19,6 +19,7 @@ import io.karma.moreprotectables.block.ReinforcedBlockGenerator;
 import io.karma.moreprotectables.client.model.ModelPatcher;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
+import io.karma.moreprotectables.client.render.ReinforcedItemOverlayRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.init.ModBlockEntities;
 import io.karma.moreprotectables.init.ModBlocks;
@@ -105,6 +106,7 @@ public class MoreProtectables {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             ModelPatcher.INSTANCE.setup();
             KeypadRenderer.INSTANCE.setup();
+            ReinforcedItemOverlayRenderer.INSTANCE.setup();
             modBus.addListener(this::onClientSetup);
         });
 

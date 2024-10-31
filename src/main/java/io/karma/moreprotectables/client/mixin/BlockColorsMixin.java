@@ -29,7 +29,7 @@ public final class BlockColorsMixin implements BlockColorsHooks {
     }
 
     @Override
-    public @Nullable BlockColor moreprotectable$removeBlockColor(final Block block) {
-        return blockColors.remove(ForgeRegistries.BLOCKS.getDelegateOrThrow(block));
+    public void moreprotectable$removeBlockColor(final Block block) {
+        blockColors.remove(ForgeRegistries.BLOCKS.getDelegateOrThrow(block));
     }
 }

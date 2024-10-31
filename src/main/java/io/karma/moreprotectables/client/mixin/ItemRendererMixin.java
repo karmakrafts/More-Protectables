@@ -2,6 +2,7 @@ package io.karma.moreprotectables.client.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.karma.moreprotectables.client.event.BlockEntityRenderEvent;
+import io.karma.moreprotectables.client.event.RenderItemEvent;
 import io.karma.moreprotectables.client.hook.ItemRendererHooks;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -33,6 +34,48 @@ import java.util.HashMap;
 public final class ItemRendererMixin implements ItemRendererHooks {
     @Unique
     private final HashMap<ResourceLocation, BlockEntity> moreprotectables$blockEntityCache = new HashMap<>();
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = Shift.BEFORE), cancellable = true)
+    private void onRenderPre(final ItemStack stack,
+                             final ItemDisplayContext displayContext,
+                             final boolean leftHand,
+                             final PoseStack poseStack,
+                             final MultiBufferSource buffer,
+                             final int combinedLight,
+                             final int combinedOverlay,
+                             final BakedModel model,
+                             final CallbackInfo cbi) {
+        final var event = new RenderItemEvent.Pre(stack,
+            displayContext,
+            buffer,
+            poseStack,
+            leftHand,
+            combinedLight,
+            combinedOverlay);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
+            cbi.cancel();
+        }
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = Shift.AFTER))
+    private void onRenderPost(final ItemStack stack,
+                              final ItemDisplayContext displayContext,
+                              final boolean leftHand,
+                              final PoseStack poseStack,
+                              final MultiBufferSource buffer,
+                              final int combinedLight,
+                              final int combinedOverlay,
+                              final BakedModel model,
+                              final CallbackInfo cbi) {
+        MinecraftForge.EVENT_BUS.post(new RenderItemEvent.Post(stack,
+            displayContext,
+            buffer,
+            poseStack,
+            leftHand,
+            combinedLight,
+            combinedOverlay));
+    }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/BlockEntityWithoutLevelRenderer;renderByItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", shift = Shift.AFTER))
     private void onRender(final ItemStack stack,

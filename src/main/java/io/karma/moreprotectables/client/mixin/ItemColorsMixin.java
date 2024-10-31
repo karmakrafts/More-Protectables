@@ -24,7 +24,12 @@ public final class ItemColorsMixin implements ItemColorsHooks {
     private Map<Reference<Item>, ItemColor> itemColors;
 
     @Override
-    public @Nullable ItemColor moreprotectables$removeItemColor(final Item item) {
-        return itemColors.remove(ForgeRegistries.ITEMS.getDelegateOrThrow(item));
+    public @Nullable ItemColor moreprotectables$getItemColor(final Item item) {
+        return itemColors.get(ForgeRegistries.ITEMS.getDelegateOrThrow(item));
+    }
+
+    @Override
+    public void moreprotectables$removeItemColor(final Item item) {
+        itemColors.remove(ForgeRegistries.ITEMS.getDelegateOrThrow(item));
     }
 }

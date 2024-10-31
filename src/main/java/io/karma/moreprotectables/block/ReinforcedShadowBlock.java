@@ -59,6 +59,8 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
             .friction(shadowedBlock.friction)
             .speedFactor(shadowedBlock.speedFactor)
             .jumpFactor(shadowedBlock.jumpFactor)
+            .destroyTime(shadowedBlock.properties.destroyTime)
+            .pushReaction(shadowedBlock.properties.pushReaction)
         );
         // @formatter:on
         if (shadowedBlock.isRandomlyTicking) {
