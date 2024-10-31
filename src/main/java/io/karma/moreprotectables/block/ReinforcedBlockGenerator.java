@@ -96,20 +96,6 @@ public final class ReinforcedBlockGenerator {
     }
 
     private boolean shouldGenerate(final @Nullable Block block) {
-        // @formatter:off
-        if(block == null || block == Blocks.AIR
-            || block instanceof EntityBlock
-            || block instanceof LiquidBlock
-            || block instanceof IPlantable
-            || block instanceof FlowerPotBlock
-            || block instanceof DoorBlock
-            || block instanceof TrapDoorBlock
-            || block instanceof WallTorchBlock
-            || block instanceof RedstoneWallTorchBlock
-            || block.isRandomlyTicking) {
-            return false;
-        }
-        // @formatter:on
         final var key = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
         // Handle blacklist
         if (namespaceBlacklist.contains(key.getNamespace())) {
@@ -124,19 +110,16 @@ public final class ReinforcedBlockGenerator {
             return true;
         }
         // @formatter:off
-        return block.getClass() == Block.class
-            || block.getClass().getSuperclass() == Block.class
-            || block instanceof HorizontalDirectionalBlock
-            || block instanceof DirectionalBlock
-            || block instanceof RotatedPillarBlock
-            || block instanceof SlabBlock
-            || block instanceof FenceBlock
-            || block instanceof FenceGateBlock
-            || block instanceof WallBlock
-            || block instanceof RedstoneLampBlock
-            || block instanceof LeavesBlock
-            || block instanceof TorchBlock
-            || block instanceof RedstoneTorchBlock;
+        return !(block == null || block == Blocks.AIR
+            || block instanceof EntityBlock
+            || block instanceof LiquidBlock
+            || block instanceof IPlantable
+            || block instanceof FlowerPotBlock
+            || block instanceof DoorBlock
+            || block instanceof TrapDoorBlock
+            || block instanceof WallTorchBlock
+            || block instanceof RedstoneWallTorchBlock
+            || block.isRandomlyTicking);
         // @formatter:on
     }
 

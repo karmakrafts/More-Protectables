@@ -10,8 +10,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,13 +41,6 @@ public final class ModelPatcher {
     // @formatter:off
     private ModelPatcher() {}
     // @formatter:on
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Comparable<T>> String serializeProperty(final BlockState state,
-                                                                      final Property<?> property) {
-        final var typedProp = (Property<T>) property;
-        return typedProp.getName(state.getValue(typedProp));
-    }
 
     @Internal
     public void setup() {

@@ -355,7 +355,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
             shadowedState -> shadowedBlock.neighborChanged(shadowedState,
                 level,
                 pos,
-                neighborBlock,
+                getShadowedState(neighborBlock.defaultBlockState()).getBlock(),
                 neighborPos,
                 movedByPiston));
     }
@@ -453,6 +453,35 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         tryDoShadowed(oldState,
             "Block#onBlockStateChange",
             shadowedState -> shadowedBlock.onBlockStateChange(level, pos, shadowedState, getShadowedState(newState)));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(final @NotNull BlockState state,
+                                          final @NotNull BlockGetter level,
+                                          final @NotNull BlockPos pos) {
+        return tryDoShadowed(state,
+            "Block#propagatesSkylightDown",
+            () -> super.propagatesSkylightDown(state, level, pos),
+            shadowedState -> shadowedBlock.propagatesSkylightDown(shadowedState, level, pos));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getLightBlock(final @NotNull BlockState state,
+                             final @NotNull BlockGetter level,
+                             final @NotNull BlockPos pos) {
+        return tryDoShadowed(state,
+            "Block#getLightBlock",
+            () -> super.getLightBlock(state, level, pos),
+            shadowedState -> shadowedBlock.getLightBlock(shadowedState, level, pos));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean skipRendering(final @NotNull BlockState state,
+                                 final @NotNull BlockState adjacentState,
+                                 final @NotNull Direction direction) {
+        return shadowedBlock.skipRendering(getShadowedState(state), getShadowedState(adjacentState), direction);
     }
 
     @Override
