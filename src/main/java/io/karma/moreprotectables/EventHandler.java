@@ -19,7 +19,7 @@ public final class EventHandler {
     // @formatter:on
 
     @Internal
-    public void setup() {
+    public void init() {
         final var bus = MinecraftForge.EVENT_BUS;
         bus.addListener(this::onEntityInteract);
     }

@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.hooks;
+package io.karma.moreprotectables.hook;
 
 /**
  * @author Alexander Hinze

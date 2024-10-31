@@ -1,7 +1,7 @@
 package io.karma.moreprotectables.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.karma.moreprotectables.client.hooks.ItemRendererHooks;
+import io.karma.moreprotectables.client.hook.ItemRendererHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,10 +27,14 @@ public final class BlockEntityItemRenderer extends BlockEntityWithoutLevelRender
 
     public static IClientItemExtensions extension() {
         return new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            private final Lazy<BlockEntityWithoutLevelRenderer> renderer = Lazy.of(() -> {
                 final var game = Minecraft.getInstance();
                 return new BlockEntityItemRenderer(game.getBlockEntityRenderDispatcher(), game.getEntityModels());
+            });
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return renderer.get();
             }
         };
     }

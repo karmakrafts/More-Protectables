@@ -17,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,10 +34,14 @@ public final class DelegateBlockItemRenderer extends BlockEntityWithoutLevelRend
 
     public static IClientItemExtensions extension() {
         return new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            private final Lazy<BlockEntityWithoutLevelRenderer> renderer = Lazy.of(() -> {
                 final var game = Minecraft.getInstance();
                 return new DelegateBlockItemRenderer(game.getBlockEntityRenderDispatcher(), game.getEntityModels());
+            });
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return renderer.get();
             }
         };
     }

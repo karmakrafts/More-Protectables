@@ -2,7 +2,7 @@ package io.karma.moreprotectables.client.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.karma.moreprotectables.client.event.BlockEntityRenderEvent;
-import io.karma.moreprotectables.client.hooks.ItemRendererHooks;
+import io.karma.moreprotectables.client.hook.ItemRendererHooks;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
@@ -51,7 +51,8 @@ public final class ItemRendererMixin implements ItemRendererHooks {
                 buffer,
                 combinedLight,
                 combinedOverlay,
-                true));
+                true,
+                leftHand));
         }
     }
 

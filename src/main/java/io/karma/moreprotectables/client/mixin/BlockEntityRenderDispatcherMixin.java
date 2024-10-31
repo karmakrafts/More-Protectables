@@ -39,6 +39,7 @@ public final class BlockEntityRenderDispatcherMixin {
             bufferSource,
             packedLight,
             OverlayTexture.NO_OVERLAY,
+            false,
             false));
     }
 }

@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.mixin;
 
-import io.karma.moreprotectables.hooks.CustomizableBlockEntityHooks;
+import io.karma.moreprotectables.hook.CustomizableBlockEntityHooks;
 import net.geforcemods.securitycraft.api.CustomizableBlockEntity;
 import net.geforcemods.securitycraft.misc.ModuleType;
 import net.minecraft.core.NonNullList;

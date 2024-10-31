@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * @since 16/10/2024
  */
 @Mixin(value = KeypadChestRenderer.class)
-public class KeypadChestRendererMixin<T extends ChestBlockEntity> extends ChestRenderer<T> {
+public final class KeypadChestRendererMixin<T extends ChestBlockEntity> extends ChestRenderer<T> {
     public KeypadChestRendererMixin(final Context context) {
         super(context);
     }

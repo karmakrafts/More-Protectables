@@ -9,10 +9,13 @@
     "maxShiftBy": 100
   },
   "client": [
+    "BlockColorsMixin",
     "BlockEntityRenderDispatcherMixin",
-    "KeypadChestRendererMixin",
-    "ItemRendererMixin",
     "CheckPasscodeScreenMixin",
+    "ItemColorsMixin",
+    "ItemRendererMixin",
+    "KeypadChestRendererMixin",
+    "ModelBakeryMixin",
     "SecuritySeaBoatRendererMixin"
   ]
 }

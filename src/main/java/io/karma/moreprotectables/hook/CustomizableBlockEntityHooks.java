@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.hooks;
+package io.karma.moreprotectables.hook;
 
 import net.geforcemods.securitycraft.misc.ModuleType;
 import net.minecraft.core.NonNullList;

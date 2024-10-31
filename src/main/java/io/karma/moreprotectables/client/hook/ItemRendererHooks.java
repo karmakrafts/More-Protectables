@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.client.hooks;
+package io.karma.moreprotectables.client.hook;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;

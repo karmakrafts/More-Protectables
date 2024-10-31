@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.blockentity;
 
-import io.karma.moreprotectables.hooks.CustomizableBlockEntityHooks;
+import io.karma.moreprotectables.hook.CustomizableBlockEntityHooks;
 import net.geforcemods.securitycraft.api.Option;
 import net.geforcemods.securitycraft.api.Option.BooleanOption;
 import net.geforcemods.securitycraft.api.Option.SmartModuleCooldownOption;

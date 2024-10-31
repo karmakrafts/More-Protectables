@@ -1,6 +1,6 @@
 package io.karma.moreprotectables.mixin;
 
-import io.karma.moreprotectables.hooks.BoatHooks;
+import io.karma.moreprotectables.hook.BoatHooks;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

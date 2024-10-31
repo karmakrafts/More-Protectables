@@ -19,19 +19,22 @@ public final class BlockEntityRenderEvent extends Event {
     private final int packedLight;
     private final int packedOverlay;
     private final boolean isItem;
+    private final boolean isLeftHand;
 
     public BlockEntityRenderEvent(final BlockEntity blockEntity,
                                   final PoseStack poseStack,
                                   final MultiBufferSource bufferSource,
                                   final int packedLight,
                                   final int packedOverlay,
-                                  final boolean isItem) {
+                                  final boolean isItem,
+                                  final boolean isLeftHand) {
         this.blockEntity = blockEntity;
         this.poseStack = poseStack;
         this.bufferSource = bufferSource;
         this.packedLight = packedLight;
         this.packedOverlay = packedOverlay;
         this.isItem = isItem;
+        this.isLeftHand = isLeftHand;
     }
 
     public BlockEntity getBlockEntity() {
@@ -56,5 +59,9 @@ public final class BlockEntityRenderEvent extends Event {
 
     public boolean isItem() {
         return isItem;
+    }
+
+    public boolean isLeftHand() {
+        return isLeftHand;
     }
 }

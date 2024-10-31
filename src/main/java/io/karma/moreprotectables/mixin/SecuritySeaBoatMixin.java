@@ -1,7 +1,7 @@
 package io.karma.moreprotectables.mixin;
 
-import io.karma.moreprotectables.hooks.SecuritySeaBoatData;
-import io.karma.moreprotectables.hooks.SecuritySeaBoatHooks;
+import io.karma.moreprotectables.hook.SecuritySeaBoatData;
+import io.karma.moreprotectables.hook.SecuritySeaBoatHooks;
 import net.geforcemods.securitycraft.entity.SecuritySeaBoat;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

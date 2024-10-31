@@ -90,14 +90,14 @@ public class MoreProtectables {
             for (final var module : COMPAT_MODULES) {
                 module.addItemsToTab(output);
             }
-            ReinforcedBlockGenerator.INSTANCE.getGeneratedBlocks().values().forEach(output::accept);
+            ReinforcedBlockGenerator.INSTANCE.getGeneratedItems().forEach(output::accept);
         }).build());
 
     public MoreProtectables() {
         ModBlocks.register();
         ModBlockEntities.register();
         ModConversions.register();
-        EventHandler.INSTANCE.setup();
+        EventHandler.INSTANCE.init();
 
         COMPAT_MODULES.forEach(CompatibilityModule::init);
         final var modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -113,7 +113,7 @@ public class MoreProtectables {
         ITEMS.register(modBus);
         TABS.register(modBus);
 
-        ReinforcedBlockGenerator.INSTANCE.setup();
+        ReinforcedBlockGenerator.INSTANCE.init();
     }
 
     public static <B extends Block> RegistryObject<B> block(final String name,

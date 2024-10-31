@@ -5,7 +5,7 @@ import com.progwml6.ironchest.common.block.regular.AbstractIronChestBlock;
 import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
 import com.progwml6.ironchest.common.item.ChestUpgradeItem;
 import io.karma.moreprotectables.block.KeypadChestBlock;
-import io.karma.moreprotectables.compat.ironchest.hooks.ChestUpgradeItemHooks;
+import io.karma.moreprotectables.compat.ironchest.hook.ChestUpgradeItemHooks;
 import io.karma.moreprotectables.util.ListUtils;
 import net.geforcemods.securitycraft.api.IDisguisable;
 import net.geforcemods.securitycraft.misc.OwnershipEvent;

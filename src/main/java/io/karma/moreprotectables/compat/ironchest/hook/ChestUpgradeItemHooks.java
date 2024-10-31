@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.compat.ironchest.hooks;
+package io.karma.moreprotectables.compat.ironchest.hook;
 
 import com.progwml6.ironchest.common.item.IronChestsUpgradeType;
 

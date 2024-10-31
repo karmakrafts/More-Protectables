@@ -2,7 +2,7 @@ package io.karma.moreprotectables.compat.ironchest.mixin;
 
 import com.progwml6.ironchest.common.item.ChestUpgradeItem;
 import com.progwml6.ironchest.common.item.IronChestsUpgradeType;
-import io.karma.moreprotectables.compat.ironchest.hooks.ChestUpgradeItemHooks;
+import io.karma.moreprotectables.compat.ironchest.hook.ChestUpgradeItemHooks;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
