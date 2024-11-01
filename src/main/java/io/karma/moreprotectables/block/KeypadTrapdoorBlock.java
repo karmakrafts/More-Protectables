@@ -24,7 +24,11 @@ public interface KeypadTrapdoorBlock extends KeypadBlock {
         final var rotationOffset = facing.getAxis() == Axis.Z ? 180F : 0F;
         final var isOpen = state.getValue(TrapDoorBlock.OPEN);
         if (isOpen) {
-            // TODO: ...
+            poseStack.translate(0.5F, 0.5F, 0.5F);
+            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, 180F + angle, 0F, true));
+            poseStack.mulPose(TransformationHelper.quatFromXYZ(0F, 0F, 180F, true));
+            poseStack.translate(-0.5F, -0.5F, -0.5F);
+            poseStack.translate(-(2F / 16F), 2F / 16F, -(1F / 16F));
         }
         else {
             poseStack.translate(0.5F, 0.5F, 0.5F);
