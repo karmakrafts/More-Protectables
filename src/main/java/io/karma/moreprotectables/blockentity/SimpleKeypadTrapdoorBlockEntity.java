@@ -73,11 +73,6 @@ public class SimpleKeypadTrapdoorBlockEntity extends DisguisableBlockEntity impl
     }
 
     @Override
-    public boolean isOpen() {
-        return false;
-    }
-
-    @Override
     public byte[] getPasscode() {
         return passcode == null || passcode.length == 0 ? null : passcode;
     }

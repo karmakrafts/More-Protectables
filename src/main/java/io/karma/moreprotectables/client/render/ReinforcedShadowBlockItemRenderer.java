@@ -55,6 +55,7 @@ public final class ReinforcedShadowBlockItemRenderer extends BlockEntityWithoutL
             return;
         }
 
+
         final var game = Minecraft.getInstance();
         final var itemRenderer = game.getItemRenderer();
         final var blockRenderer = game.getBlockRenderer();

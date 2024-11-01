@@ -38,6 +38,12 @@ import java.util.regex.Pattern;
  */
 public final class ReinforcedBlockGenerator {
     public static final ReinforcedBlockGenerator INSTANCE = new ReinforcedBlockGenerator();
+
+    @OnlyIn(Dist.CLIENT)
+    private static final BlockColor DEFAULT_BLOCK_COLOR = (state, level, pos, index) -> -1;
+    @OnlyIn(Dist.CLIENT)
+    private static final ItemColor DEFAULT_ITEM_COLOR = (stack, index) -> -1;
+
     private final HashSet<String> namespaceBlacklist = new HashSet<>();
     private final ArrayList<Pattern> whitelistPatterns = new ArrayList<>();
     private final LinkedHashMap<ResourceLocation, ReinforcedShadowBlock> generatedBlocks = new LinkedHashMap<>();
@@ -50,32 +56,45 @@ public final class ReinforcedBlockGenerator {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static BlockColor handleShadowBlockColor(final BlockColor color) {
+    private static BlockColor handleShadowBlockColor(final @Nullable BlockColor color) {
+        if (color == null) {
+            return DEFAULT_BLOCK_COLOR;
+        }
         return (state, level, pos, index) -> {
             if (!(state.getBlock() instanceof IReinforcedBlock reinforcedBlock)) {
                 return -1;
             }
-            final var shadowedState = reinforcedBlock.getVanillaBlock().withPropertiesOf(state);
-            if (shadowedState.is(Blocks.GRASS_BLOCK)) {
-                // @formatter:off
-                return index == 1 && !state.getValue(SnowyDirtBlock.SNOWY)
-                    ? BiomeColors.getAverageGrassColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
-                    : -1;
-                // @formatter:on
-            }
-            else if (shadowedState.is(Blocks.WATER_CAULDRON)) {
-                // @formatter:off
-                return index == 1
-                    ? BiomeColors.getAverageWaterColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
-                    : -1;
-                // @formatter:on
-            }
-            return color.getColor(shadowedState, level, pos, index);
+            return color.getColor(reinforcedBlock.getVanillaBlock().withPropertiesOf(state), level, pos, index);
         };
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static ItemColor handleShadowBlockItemColor(final ItemColor color) {
+    private static BlockColor handleShadowGrassBlockColor(final @Nullable BlockColor color) {
+        return (state, level, pos, index) -> {
+            // @formatter:off
+            return index == 1 && !state.getValue(SnowyDirtBlock.SNOWY)
+                ? BiomeColors.getAverageGrassColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
+                : -1;
+            // @formatter:on
+        };
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static BlockColor handleShadowWaterCauldronBlockColor(final @Nullable BlockColor color) {
+        return (state, level, pos, index) -> {
+            // @formatter:off
+            return index == 1
+                ? BiomeColors.getAverageWaterColor(Objects.requireNonNull(level), Objects.requireNonNull(pos))
+                : -1;
+            // @formatter:on
+        };
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static ItemColor handleShadowBlockItemColor(final @Nullable ItemColor color) {
+        if (color == null) {
+            return DEFAULT_ITEM_COLOR;
+        }
         return (stack, index) -> {
             final var block = Block.byItem(stack.getItem());
             if (!(block instanceof IReinforcedBlock reinforcedBlock)) {
@@ -83,10 +102,23 @@ public final class ReinforcedBlockGenerator {
             }
             final var shadowedBlock = reinforcedBlock.getVanillaBlock();
             final var shadowedStack = new ItemStack(shadowedBlock);
-            if (shadowedBlock == Blocks.GRASS_BLOCK || shadowedBlock == Blocks.WATER_CAULDRON) {
-                return index == 1 ? color.getColor(shadowedStack, index) : -1;
-            }
             return color.getColor(shadowedStack, index);
+        };
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static ItemColor handleShadowTintedBlockItemColor(final @Nullable ItemColor color) {
+        if (color == null) {
+            return DEFAULT_ITEM_COLOR;
+        }
+        return (stack, index) -> {
+            final var block = Block.byItem(stack.getItem());
+            if (!(block instanceof IReinforcedBlock reinforcedBlock)) {
+                return -1;
+            }
+            final var shadowedBlock = reinforcedBlock.getVanillaBlock();
+            final var shadowedStack = new ItemStack(shadowedBlock);
+            return index == 1 ? color.getColor(shadowedStack, index) : -1;
         };
     }
 
@@ -131,23 +163,39 @@ public final class ReinforcedBlockGenerator {
                 if (!entry.getKey().location().getNamespace().equals(SecurityCraft.MODID)) {
                     continue;
                 }
-                final var blockColor = ((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(reinforcedBlock.getVanillaBlock());
+                final var shadowedBlock = reinforcedBlock.getVanillaBlock();
+                // Handle block colors
+                var blockColor = ((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(block);
                 if (blockColor != null) {
-                    blockColors.register(handleShadowBlockColor(blockColor), block);
+                    if (shadowedBlock == Blocks.GRASS_BLOCK) {
+                        blockColors.register(handleShadowGrassBlockColor(((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(
+                            shadowedBlock)), block);
+                    }
+                    else if (shadowedBlock == Blocks.WATER_CAULDRON) {
+                        blockColors.register(handleShadowWaterCauldronBlockColor(((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(
+                            shadowedBlock)), block);
+                    }
+                    else {
+                        blockColors.register(handleShadowBlockColor(((BlockColorsHooks) blockColors).moreprotectable$getBlockColor(
+                            shadowedBlock)), block);
+                    }
                 }
-                else {
-                    ((BlockColorsHooks) blockColors).moreprotectable$removeBlockColor(block);
-                }
+                // Handle item colors
                 if (!ForgeRegistries.ITEMS.containsKey(ForgeRegistries.BLOCKS.getKey(block))) {
                     continue;
                 }
-                final var shadowedItem = reinforcedBlock.getVanillaBlock().asItem();
-                final var itemColor = ((ItemColorsHooks) itemColors).moreprotectables$getItemColor(shadowedItem);
+                final var item = block.asItem();
+                final var itemColor = ((ItemColorsHooks) itemColors).moreprotectables$getItemColor(item);
                 if (itemColor == null) {
-                    ((ItemColorsHooks) itemColors).moreprotectables$removeItemColor(shadowedItem);
                     continue;
                 }
-                itemColors.register(handleShadowBlockItemColor(itemColor), block.asItem());
+                if (shadowedBlock == Blocks.GRASS_BLOCK || shadowedBlock == Blocks.WATER_CAULDRON) {
+                    itemColors.register(handleShadowTintedBlockItemColor(((ItemColorsHooks) itemColors).moreprotectables$getItemColor(
+                        shadowedBlock.asItem())), item);
+                    continue;
+                }
+                itemColors.register(handleShadowBlockItemColor(((ItemColorsHooks) itemColors).moreprotectables$getItemColor(
+                    shadowedBlock.asItem())), item);
             }
         });
     }

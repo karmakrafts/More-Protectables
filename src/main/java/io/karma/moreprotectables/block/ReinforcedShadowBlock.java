@@ -29,6 +29,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -484,6 +485,13 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
                                  final @NotNull BlockState adjacentState,
                                  final @NotNull Direction direction) {
         return shadowedBlock.skipRendering(getShadowedState(state), getShadowedState(adjacentState), direction);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull List<ItemStack> getDrops(final @NotNull BlockState state,
+                                             final @NotNull LootParams.Builder params) {
+        return List.of(new ItemStack(this));
     }
 
     @Override

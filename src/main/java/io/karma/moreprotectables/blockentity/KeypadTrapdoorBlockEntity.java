@@ -26,4 +26,9 @@ public interface KeypadTrapdoorBlockEntity extends KeypadBlockEntity {
                 player);
         }
     }
+
+    @Override
+    default boolean isOpen() {
+        return getThisState().getValue(TrapDoorBlock.OPEN);
+    }
 }
