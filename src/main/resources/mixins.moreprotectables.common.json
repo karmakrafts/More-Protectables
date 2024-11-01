@@ -1,3 +1,4 @@
+
 {
   "package": "io.karma.moreprotectables.mixin",
   "required": true,
@@ -16,6 +17,9 @@
     "KeypadChestBlockMixin",
     "SecuritySeaBoatMixin",
     "BlockStateBaseMixin",
-    "StairBlockMixin"
+    "StairBlockMixin",
+    "NeighborUpdaterMixin",
+    "CollectingNeighborUpdaterMixin",
+    "LevelMixin"
   ]
 }

@@ -1,6 +1,7 @@
 package io.karma.moreprotectables.block;
 
 import io.karma.moreprotectables.MoreProtectables;
+import io.karma.moreprotectables.hook.LevelHooks;
 import net.geforcemods.securitycraft.api.IReinforcedBlock;
 import net.geforcemods.securitycraft.blocks.OwnableBlock;
 import net.minecraft.core.BlockPos;
@@ -99,6 +100,31 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return shadowedBlock.withPropertiesOf(state);
     }
 
+    private static Level getShadowedLevel(final Level level) {
+        return ((LevelHooks) level).moreprotectables$getShadowLevel();
+    }
+
+    private static LevelReader getShadowedLevelReader(final LevelReader reader) {
+        if (!(reader instanceof LevelHooks hooks)) {
+            return reader;
+        }
+        return hooks.moreprotectables$getShadowLevel();
+    }
+
+    private static BlockGetter getShadowedBlockGetter(final BlockGetter getter) {
+        if (!(getter instanceof LevelHooks hooks)) {
+            return getter;
+        }
+        return hooks.moreprotectables$getShadowLevel();
+    }
+
+    private static LevelAccessor getShadowedLevelAccessor(final LevelAccessor accessor) {
+        if (!(accessor instanceof LevelHooks hooks)) {
+            return accessor;
+        }
+        return hooks.moreprotectables$getShadowLevel();
+    }
+
     private void printShadowWarning(final String function) {
         MoreProtectables.LOGGER.warn("{} failed with generated reinforced block {}, please report this issue",
             function,
@@ -143,7 +169,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#use",
             () -> super.use(state, level, pos, player, hand, hit),
-            shadowedState -> shadowedBlock.use(shadowedState, level, pos, player, hand, hit));
+            shadowedState -> shadowedBlock.use(shadowedState, getShadowedLevel(level), pos, player, hand, hit));
     }
 
     @Override
@@ -155,7 +181,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         super.setPlacedBy(level, pos, state, placer, stack); // Make sure owner is updated first
         tryDoShadowed(state,
             "Block#setPlacedBy",
-            shadowedState -> shadowedBlock.setPlacedBy(level, pos, shadowedState, placer, stack));
+            shadowedState -> shadowedBlock.setPlacedBy(getShadowedLevel(level), pos, shadowedState, placer, stack));
     }
 
     @Override
@@ -185,7 +211,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         tryDoShadowed(state,
             "Block#onPlace",
             shadowedState -> shadowedBlock.onPlace(shadowedState,
-                level,
+                getShadowedLevel(level),
                 pos,
                 getShadowedState(oldState),
                 movedByPiston));
@@ -201,7 +227,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         tryDoShadowed(state,
             "Block#onRemove",
             shadowedState -> shadowedBlock.onRemove(shadowedState,
-                level,
+                getShadowedLevel(level),
                 pos,
                 getShadowedState(newState),
                 movedByPiston));
@@ -231,7 +257,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#isPathfindable",
             () -> super.isPathfindable(state, level, pos, type),
-            shadowedState -> shadowedBlock.isPathfindable(shadowedState, level, pos, type));
+            shadowedState -> shadowedBlock.isPathfindable(shadowedState, getShadowedBlockGetter(level), pos, type));
     }
 
     @SuppressWarnings("deprecation")
@@ -254,7 +280,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getOcclusionShape",
             () -> super.getOcclusionShape(state, level, pos),
-            shadowedState -> shadowedBlock.getOcclusionShape(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.getOcclusionShape(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -265,7 +291,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getBlockSupportShape",
             () -> super.getBlockSupportShape(state, level, pos),
-            shadowedState -> shadowedBlock.getBlockSupportShape(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.getBlockSupportShape(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -276,7 +302,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getInteractionShape",
             () -> super.getInteractionShape(state, level, pos),
-            shadowedState -> shadowedBlock.getInteractionShape(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.getInteractionShape(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -288,7 +314,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getCollisionShape",
             () -> super.getCollisionShape(state, level, pos, context),
-            shadowedState -> shadowedBlock.getCollisionShape(shadowedState, level, pos, context));
+            shadowedState -> shadowedBlock.getCollisionShape(shadowedState,
+                getShadowedBlockGetter(level),
+                pos,
+                context));
     }
 
     @SuppressWarnings("deprecation")
@@ -300,7 +329,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getVisualShape",
             () -> super.getVisualShape(state, level, pos, context),
-            shadowedState -> shadowedBlock.getVisualShape(shadowedState, level, pos, context));
+            shadowedState -> shadowedBlock.getVisualShape(shadowedState, getShadowedBlockGetter(level), pos, context));
     }
 
     @SuppressWarnings("deprecation")
@@ -317,7 +346,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
             shadowedState -> withPropertiesOf(shadowedBlock.updateShape(shadowedState,
                 direction,
                 getShadowedState(neighborState),
-                level,
+                getShadowedLevelAccessor(level),
                 pos,
                 neighborPos)));
         // @formatter:on
@@ -332,7 +361,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getShape",
             () -> super.getShape(state, level, pos, context),
-            shadowedState -> shadowedBlock.getShape(shadowedState, level, pos, context));
+            shadowedState -> shadowedBlock.getShape(shadowedState, getShadowedBlockGetter(level), pos, context));
     }
 
     @Override
@@ -342,7 +371,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
                                  final BlockPos neighbor) {
         tryDoShadowed(state,
             "Block#onNeighborChange",
-            shadowedState -> shadowedBlock.onNeighborChange(shadowedState, level, pos, neighbor));
+            shadowedState -> shadowedBlock.onNeighborChange(shadowedState,
+                getShadowedLevelReader(level),
+                pos,
+                neighbor));
     }
 
     @SuppressWarnings("deprecation")
@@ -356,7 +388,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         tryDoShadowed(state,
             "Block#neighborChanged",
             shadowedState -> shadowedBlock.neighborChanged(shadowedState,
-                level,
+                getShadowedLevel(level),
                 pos,
                 getShadowedState(neighborBlock.defaultBlockState()).getBlock(),
                 neighborPos,
@@ -377,7 +409,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getFlammability",
             () -> super.getFlammability(state, level, pos, direction),
-            shadowedState -> shadowedBlock.getFlammability(shadowedState, level, pos, direction));
+            shadowedState -> shadowedBlock.getFlammability(shadowedState,
+                getShadowedBlockGetter(level),
+                pos,
+                direction));
     }
 
     @Override
@@ -388,7 +423,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getFireSpreadSpeed",
             () -> super.getFireSpreadSpeed(state, level, pos, direction),
-            shadowedState -> shadowedBlock.getFireSpreadSpeed(shadowedState, level, pos, direction));
+            shadowedState -> shadowedBlock.getFireSpreadSpeed(shadowedState,
+                getShadowedBlockGetter(level),
+                pos,
+                direction));
     }
 
     @Override
@@ -398,7 +436,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
                             final @NotNull RandomSource random) {
         tryDoShadowed(state,
             "Block#animateTick",
-            shadowedState -> shadowedBlock.animateTick(shadowedState, level, pos, random));
+            shadowedState -> shadowedBlock.animateTick(shadowedState, getShadowedLevel(level), pos, random));
     }
 
     @Override
@@ -406,7 +444,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getLightEmission",
             () -> super.getLightEmission(state, level, pos),
-            shadowedState -> shadowedBlock.getLightEmission(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.getLightEmission(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -419,7 +457,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         tryDoShadowed(state,
             "Block#updateIndirectNeighborShapes",
             shadowedState -> shadowedBlock.updateIndirectNeighbourShapes(shadowedState,
-                level,
+                getShadowedLevelAccessor(level),
                 pos,
                 flags,
                 recursionLeft));
@@ -433,7 +471,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getMapColor",
             () -> super.getMapColor(state, level, pos, defaultColor),
-            shadowedState -> shadowedBlock.getMapColor(shadowedState, level, pos, defaultColor));
+            shadowedState -> shadowedBlock.getMapColor(shadowedState,
+                getShadowedBlockGetter(level),
+                pos,
+                defaultColor));
     }
 
     @SuppressWarnings("deprecation")
@@ -455,7 +496,10 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
                                    final BlockState newState) {
         tryDoShadowed(oldState,
             "Block#onBlockStateChange",
-            shadowedState -> shadowedBlock.onBlockStateChange(level, pos, shadowedState, getShadowedState(newState)));
+            shadowedState -> shadowedBlock.onBlockStateChange(getShadowedLevelReader(level),
+                pos,
+                shadowedState,
+                getShadowedState(newState)));
     }
 
     @Override
@@ -465,7 +509,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#propagatesSkylightDown",
             () -> super.propagatesSkylightDown(state, level, pos),
-            shadowedState -> shadowedBlock.propagatesSkylightDown(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.propagatesSkylightDown(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -476,7 +520,7 @@ public final class ReinforcedShadowBlock extends OwnableBlock implements IReinfo
         return tryDoShadowed(state,
             "Block#getLightBlock",
             () -> super.getLightBlock(state, level, pos),
-            shadowedState -> shadowedBlock.getLightBlock(shadowedState, level, pos));
+            shadowedState -> shadowedBlock.getLightBlock(shadowedState, getShadowedBlockGetter(level), pos));
     }
 
     @SuppressWarnings("deprecation")
