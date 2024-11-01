@@ -17,15 +17,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "moreprotectables:keypad_tf_canopy_trapdoor",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
-            }
-          ],
           "name": "moreprotectables:keypad_tf_canopy_trapdoor"
         }
       ],
