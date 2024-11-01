@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.compat.tropicraft;
 
+import com.google.auto.service.AutoService;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
@@ -16,6 +17,7 @@ import net.tropicraft.core.common.block.TropicraftWoodTypes;
  * @author Alexander Hinze
  * @since 14/10/2024
  */
+@AutoService(CompatibilityModule.class)
 @ModId(TropicraftCompatibilityModule.MODID)
 public final class TropicraftCompatibilityModule implements CompatibilityModule {
     public static final String MODID = "tropicraft";

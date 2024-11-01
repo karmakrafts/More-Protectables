@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.compat.ironchest;
 
+import com.google.auto.service.AutoService;
 import com.progwml6.ironchest.client.render.IronChestRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
@@ -13,6 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author Alexander Hinze
  * @since 14/10/2024
  */
+@AutoService(CompatibilityModule.class)
 @ModId(IronChestCompatibilityModule.MODID)
 public final class IronChestCompatibilityModule implements CompatibilityModule {
     public static final String MODID = "ironchest";

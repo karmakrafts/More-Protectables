@@ -1,6 +1,7 @@
 package io.karma.moreprotectables.compat.appeng;
 
 import appeng.core.definitions.AEBlocks;
+import com.google.auto.service.AutoService;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
 import io.karma.moreprotectables.compat.appeng.client.render.KeypadSkyChestRenderer;
@@ -14,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author Alexander Hinze
  * @since 14/10/2024
  */
+@AutoService(CompatibilityModule.class)
 @ModId(AppengCompatibilityModule.MODID)
 public final class AppengCompatibilityModule implements CompatibilityModule {
     public static final String MODID = "ae2";

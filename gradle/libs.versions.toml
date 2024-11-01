@@ -10,6 +10,8 @@ librarian = "1.2.0" # https://github.com/ParchmentMC/Librarian/tags
 curseforgeGradle = "1.1.25" # https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle
 minotaur = "2.8.7" # https://plugins.gradle.org/plugin/com.modrinth.minotaur
 
+autoService = "1.1.1" # https://mvnrepository.com/artifact/com.google.auto.service/auto-service
+
 securityCraft = "5779953" # https://www.curseforge.com/minecraft/mc-mods/security-craft/files/all?page=1&pageSize=20
 ironChests = "1.20.1-14.4.1" # https://dvs1.progwml6.com/files/maven/com/progwml6/ironchest/ironchests_1.20.x/
 appliedEnergistics = "5641282" # https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2/files/all?page=1&pageSize=20
@@ -49,6 +51,8 @@ jei-forge-api = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" 
 jade = { module = "curse.maven:jade-324717", version.ref = "jade" }
 embeddium = { module = "org.embeddedt:embeddium-1.20.1", version.ref = "embeddium" }
 oculus = { module = "curse.maven:oculus-581495", version.ref = "oculus" }
+
+autoService = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }

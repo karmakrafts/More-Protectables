@@ -1,5 +1,6 @@
 package io.karma.moreprotectables.compat.twilightforest;
 
+import com.google.auto.service.AutoService;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
@@ -14,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author Alexander Hinze
  * @since 18/10/2024
  */
+@AutoService(CompatibilityModule.class)
 @ModId(TFCompatibilityModule.MODID)
 public final class TFCompatibilityModule implements CompatibilityModule {
     public static final String MODID = "twilightforest";

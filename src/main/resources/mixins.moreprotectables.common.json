@@ -17,9 +17,6 @@
     "KeypadChestBlockMixin",
     "SecuritySeaBoatMixin",
     "BlockStateBaseMixin",
-    "StairBlockMixin",
-    "NeighborUpdaterMixin",
-    "CollectingNeighborUpdaterMixin",
-    "LevelMixin"
+    "StairBlockMixin"
   ]
 }
