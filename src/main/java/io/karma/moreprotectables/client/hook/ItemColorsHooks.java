@@ -14,6 +14,4 @@ import org.jetbrains.annotations.Nullable;
 public interface ItemColorsHooks {
     @Nullable
     ItemColor moreprotectables$getItemColor(final Item item);
-
-    void moreprotectables$removeItemColor(final Item item);
 }

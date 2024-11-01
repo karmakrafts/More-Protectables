@@ -27,9 +27,4 @@ public final class BlockColorsMixin implements BlockColorsHooks {
     public @Nullable BlockColor moreprotectable$getBlockColor(final Block block) {
         return blockColors.get(ForgeRegistries.BLOCKS.getDelegateOrThrow(block));
     }
-
-    @Override
-    public void moreprotectable$removeBlockColor(final Block block) {
-        blockColors.remove(ForgeRegistries.BLOCKS.getDelegateOrThrow(block));
-    }
 }

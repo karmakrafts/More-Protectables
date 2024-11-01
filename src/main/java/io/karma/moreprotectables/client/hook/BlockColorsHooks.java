@@ -14,6 +14,4 @@ import org.jetbrains.annotations.Nullable;
 public interface BlockColorsHooks {
     @Nullable
     BlockColor moreprotectable$getBlockColor(final Block block);
-
-    void moreprotectable$removeBlockColor(final Block block);
 }

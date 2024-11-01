@@ -27,9 +27,4 @@ public final class ItemColorsMixin implements ItemColorsHooks {
     public @Nullable ItemColor moreprotectables$getItemColor(final Item item) {
         return itemColors.get(ForgeRegistries.ITEMS.getDelegateOrThrow(item));
     }
-
-    @Override
-    public void moreprotectables$removeItemColor(final Item item) {
-        itemColors.remove(ForgeRegistries.ITEMS.getDelegateOrThrow(item));
-    }
 }
