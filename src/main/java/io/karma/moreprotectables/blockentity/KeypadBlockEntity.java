@@ -29,6 +29,10 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
     Vec3i X_AXIS = new Vec3i(1, 0, 0);
     Vec3i Z_AXIS = new Vec3i(0, 0, 1);
 
+    default int getSignalLength() {
+        return 0;
+    }
+
     Map<ModuleType, Boolean> getModuleStates();
 
     Option.BooleanOption getSendAllowlistMessage();
@@ -222,7 +226,7 @@ public interface KeypadBlockEntity extends IPasscodeProtected, IOwnable, IModule
         if (!level.isClientSide) {
             final var state = getThisState();
             if (state.getBlock() instanceof KeypadBlock doorBlock) {
-                doorBlock.activate(state, level, getThisPos(), player);
+                doorBlock.activate(state, level, getThisPos(), player, getSignalLength());
             }
         }
     }

@@ -106,6 +106,11 @@ public class SimpleKeypadTrapdoorBlockEntity extends DisguisableBlockEntity impl
     }
 
     @Override
+    public int getSignalLength() {
+        return signalLength.get();
+    }
+
+    @Override
     public Option<?>[] customOptions() {
         return new Option[]{sendAllowlistMessage, sendDenylistMessage, signalLength, disabled, smartModuleCooldown};
     }

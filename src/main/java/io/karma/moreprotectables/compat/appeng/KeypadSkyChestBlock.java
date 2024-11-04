@@ -284,7 +284,11 @@ public final class KeypadSkyChestBlock extends AEBaseEntityBlock<KeypadSkyChestB
     }
 
     @Override
-    public void activate(final BlockState state, final Level level, final BlockPos pos, final Player player) {
+    public void activate(final BlockState state,
+                         final Level level,
+                         final BlockPos pos,
+                         final Player player,
+                         final int signalLength) {
         if (!level.isClientSide()) {
             final var blockEntity = getBlockEntity(level, pos);
             if (blockEntity != null) {

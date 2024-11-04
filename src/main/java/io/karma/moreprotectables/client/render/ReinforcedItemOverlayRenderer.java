@@ -53,7 +53,7 @@ public final class ReinforcedItemOverlayRenderer {
     // @formatter:on
 
     @Internal
-    public void setup() {
+    public void init() {
         MinecraftForge.EVENT_BUS.addListener(this::onRenderItemPost);
     }
 

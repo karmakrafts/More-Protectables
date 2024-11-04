@@ -15,8 +15,6 @@ import java.util.function.Consumer;
  * @since 19/10/2024
  */
 public interface KeypadDoorBlockEntity extends KeypadBlockEntity, IModuleInventory {
-    int getSignalLength();
-
     default void runForOtherHalf(final Consumer<BlockEntity> action) {
         final var level = getThis().getLevel();
         if (level != null) {

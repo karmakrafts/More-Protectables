@@ -17,6 +17,7 @@ package io.karma.moreprotectables;
 
 import io.karma.moreprotectables.block.ReinforcedBlockGenerator;
 import io.karma.moreprotectables.client.model.ModelPatcher;
+import io.karma.moreprotectables.client.render.ABROverlayRenderer;
 import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.client.render.KeypadRenderer;
 import io.karma.moreprotectables.client.render.ReinforcedItemOverlayRenderer;
@@ -24,6 +25,7 @@ import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.init.ModBlockEntities;
 import io.karma.moreprotectables.init.ModBlocks;
 import io.karma.moreprotectables.init.ModConversions;
+import io.karma.moreprotectables.init.ModItems;
 import net.geforcemods.securitycraft.SCContent;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -98,6 +100,7 @@ public class MoreProtectables {
         ModBlocks.register();
         ModBlockEntities.register();
         ModConversions.register();
+        ModItems.register();
         EventHandler.INSTANCE.init();
 
         COMPAT_MODULES.forEach(CompatibilityModule::init);
@@ -106,7 +109,8 @@ public class MoreProtectables {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             ModelPatcher.INSTANCE.setup();
             KeypadRenderer.INSTANCE.setup();
-            ReinforcedItemOverlayRenderer.INSTANCE.setup();
+            ReinforcedItemOverlayRenderer.INSTANCE.init();
+            ABROverlayRenderer.INSTANCE.init();
             modBus.addListener(this::onClientSetup);
         });
 
@@ -130,6 +134,10 @@ public class MoreProtectables {
                                                                                          final Supplier<? extends Block> block,
                                                                                          final BlockEntitySupplier<E> supplier) {
         return BLOCK_ENTITIES.register(name, () -> new BlockEntityType<>(supplier, Set.of(block.get()), null));
+    }
+
+    public static <I extends Item> RegistryObject<I> item(final String name, final Supplier<I> supplier) {
+        return ITEMS.register(name, supplier);
     }
 
     @SuppressWarnings("deprecation")

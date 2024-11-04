@@ -40,7 +40,11 @@ public interface KeypadChestBlock extends KeypadBlock, IDisguisable, IOverlayDis
 
     @SuppressWarnings("deprecation")
     @Override
-    default void activate(final BlockState state, final Level level, final BlockPos pos, final Player player) {
+    default void activate(final BlockState state,
+                          final Level level,
+                          final BlockPos pos,
+                          final Player player,
+                          final int signalLength) {
         if (!level.isClientSide) {
             final var blockEntity = level.getBlockEntity(pos);
             if (blockEntity != null) {
@@ -80,7 +84,7 @@ public interface KeypadChestBlock extends KeypadBlock, IDisguisable, IOverlayDis
                             Utils.localize("messages.securitycraft:module.onAllowlist"),
                             ChatFormatting.GREEN);
                     }
-                    activate(state, level, pos, player);
+                    activate(state, level, pos, player, chestBlockEntity.getSignalLength());
                 }
                 else if (!player.getItemInHand(hand).is(SCContent.CODEBREAKER.get())) {
                     chestBlockEntity.openPasscodeGUI(level, pos, player);

@@ -68,7 +68,7 @@ public interface KeypadChestBlockEntity extends KeypadBlockEntity, ILockable, IS
         }
         final var level = Objects.requireNonNull(blockEntity.getLevel());
         if (!level.isClientSide && blockEntity.getBlockState().getBlock() instanceof KeypadBlock block && !isBlocked()) {
-            block.activate(blockEntity.getBlockState(), level, blockEntity.getBlockPos(), player);
+            block.activate(blockEntity.getBlockState(), level, blockEntity.getBlockPos(), player, getSignalLength());
         }
     }
 

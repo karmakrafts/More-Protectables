@@ -85,6 +85,7 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraftForge)
+
     implementation(libs.autoService)
 
     //implementation(fg.deobf(libs.embeddium.get().toString()))

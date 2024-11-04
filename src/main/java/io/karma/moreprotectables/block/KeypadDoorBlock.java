@@ -104,7 +104,7 @@ public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisp
                             Utils.localize("messages.securitycraft:module.onAllowlist"),
                             ChatFormatting.GREEN);
                     }
-                    activate(state, level, pos, player);
+                    activate(state, level, pos, player, blockEntity.getSignalLength());
                 }
                 else if (!player.getItemInHand(hand).is(SCContent.CODEBREAKER.get())) {
                     blockEntity.openPasscodeGUI(level, pos, player);
@@ -116,7 +116,11 @@ public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisp
     }
 
     @Override
-    default void activate(final BlockState state, final Level level, final BlockPos pos, final Player player) {
+    default void activate(final BlockState state,
+                          final Level level,
+                          final BlockPos pos,
+                          final Player player,
+                          final int signalLength) {
         final var open = !(Boolean) state.getValue(DoorBlock.OPEN);
         final var type = getThisBlock().type();
         level.playSound(player,
@@ -128,11 +132,6 @@ public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisp
         level.setBlockAndUpdate(pos, state.setValue(DoorBlock.OPEN, open));
         level.updateNeighborsAt(pos, getThisBlock());
         level.gameEvent(player, open ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
-        final var blockEntity = level.getBlockEntity(pos);
-        if (!(blockEntity instanceof KeypadDoorBlockEntity doorBlockEntity)) {
-            return;
-        }
-        final var signalLength = doorBlockEntity.getSignalLength();
         if (open && signalLength > 0) {
             level.scheduleTick(pos, getThisBlock(), signalLength);
         }

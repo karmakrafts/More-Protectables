@@ -28,5 +28,9 @@ public interface KeypadBlock extends EntityBlock {
 
     String getDescriptionId();
 
-    void activate(final BlockState state, final Level level, final BlockPos pos, final Player player);
+    void activate(final BlockState state,
+                  final Level level,
+                  final BlockPos pos,
+                  final Player player,
+                  final int signalLength);
 }

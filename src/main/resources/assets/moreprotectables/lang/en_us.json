@@ -3,6 +3,10 @@
   "subtitle.moreprotectables.keypad_beep": "Beep",
   "subtitle.moreprotectables.keypad_beep_confirm": "Beep-beep",
 
+  "item.moreprotectables.advanced_block_reinforcer_level_1": "Advanced Block Reinforcer (LvL1)",
+  "item.moreprotectables.advanced_block_reinforcer_level_2": "Advanced Block Reinforcer (LvL2)",
+  "item.moreprotectables.advanced_block_reinforcer_level_3": "Advanced Block Reinforcer (LvL3)",
+
   "block.moreprotectables.reinforced_block": "Reinforced %s",
   "tooltip.moreprotectables.reinforced_block": "§8Originally added by %s",
 

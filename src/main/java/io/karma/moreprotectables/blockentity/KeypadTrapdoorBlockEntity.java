@@ -1,9 +1,12 @@
 package io.karma.moreprotectables.blockentity;
 
+import io.karma.moreprotectables.block.KeypadTrapdoorBlock;
 import net.geforcemods.securitycraft.misc.ModuleType;
 import net.geforcemods.securitycraft.util.Utils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.TrapDoorBlock;
+
+import java.util.Objects;
 
 /**
  * @author Alexander Hinze
@@ -13,6 +16,16 @@ public interface KeypadTrapdoorBlockEntity extends KeypadBlockEntity {
     @Override
     default ModuleType[] acceptedModules() {
         return new ModuleType[]{ModuleType.ALLOWLIST, ModuleType.DENYLIST, ModuleType.SMART, ModuleType.HARMING, ModuleType.DISGUISE};
+    }
+
+    @Override
+    default void activate(final Player player) {
+        final var level = Objects.requireNonNull(getThis().getLevel());
+        if (!level.isClientSide) {
+            if (getThisState().getBlock() instanceof KeypadTrapdoorBlock trapdoorBlock) {
+                trapdoorBlock.activate(getThisState(), level, getThisPos(), player, getSignalLength());
+            }
+        }
     }
 
     @Override
