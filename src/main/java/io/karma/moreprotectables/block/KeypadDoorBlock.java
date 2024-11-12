@@ -64,6 +64,7 @@ public interface KeypadDoorBlock extends KeypadBlock, IDisguisable, IOverlayDisp
             poseStack.translate(-(2F / 16F), 0F, 12F / 16F);
             return;
         }
+
         // Handle closed transforms
         if (hinge == DoorHingeSide.LEFT) {
             poseStack.translate(-(10F / 16F), 0F, -(1F / 16F));

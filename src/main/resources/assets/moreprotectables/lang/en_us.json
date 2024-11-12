@@ -3,6 +3,8 @@
   "subtitle.moreprotectables.keypad_beep": "Beep",
   "subtitle.moreprotectables.keypad_beep_confirm": "Beep-beep",
 
+  "message.moreprotectables.teleport_blocked": "§4Teleportation cancelled due to protected area",
+
   "item.moreprotectables.advanced_block_reinforcer_level_1": "Advanced Block Reinforcer (LvL1)",
   "item.moreprotectables.advanced_block_reinforcer_level_2": "Advanced Block Reinforcer (LvL2)",
   "item.moreprotectables.advanced_block_reinforcer_level_3": "Advanced Block Reinforcer (LvL3)",
