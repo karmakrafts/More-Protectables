@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.util;
+package io.karma.moreprotectables.conversion;
 
 import io.karma.moreprotectables.blockentity.KeypadChestBlockEntity;
 import net.geforcemods.securitycraft.api.IModuleInventory;

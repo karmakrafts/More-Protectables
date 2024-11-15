@@ -5,7 +5,7 @@ import io.karma.moreprotectables.client.render.DummyBlockEntityRenderer;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
 import io.karma.moreprotectables.compat.twilightforest.client.render.KeypadTFChestRenderer;
-import io.karma.moreprotectables.util.PasscodeConversions;
+import io.karma.moreprotectables.conversion.PasscodeConversions;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraftforge.api.distmarker.Dist;

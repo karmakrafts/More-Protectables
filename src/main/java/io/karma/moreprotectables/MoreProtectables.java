@@ -26,6 +26,7 @@ import io.karma.moreprotectables.init.ModBlockEntities;
 import io.karma.moreprotectables.init.ModBlocks;
 import io.karma.moreprotectables.init.ModConversions;
 import io.karma.moreprotectables.init.ModItems;
+import io.karma.moreprotectables.item.ABRItem;
 import net.geforcemods.securitycraft.SCContent;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -82,19 +83,25 @@ public class MoreProtectables {
         .map(Provider::get)
         .toList();
     // @formatter:on
-    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(MODID,
-        () -> CreativeModeTab.builder().icon(() -> new ItemStack(SCContent.KEY_PANEL.get())).title(Component.translatable(
-            String.format("itemGroup.%s", MODID))).displayItems((params, output) -> {
-            for (final var woodType : WOOD_TYPES) {
-                output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
-                output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
-            }
-            output.accept(ModBlocks.KEYPAD_IRON_DOOR.get());
-            for (final var module : COMPAT_MODULES) {
-                module.addItemsToTab(output);
-            }
-            ReinforcedBlockGenerator.INSTANCE.getGeneratedItems().forEach(output::accept);
-        }).build());
+
+    static {
+        TABS.register(MODID,
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(SCContent.KEY_PANEL.get())).title(Component.translatable(
+                String.format("itemGroup.%s", MODID))).displayItems((params, output) -> {
+                for (final var type : ABRItem.Type.values()) {
+                    output.accept(ModItems.ADVANCED_BLOCK_REINFORCER.get(type).get());
+                }
+                for (final var woodType : WOOD_TYPES) {
+                    output.accept(ModBlocks.KEYPAD_WOOD_DOOR.get(woodType).get());
+                    output.accept(ModBlocks.KEYPAD_WOOD_TRAPDOOR.get(woodType).get());
+                }
+                output.accept(ModBlocks.KEYPAD_IRON_DOOR.get());
+                for (final var module : COMPAT_MODULES) {
+                    module.addItemsToTab(output);
+                }
+                ReinforcedBlockGenerator.INSTANCE.getGeneratedItems().forEach(output::accept);
+            }).build());
+    }
 
     public MoreProtectables() {
         ModBlocks.register();

@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.util;
+package io.karma.moreprotectables.conversion;
 
 import net.geforcemods.securitycraft.api.IPasscodeConvertible;
 import net.minecraft.core.BlockPos;

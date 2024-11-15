@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.util;
+package io.karma.moreprotectables.conversion;
 
 import net.geforcemods.securitycraft.SecurityCraft;
 import net.geforcemods.securitycraft.api.SecurityCraftAPI;

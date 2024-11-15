@@ -13,10 +13,17 @@ import org.jetbrains.annotations.NotNull;
  */
 @OnlyIn(Dist.CLIENT)
 public final class DelegatingBufferSource implements MultiBufferSource {
-    private final VertexConsumer consumer;
+    private static final ThreadLocal<DelegatingBufferSource> INSTANCE = ThreadLocal.withInitial(DelegatingBufferSource::new);
+    private VertexConsumer consumer;
 
-    public DelegatingBufferSource(final VertexConsumer consumer) {
-        this.consumer = consumer;
+    // @formatter:off
+    private DelegatingBufferSource() {}
+    // @formatter:on
+
+    public static DelegatingBufferSource get(final VertexConsumer delegate) {
+        final var instance = INSTANCE.get();
+        instance.consumer = delegate;
+        return instance;
     }
 
     @Override

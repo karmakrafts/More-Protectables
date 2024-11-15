@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.util;
+package io.karma.moreprotectables.client.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

@@ -1,4 +1,4 @@
-package io.karma.moreprotectables.util;
+package io.karma.moreprotectables.conversion;
 
 import io.karma.moreprotectables.blockentity.KeypadDoorBlockEntity;
 import net.geforcemods.securitycraft.api.IPasscodeConvertible;
@@ -72,17 +72,7 @@ public final class KeypadDoorConvertible implements IPasscodeConvertible {
 
     private void convert(final Player player, final Level level, final BlockPos pos, final boolean protect) {
         final var state = level.getBlockState(pos);
-        final var half = state.getValue(DoorBlock.HALF);
-        final var facing = state.getValue(DoorBlock.FACING);
-        final var open = state.getValue(DoorBlock.OPEN);
-        final var hinge = state.getValue(DoorBlock.HINGE);
-        // @formatter:off
-        level.setBlockAndUpdate(pos, (protect ? protectedBlock.get().defaultBlockState() : unprotectedBlock.get().defaultBlockState())
-            .setValue(DoorBlock.HALF, half)
-            .setValue(DoorBlock.FACING, facing)
-            .setValue(DoorBlock.OPEN, open)
-            .setValue(DoorBlock.HINGE, hinge));
-        // @formatter:on
+        level.setBlockAndUpdate(pos, (protect ? protectedBlock.get() : unprotectedBlock.get()).withPropertiesOf(state));
         if (protect) {
             final var blockEntity = level.getBlockEntity(pos);
             if (!(blockEntity instanceof KeypadDoorBlockEntity doorBlockEntity)) {

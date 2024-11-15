@@ -56,18 +56,6 @@ public final class KeypadTFChestBlockEntity extends ChestBlockEntity implements 
     }
 
     @Override
-    public void onDataPacket(final Connection net, final ClientboundBlockEntityDataPacket packet) {
-        super.onDataPacket(net, packet);
-        this.handleUpdateTag(packet.getTag());
-    }
-
-    @Override
-    public void handleUpdateTag(final CompoundTag tag) {
-        super.handleUpdateTag(tag);
-        DisguisableBlockEntity.onHandleUpdateTag(this);
-    }
-
-    @Override
     public void saveAdditional(final @NotNull CompoundTag data) {
         super.saveAdditional(data);
         saveAdditionalKeypadData(data);

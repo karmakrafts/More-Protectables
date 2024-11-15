@@ -8,7 +8,7 @@ import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.init.ModItems;
 import io.karma.moreprotectables.item.ABRItem;
 import io.karma.moreprotectables.util.ABRSelectionUtils;
-import io.karma.moreprotectables.util.RenderUtils;
+import io.karma.moreprotectables.client.utils.RenderUtils;
 import net.geforcemods.securitycraft.api.IReinforcedBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -108,7 +108,7 @@ public final class ABROverlayRenderer {
     }
 
     private void onClientTick(final ClientTickEvent event) {
-        if (event.phase == Phase.START && shouldRenderOverlay() && !Minecraft.getInstance().isPaused()) {
+        if (event.phase == Phase.END && shouldRenderOverlay() && !Minecraft.getInstance().isPaused()) {
             overlayTicks++;
         }
     }
@@ -153,7 +153,7 @@ public final class ABROverlayRenderer {
         final var overlayOpacity = previousOpacity + (this.overlayOpacity - previousOpacity) * partialTick;
 
         final var buffer = bufferSource.getBuffer(RENDER_TYPE);
-        final var delegatingSource = new DelegatingBufferSource(buffer);
+        final var delegatingSource = DelegatingBufferSource.get(buffer);
         final var blockRenderer = game.getBlockRenderer();
         final var blockEntityRendererDispatcher = game.getBlockEntityRenderDispatcher();
 

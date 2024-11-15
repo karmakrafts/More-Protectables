@@ -5,7 +5,7 @@ import com.google.auto.service.AutoService;
 import io.karma.moreprotectables.compat.CompatibilityModule;
 import io.karma.moreprotectables.compat.CompatibilityModule.ModId;
 import io.karma.moreprotectables.compat.appeng.client.render.KeypadSkyChestRenderer;
-import io.karma.moreprotectables.util.PasscodeConversions;
+import io.karma.moreprotectables.conversion.PasscodeConversions;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraftforge.api.distmarker.Dist;

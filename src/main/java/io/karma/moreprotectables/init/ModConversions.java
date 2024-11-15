@@ -1,7 +1,7 @@
 package io.karma.moreprotectables.init;
 
 import io.karma.moreprotectables.MoreProtectables;
-import io.karma.moreprotectables.util.PasscodeConversions;
+import io.karma.moreprotectables.conversion.PasscodeConversions;
 import net.minecraft.world.level.block.Blocks;
 
 /**

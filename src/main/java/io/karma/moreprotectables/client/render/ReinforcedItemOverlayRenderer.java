@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import io.karma.moreprotectables.MoreProtectables;
 import io.karma.moreprotectables.client.event.RenderItemEvent;
-import io.karma.moreprotectables.util.RenderUtils;
+import io.karma.moreprotectables.client.utils.RenderUtils;
 import net.geforcemods.securitycraft.api.IReinforcedBlock;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderStateShard.EmptyTextureStateShard;
